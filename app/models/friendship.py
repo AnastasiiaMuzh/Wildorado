@@ -6,10 +6,9 @@ class Friendship(db.Model):
     __tablename__ = 'friendships'
 
     if environment == "production":
-        __table_args__ = (
-            {'schema': SCHEMA},
-            UniqueConstraint('userId1', 'userId2', name='unique_friendship')
-        )
+        __table_args__ = {'schema': SCHEMA}
+            # UniqueConstraint('userId1', 'userId2', name='unique_friendship')
+        
 
     id = db.Column(db.Integer, primary_key=True)
     userId1 = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
