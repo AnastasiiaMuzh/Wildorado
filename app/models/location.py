@@ -20,7 +20,7 @@ class Location(db.Model):
     lake = db.Column(db.Boolean, default=False)
     fireAllowed = db.Column(db.Boolean, default=False)
     maxTents = db.Column(db.Integer)
-    routeType = db.Column(db.Enum('Trad', 'Sport'))
+    routeType = db.Column(db.Enum('Trad', 'Sport', name="routeType_enum"), nullable=True)
     bestSeason = db.Column(db.String(100))
     createdAt = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
     updatedAt = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False) 

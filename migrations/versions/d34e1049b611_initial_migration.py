@@ -71,7 +71,7 @@ def upgrade():
     sa.Column('lake', sa.Boolean(), nullable=True),
     sa.Column('fireAllowed', sa.Boolean(), nullable=True),
     sa.Column('maxTents', sa.Integer(), nullable=True),
-    sa.Column('routeType', sa.Enum('Trad', 'Sport'), nullable=True),
+    sa.Column('routeType', sa.Enum('Trad', 'Sport', name="routeType_enum"), nullable=True),
     sa.Column('bestSeason', sa.String(length=100), nullable=True),
     sa.Column('createdAt', sa.DateTime(), nullable=False),
     sa.Column('updatedAt', sa.DateTime(), nullable=False),
