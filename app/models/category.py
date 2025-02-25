@@ -1,4 +1,4 @@
-from .db import db, environment, SCHEMA, add_prefix_for_prod
+from .db import db, environment, SCHEMA
 from datetime import datetime, timezone
 
 
@@ -14,6 +14,9 @@ class Category(db.Model):
 
     # relationships below
     locations = db.relationship("Location", back_populates="category", cascade="all, delete-orphan")
+    users = db.relationship("User", back_populates="category", cascade="all, delete-orphan")
+    createdAt = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
+    updatedAt = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
 
     # Debugging representation
     def __repr__(self):

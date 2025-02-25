@@ -1,4 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
+from datetime import datetime, timezone
 
 class ReviewImage(db.Model):
     __tablename__ = 'review_images'
@@ -9,6 +10,8 @@ class ReviewImage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     reviewId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("reviews.id")), nullable=False)
     imageUrl = db.Column(db.String(255), nullable=False)  
+    createdAt = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
+    updatedAt = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
 
     # Relationships
     review = db.relationship("Review", back_populates="images")

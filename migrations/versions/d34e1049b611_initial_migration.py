@@ -1,8 +1,8 @@
-"""Initial migration with schema
+"""Initial migration
 
-Revision ID: 1ad9ae1ad2ca
+Revision ID: d34e1049b611
 Revises: 
-Create Date: 2025-02-24 18:46:49.500989
+Create Date: 2025-02-25 10:43:33.688213
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1ad9ae1ad2ca'
+revision = 'd34e1049b611'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,6 +21,8 @@ def upgrade():
     op.create_table('categories',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=False),
+    sa.Column('createdAt', sa.DateTime(), nullable=False),
+    sa.Column('updatedAt', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
@@ -32,8 +34,10 @@ def upgrade():
     sa.Column('avatar', sa.String(length=255), nullable=True),
     sa.Column('bio', sa.Text(), nullable=True),
     sa.Column('interests', sa.String(length=255), nullable=True),
+    sa.Column('categoryId', sa.Integer(), nullable=True),
     sa.Column('createdAt', sa.DateTime(), nullable=False),
     sa.Column('updatedAt', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['categoryId'], ['categories.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
@@ -43,10 +47,16 @@ def upgrade():
     sa.Column('userId1', sa.Integer(), nullable=False),
     sa.Column('userId2', sa.Integer(), nullable=False),
     sa.Column('status', sa.Enum('pending', 'accepted', 'blocked', name='friendship_status_enum'), nullable=False),
+    sa.Column('createdAt', sa.DateTime(), nullable=False),
+    sa.Column('updatedAt', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['userId1'], ['users.id'], ),
     sa.ForeignKeyConstraint(['userId2'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('userId1', 'userId2', name='unique_friendship')
     )
+    with op.batch_alter_table('friendships', schema=None) as batch_op:
+        batch_op.create_index('unique_friendship_idx', ['userId1', 'userId2'], unique=True)
+
     op.create_table('locations',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('categoryId', sa.Integer(), nullable=False),
@@ -54,14 +64,14 @@ def upgrade():
     sa.Column('name', sa.String(length=100), nullable=False),
     sa.Column('city', sa.String(length=100), nullable=False),
     sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('height', sa.Float(), nullable=True),
+    sa.Column('elevation', sa.Float(), nullable=True),
     sa.Column('difficulty', sa.Enum('Easy', 'Medium', 'Hard', name='difficulty_enum'), nullable=True),
     sa.Column('distance', sa.Float(), nullable=True),
     sa.Column('river_class', sa.Enum('I', 'II', 'III', 'IV', 'V', name='river_class_enum'), nullable=True),
     sa.Column('lake', sa.Boolean(), nullable=True),
     sa.Column('fireAllowed', sa.Boolean(), nullable=True),
     sa.Column('maxTents', sa.Integer(), nullable=True),
-    sa.Column('routeType', sa.String(length=100), nullable=True),
+    sa.Column('routeType', sa.Enum('Trad', 'Sport'), nullable=True),
     sa.Column('bestSeason', sa.String(length=100), nullable=True),
     sa.Column('createdAt', sa.DateTime(), nullable=False),
     sa.Column('updatedAt', sa.DateTime(), nullable=False),
@@ -120,6 +130,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('eventId', sa.Integer(), nullable=False),
     sa.Column('userId', sa.Integer(), nullable=False),
+    sa.Column('createdAt', sa.DateTime(), nullable=False),
+    sa.Column('updatedAt', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['eventId'], ['events.id'], ),
     sa.ForeignKeyConstraint(['userId'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -128,6 +140,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('reviewId', sa.Integer(), nullable=False),
     sa.Column('imageUrl', sa.String(length=255), nullable=False),
+    sa.Column('createdAt', sa.DateTime(), nullable=False),
+    sa.Column('updatedAt', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['reviewId'], ['reviews.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -143,6 +157,9 @@ def downgrade():
     op.drop_table('location_images')
     op.drop_table('events')
     op.drop_table('locations')
+    with op.batch_alter_table('friendships', schema=None) as batch_op:
+        batch_op.drop_index('unique_friendship_idx')
+
     op.drop_table('friendships')
     op.drop_table('users')
     op.drop_table('categories')

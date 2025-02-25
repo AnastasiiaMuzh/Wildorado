@@ -20,10 +20,12 @@ class User(db.Model, UserMixin):
     avatar = db.Column(db.String(255))
     bio = db.Column(db.Text)
     interests = db.Column(db.String(255))
+    categoryId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("categories.id")), nullable=True)
     createdAt = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
     updatedAt = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
 
     # Relationships
+    category = db.relationship("Category", back_populates="users")
     locations = db.relationship("Location", back_populates="user", cascade="all, delete-orphan")
     reviews = db.relationship("Review", back_populates="user", cascade="all, delete-orphan")
     events = db.relationship("Event", back_populates="user", cascade="all, delete-orphan")
@@ -51,5 +53,6 @@ class User(db.Model, UserMixin):
             'email': self.email,
             'avatar': self.avatar,
             'bio': self.bio,
-            'interests': self.interests
+            'interests': self.interests,
+            'categoryId': self.categoryId  
         }

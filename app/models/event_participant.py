@@ -1,4 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
+from datetime import datetime, timezone
 
 class EventParticipant(db.Model):
     __tablename__ = 'event_participants'
@@ -9,6 +10,8 @@ class EventParticipant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     eventId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("events.id")), nullable=False)
     userId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
+    createdAt = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
+    updatedAt = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
 
     # Relationships
     event = db.relationship("Event", back_populates="participants")
