@@ -73,6 +73,7 @@ def upgrade():
     sa.Column('maxTents', sa.Integer(), nullable=True),
     sa.Column('routeType', sa.Enum('Trad', 'Sport', name="routeType_enum"), nullable=True),
     sa.Column('bestSeason', sa.String(length=100), nullable=True),
+    sa.Column('terrainType', sa.Enum('Dirt', 'Rocky', 'Forest', 'Mixed',  name="terrain_type_enum"), nullable=True),
     sa.Column('createdAt', sa.DateTime(), nullable=False),
     sa.Column('updatedAt', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['categoryId'], ['categories.id'], ),
