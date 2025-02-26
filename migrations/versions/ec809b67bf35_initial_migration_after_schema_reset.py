@@ -1,8 +1,8 @@
-"""Recreating database with terrainType
+"""Initial migration after schema reset
 
-Revision ID: 1efcda52109b
+Revision ID: ec809b67bf35
 Revises: 
-Create Date: 2025-02-26 11:06:45.658524
+Create Date: 2025-02-26 11:19:05.023082
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1efcda52109b'
+revision = 'ec809b67bf35'
 down_revision = None
 branch_labels = None
 depends_on = None
