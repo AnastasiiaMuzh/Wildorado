@@ -1,8 +1,8 @@
-"""Initial migration
+"""Recreating database with terrainType
 
-Revision ID: d34e1049b611
+Revision ID: 1efcda52109b
 Revises: 
-Create Date: 2025-02-25 10:43:33.688213
+Create Date: 2025-02-26 11:06:45.658524
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd34e1049b611'
+revision = '1efcda52109b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -71,9 +71,9 @@ def upgrade():
     sa.Column('lake', sa.Boolean(), nullable=True),
     sa.Column('fireAllowed', sa.Boolean(), nullable=True),
     sa.Column('maxTents', sa.Integer(), nullable=True),
-    sa.Column('routeType', sa.Enum('Trad', 'Sport', name="routeType_enum"), nullable=True),
+    sa.Column('routeType', sa.Enum('Trad', 'Sport', name='routeType_enum'), nullable=True),
     sa.Column('bestSeason', sa.String(length=100), nullable=True),
-    sa.Column('terrainType', sa.Enum('Dirt', 'Rocky', 'Forest', 'Mixed',  name="terrain_type_enum"), nullable=True),
+    sa.Column('terrainType', sa.Enum('Dirt', 'Rocky', 'Forest', 'Mixed', name='terrain_type_enum'), nullable=True),
     sa.Column('createdAt', sa.DateTime(), nullable=False),
     sa.Column('updatedAt', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['categoryId'], ['categories.id'], ),
