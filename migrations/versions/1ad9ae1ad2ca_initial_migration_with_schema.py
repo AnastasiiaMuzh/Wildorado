@@ -54,7 +54,7 @@ def upgrade():
     sa.Column('name', sa.String(length=100), nullable=False),
     sa.Column('city', sa.String(length=100), nullable=False),
     sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('height', sa.Float(), nullable=True),
+    sa.Column('elevation', sa.Float(), nullable=True),
     sa.Column('difficulty', sa.Enum('Easy', 'Medium', 'Hard', name='difficulty_enum'), nullable=True),
     sa.Column('distance', sa.Float(), nullable=True),
     sa.Column('river_class', sa.Enum('I', 'II', 'III', 'IV', 'V', name='river_class_enum'), nullable=True),

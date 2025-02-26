@@ -13,7 +13,7 @@ class Location(db.Model):
     name = db.Column(db.String(100), nullable=False)
     city = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text)
-    height = db.Column(db.Float)
+    elevation = db.Column(db.Float)
     difficulty = db.Column(db.Enum('Easy', 'Medium', 'Hard', name="difficulty_enum"), nullable=True)
     distance = db.Column(db.Float)
     river_class = db.Column(db.Enum('I', 'II', 'III', 'IV', 'V', name="river_class_enum"), nullable=True)
