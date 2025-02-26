@@ -22,6 +22,7 @@ class Location(db.Model):
     maxTents = db.Column(db.Integer)
     routeType = db.Column(db.String(100))
     bestSeason = db.Column(db.String(100))
+    terrainType = db.Column(db.Enum('Dirt', 'Rocky', 'Forest', 'Mixed', name="terrain_type_enum"), nullable=True)
     createdAt = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
     updatedAt = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False) 
 
