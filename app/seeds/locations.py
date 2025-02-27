@@ -69,16 +69,17 @@ def seed_locations():
 
 
         # ATV/Bikes (Category 6)
-        Location(categoryId=6, ownerId=6, name="Rampart Range", city="Woodland Park", description="Amazing off-road terrain.", elevation=2500.0, distance=70.0),
-        Location(categoryId=6, ownerId=6, name="Grand Mesa Trails", city="Grand Junction", description="Endless miles of off-road trails.", elevation=3000.0, distance=85.0),
-        Location(categoryId=6, ownerId=6, name="Taylor Park", city="Almont", description="Popular ATV and dirt bike area.", elevation=2800.0, distance=60.0),
-        Location(categoryId=6, ownerId=6, name="San Juan Mountains", city="Ouray", description="Scenic and challenging trails.", elevation=3200.0, distance=100.0),
-        Location(categoryId=6, ownerId=6, name="Gunnison National Forest", city="Gunnison", description="Diverse terrain for off-roading.", elevation=2900.0, distance=90.0),
-        Location(categoryId=6, ownerId=6, name="Uncompahgre National Forest", city="Montrose", description="Remote and rugged trails.", elevation=3100.0, distance=80.0),
-        Location(categoryId=6, ownerId=6, name="White River National Forest", city="Glenwood Springs", description="Great for ATV and bike adventures.", elevation=2700.0, distance=75.0),
-        Location(categoryId=6, ownerId=6, name="Pike National Forest", city="Colorado Springs", description="Close to Denver with varied trails.", elevation=2600.0, distance=65.0),
-        Location(categoryId=6, ownerId=6, name="Rio Grande National Forest", city="Monte Vista", description="Remote and scenic trails.", elevation=3000.0, distance=95.0),
-        Location(categoryId=6, ownerId=6, name="Curecanti National Recreation Area", city="Gunnison", description="Lakeside trails with great views.", elevation=2800.0, distance=70.0),
+        Location(categoryId=6, ownerId=6, name="Rampart Range", city="Woodland Park", description="Amazing off-road terrain.", elevation=2500.0, distance=70.0, terrainType="Dirt"),
+        Location(categoryId=6, ownerId=6, name="Grand Mesa Trails", city="Grand Junction", description="Endless miles of off-road trails.", elevation=3000.0, distance=85.0, terrainType="Rocky"),
+        Location(categoryId=6, ownerId=6, name="Taylor Park", city="Almont", description="Popular ATV and dirt bike area.", elevation=2800.0, distance=60.0, terrainType="Mixed"),
+        Location(categoryId=6, ownerId=6, name="San Juan Mountains", city="Ouray", description="Scenic and challenging trails.", elevation=3200.0, distance=100.0, terrainType="Dirt"),
+        Location(categoryId=6, ownerId=6, name="Gunnison National Forest", city="Gunnison", description="Diverse terrain for off-roading.", elevation=2900.0, distance=90.0, terrainType="Forest"),
+        Location(categoryId=6, ownerId=6, name="Uncompahgre National Forest", city="Montrose", description="Remote and rugged trails.", elevation=3100.0, distance=80.0, terrainType="Rocky"),
+        Location(categoryId=6, ownerId=6, name="White River National Forest", city="Glenwood Springs", description="Great for ATV and bike adventures.", elevation=2700.0, distance=75.0, terrainType="Mixed"),
+        Location(categoryId=6, ownerId=6, name="Pike National Forest", city="Colorado Springs", description="Close to Denver with varied trails.", elevation=2600.0, distance=65.0, terrainType="Dirt"),
+        Location(categoryId=6, ownerId=6, name="Rio Grande National Forest", city="Monte Vista", description="Remote and scenic trails.", elevation=3000.0, distance=95.0, terrainType="Forest"),
+        Location(categoryId=6, ownerId=6, name="Curecanti National Recreation Area", city="Gunnison", description="Lakeside trails with great views.", elevation=2800.0, distance=70.0, terrainType="Rocky"),
+
     ]
 
     db.session.add_all(locations)
