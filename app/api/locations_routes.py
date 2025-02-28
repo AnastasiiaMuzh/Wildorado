@@ -1,128 +1,561 @@
 from flask import Blueprint, request, jsonify
-from app.models import db, Location
+from flask_login import current_user, login_required
 from sqlalchemy import or_
+from datetime import datetime
+from app.models import db, Location, LocationImage, Review, ReviewImage, User
+from app.api.utils import apply_category_filters, get_location_images, calculate_average_rating, get_reviews_for_location
+from datetime import datetime, timezone
 
 location_routes = Blueprint('locations', __name__)
 
+# ************************ GET /api/locations ************************
 @location_routes.route("/", methods=["GET"])
 def get_locations():
-    """Get locations with search, pagination, and category-specific filters"""
+    """
+    Retrieves a paginated list of locations. Allows:
+      - Searching by 'name' or 'city' (via 'search' query param).
+      - Filtering by 'category' plus category-specific fields 
+        (e.g. difficulty for Hiking, riverClass for Rafting, etc.).
+      - 'elevation' and 'distance' can also be filtered by partial matching.
+    """
     try:
-        # Pagination
+        # Pagination params
         page = request.args.get("page", 1, type=int)
         per_page = request.args.get("perPage", 12, type=int)
 
-        # Search (name, city, category)
+        # Search and filter params
         search_query = request.args.get("search", "", type=str).strip().lower()
         category = request.args.get("category", None, type=int)
-
-        # Filters that all categories have
         elevation = request.args.get("elevation", None, type=str)
         distance = request.args.get("distance", None, type=str)
 
         # Category-specific filters
-        difficulty = request.args.get("difficulty", None, type=str)
-        best_season = request.args.get("bestSeason", None, type=str)
-        river_class = request.args.get("riverClass", None, type=str)
-        max_tents = request.args.get("maxTents", None, type=int)
-        fire_allowed = request.args.get("fireAllowed", None, type=bool)
-        lake = request.args.get("lake", None, type=bool)
-        route_type = request.args.get("routeType", None, type=str)
-        terrain_type = request.args.get("terrainType", None, type=str)
+        filters = {
+            "difficulty": request.args.get("difficulty", None, type=str),
+            "bestSeason": request.args.get("bestSeason", None, type=str),
+            "riverClass": request.args.get("riverClass", None, type=str),
+            "maxTents": request.args.get("maxTents", None, type=int),
+            "fireAllowed": request.args.get("fireAllowed", None, type=bool),
+            "lake": request.args.get("lake", None, type=bool),
+            "routeType": request.args.get("routeType", None, type=str),
+            "terrainType": request.args.get("terrainType", None, type=str)
+        }
 
         query = Location.query
 
-        # Search
+        # Search in name or city
         if search_query:
             query = query.filter(
-                (Location.name.ilike(f"%{search_query}%")) |
-                (Location.city.ilike(f"%{search_query}%"))
+                or_(
+                    Location.name.ilike(f"%{search_query}%"),
+                    Location.city.ilike(f"%{search_query}%")
+                )
             )
 
+        # If category is present, filter and apply category-specific logic
         if category:
             query = query.filter(Location.categoryId == category)
+            query = apply_category_filters(query, category, filters)
 
-        # Filter by elevation (все числа, начинающиеся с введённого значения)
+        # Filter by elevation (partial match) and distance (partial match)
         if elevation:
             query = query.filter(Location.elevation.cast(db.String).ilike(f"{elevation}%"))
-
-        # Filter by distance (все числа, начинающиеся с введённого значения)
         if distance:
             query = query.filter(Location.distance.cast(db.String).ilike(f"{distance}%"))
 
-        # Filters by category
-        if category == 1:  # Hiking
-            if difficulty:
-                query = query.filter(Location.difficulty == difficulty)
-            if best_season:
-                query = query.filter(Location.bestSeason.ilike(f"%{best_season}%"))
-
-        if category == 2:  # Rafting
-            if river_class:
-                query = query.filter(Location.river_class == river_class)
-
-        if category == 3:  # Camping
-            if max_tents:
-                query = query.filter(Location.maxTents >= max_tents)
-            if fire_allowed is not None:
-                query = query.filter(Location.fireAllowed == fire_allowed)
-            if lake is not None:
-                query = query.filter(Location.lake == lake)
-
-        if category == 4:  # Climbing
-            if difficulty:
-                query = query.filter(Location.difficulty == difficulty)
-            if route_type:
-                query = query.filter(Location.routeType == route_type)
-
-        if category == 5:  # Snow Sports
-            if best_season:
-                query = query.filter(Location.bestSeason.ilike(f"%{best_season}%"))
-
-        if category == 6:  # ATV/Bikes
-            if terrain_type:
-                query = query.filter(Location.terrainType == terrain_type)
-
-        # Pagination
+        # Paginate results
         locations = query.paginate(page=page, per_page=per_page, error_out=False)
 
         if not locations.items:
             return jsonify({"message": "No locations found."}), 404
 
-        return jsonify({
+        # Build the response
+        response = {
             "Locations": [{
-                "id": location.id,
-                "name": location.name,
-                "city": location.city,
-                "description": location.description,
-                "elevation": location.elevation,
-                "distance": location.distance,
-                "difficulty": location.difficulty,
-                "bestSeason": location.bestSeason,
-                "riverClass": location.river_class,
-                "maxTents": location.maxTents,
-                "fireAllowed": location.fireAllowed,
-                "lake": location.lake,
-                "routeType": location.routeType,
-                "terrainType": location.terrainType
-            } for location in locations.items],
+                "id": loc.id,
+                "name": loc.name,
+                "city": loc.city,
+                # For 'imageUrl', we fetch the first image if it exists
+                "imageUrl": (
+                    get_location_images(loc.id)[0]["url"]
+                    if get_location_images(loc.id) else None
+                ),
+                # Calculate average rating by fetching all reviews
+                "avgRating": round(calculate_average_rating(get_reviews_for_location(loc.id)), 1),
+                "reviewCount": len(get_reviews_for_location(loc.id)),
+                "elevation": loc.elevation
+            } for loc in locations.items],
             "Pagination": {
                 "page": locations.page,
                 "perPage": locations.per_page,
                 "totalLocations": locations.total,
                 "totalPages": locations.pages
             }
-        }), 200
+        }
+
+        return jsonify(response), 200
 
     except Exception as e:
         print(e)
         return jsonify({"message": "Internal server error"}), 500
 
 
+#************************ GET /api/locations/<int:id> ************************
+@location_routes.route("/<int:id>", methods=["GET"])
+def get_location_detail(id):
+    """
+    Retrieves detailed information about a single location by ID, including:
+      - All associated images
+      - Reviews with images and user data
+      - Owner info
+      - Category-specific fields
+      - Timestamps (createdAt/updatedAt)
+    """
+    try:
+        location = Location.query.get(id)
+        if not location:
+            return jsonify({"message": "Location not found"}), 404
 
-# Hiking : elevation, difficulty, distance, bestSeason
-# Rafting : river_class, distance
-# Camping : maxTents, fireAllowed, lake
-# Climbing : routeType, difficulty, elevation, distance
-# Snow Sports : bestSeason, elevation, distance
-# ATV/Bikes : terrainType, distance, elevation
+        # Grab location images and reviews
+        location_images = get_location_images(location.id)
+        reviews = get_reviews_for_location(location.id)
+        avg_rating = calculate_average_rating(reviews)
+
+        # Category-specific fields: depends on the categoryId
+        category_fields = {
+            1: ["elevation", "difficulty", "distance", "bestSeason"],  
+            2: ["river_class", "distance"],   
+            3: ["maxTents", "fireAllowed", "lake", "distance"], 
+            4: ["routeType", "difficulty", "elevation", "distance"],
+            5: ["bestSeason", "elevation", "distance"],
+            6: ["terrainType", "distance", "elevation"]
+        }
+
+        # Generate a dictionary of only the relevant fields for this category
+        category_specific = {
+            field: getattr(location, field)
+            for field in category_fields.get(location.categoryId, [])
+        }
+
+        # Owner info (username, avatar, etc.)
+        owner = User.query.get(location.ownerId)
+
+        response = {
+            "id": location.id,
+            "name": location.name,
+            "city": location.city,
+            "description": location.description,
+            "categoryId": location.categoryId,
+            "categorySpecific": category_specific,
+            "avgRating": round(avg_rating, 1),
+            "reviewCount": len(reviews),
+            "reviews": reviews,  # includes user data and images
+            "images": location_images,
+            "owner": {
+                "id": owner.id,
+                "username": owner.username,
+                "avatar": owner.avatar
+            },
+            "createdAt": str(location.createdAt),
+            "updatedAt": str(location.updatedAt)
+        }
+
+        return jsonify(response), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify({"message": "Internal server error"}), 500
+
+
+# ************************ GET /api/locations/current ************************
+@location_routes.route('/current', methods=['GET'])
+@login_required
+def get_current_user_locations():
+    """
+    Returns a list of all locations whose 'ownerId' matches the current user's ID.
+    Only accessible to logged-in users.
+    """
+    try:
+        user_id = current_user.id
+        locations = Location.query.filter_by(ownerId=user_id).all()
+
+        if not locations:
+            return jsonify({"message": "You have no locations"}), 200
+
+        response = {
+            "Locations": [{
+                "id": loc.id,
+                "name": loc.name,
+                "city": loc.city,
+                "categoryId": loc.categoryId,
+                "imageUrl": (
+                    get_location_images(loc.id)[0]["url"]
+                    if get_location_images(loc.id) else None
+                ),
+                "avgRating": round(calculate_average_rating(get_reviews_for_location(loc.id)), 1),
+                "reviewCount": len(get_reviews_for_location(loc.id))
+            } for loc in locations]
+        }
+
+        return jsonify(response), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify({"message": "Internal server error"}), 500
+
+
+# ************************ POST /api/locations ************************
+@location_routes.route('/', methods=['POST'])
+@login_required
+def create_location():
+    """
+    Creates a new location, ensuring that all category-specific required fields are present
+    and that numeric fields (distance/elevation) are positive.
+    Also checks for duplicates (name + city).
+    """
+    try:
+        data = request.get_json() or {}
+
+        # Required fields for all categories
+        base_required_fields = ["categoryId", "name", "city", "description", "distance"]
+
+        # Category-specific fields
+        category_fields = {
+            1: ["difficulty", "bestSeason", "elevation"],  
+            2: ["riverClass"],  
+            3: ["maxTents", "fireAllowed", "lake", "elevation"],
+            4: ["routeType", "difficulty", "elevation"],
+            5: ["bestSeason", "elevation"],
+            6: ["terrainType", "elevation"]
+        }
+
+        # 1) Check categoryId
+        category_id = data.get("categoryId")
+        if category_id not in category_fields:
+            return jsonify({"message": "Invalid categoryId"}), 400
+
+        # 2) Combine base + category fields
+        required_fields = base_required_fields + category_fields[category_id]
+        missing_fields = [f for f in required_fields if f not in data]
+        if missing_fields:
+            return jsonify({"message": "Missing required fields", "missing": missing_fields}), 400
+
+        # 3) Validate that 'name', 'city', 'description' are non-empty
+        for field in ["name", "city", "description"]:
+            if not data[field].strip():
+                return jsonify({"message": f"Field '{field}' cannot be empty"}), 400
+
+        # 4) Validate 'distance' as a positive number
+        if not isinstance(data["distance"], (int, float)) or data["distance"] <= 0:
+            return jsonify({"message": "Distance must be a positive number"}), 400
+
+        # 5) If 'elevation' is required for this category, validate it as well
+        if "elevation" in category_fields[category_id]:
+            if not isinstance(data["elevation"], (int, float)) or data["elevation"] <= 0:
+                return jsonify({"message": "Elevation must be a positive number"}), 400
+
+        # 6) Validate enum fields (difficulty, riverClass, routeType, terrainType)
+        valid_difficulties = ["Easy", "Medium", "Hard"]
+        valid_river_classes = ["I", "II", "III", "IV", "V"]
+        valid_route_types = ["Trad", "Sport"]
+        valid_terrain_types = ["Dirt", "Rocky", "Forest", "Mixed"]
+
+        if "difficulty" in data and data["difficulty"] not in valid_difficulties:
+            return jsonify({"message": "Invalid difficulty value"}), 400
+        if "riverClass" in data and data["riverClass"] not in valid_river_classes:
+            return jsonify({"message": "Invalid river class value"}), 400
+        if "routeType" in data and data["routeType"] not in valid_route_types:
+            return jsonify({"message": "Invalid route type value"}), 400
+        if "terrainType" in data and data["terrainType"] not in valid_terrain_types:
+            return jsonify({"message": "Invalid terrain type value"}), 400
+
+        # 7) Check for duplicate (location name + city)
+        existing_location = Location.query.filter_by(name=data["name"], city=data["city"]).first()
+        if existing_location:
+            return jsonify({"message": "A location with this name already exists in this city"}), 409
+
+        # 8) Create the new location
+        new_loc = Location(
+            categoryId=category_id,
+            ownerId=current_user.id,
+            name=data["name"],
+            city=data["city"],
+            description=data["description"],
+            distance=data["distance"],
+            elevation=data.get("elevation"),  
+            difficulty=data.get("difficulty"),
+            river_class=data.get("riverClass"),
+            lake=data.get("lake"),
+            fireAllowed=data.get("fireAllowed"),
+            maxTents=data.get("maxTents"),
+            routeType=data.get("routeType"),
+            terrainType=data.get("terrainType"),
+            bestSeason=data.get("bestSeason")
+        )
+
+        db.session.add(new_loc)
+        db.session.commit()
+
+        # 9) Build a basic JSON response
+        response = {
+            "id": new_loc.id,
+            "ownerId": new_loc.ownerId,
+            "categoryId": new_loc.categoryId,
+            "name": new_loc.name,
+            "city": new_loc.city,
+            "description": new_loc.description,
+            "distance": new_loc.distance
+        }
+        # Add category-specific fields
+        for field in category_fields[category_id]:
+            response[field] = getattr(new_loc, field)
+
+        return jsonify(response), 201
+
+    except Exception as e:
+        import traceback
+        print(traceback.format_exc())
+        return jsonify({"message": f"Internal server error: {str(e)}"}), 500
+
+# ************************ PUT /api/locations/<int:id> ************************
+@location_routes.route('/<int:location_id>', methods=['PUT'])
+@login_required
+def update_location(location_id):
+    """
+    Updates an existing location. Must match the owner and 
+    pass all validation checks for the relevant category fields.
+    """
+    try:
+        loc = Location.query.get(location_id)
+        if not loc:
+            return jsonify({"message": "Location not found"}), 404
+        if loc.ownerId != current_user.id:
+            return jsonify({"message": "Forbidden"}), 403
+
+        data = request.get_json() or {}
+
+        # Same approach as in create_location:
+        base_required_fields = ["categoryId", "name", "city", "description", "distance"]
+        category_fields = {
+            1: ["difficulty", "bestSeason", "elevation"],
+            2: ["riverClass"],
+            3: ["maxTents", "fireAllowed", "lake", "elevation"],
+            4: ["routeType", "difficulty", "elevation"],
+            5: ["bestSeason", "elevation"],
+            6: ["terrainType", "elevation"]
+        }
+
+        category_id = data.get("categoryId")
+        if category_id not in category_fields:
+            return jsonify({"message": "Invalid categoryId"}), 400
+
+        required_fields = base_required_fields + category_fields[category_id]
+        missing_fields = [field for field in required_fields if field not in data]
+        if missing_fields:
+            return jsonify({"message": "Missing required fields", "missing": missing_fields}), 400
+
+        # Check non-empty strings
+        for field in ["name", "city", "description"]:
+            if not data[field].strip():
+                return jsonify({"message": f"Field '{field}' cannot be empty"}), 400
+
+        # Check distance
+        if not isinstance(data["distance"], (int, float)) or data["distance"] <= 0:
+            return jsonify({"message": "Distance must be a positive number"}), 400
+
+        # If this category requires elevation, check it
+        if "elevation" in category_fields[category_id]:
+            if not isinstance(data["elevation"], (int, float)) or data["elevation"] <= 0:
+                return jsonify({"message": "Elevation must be a positive number"}), 400
+
+        # Validate enum fields
+        valid_difficulties = ["Easy", "Medium", "Hard"]
+        valid_river_classes = ["I", "II", "III", "IV", "V"]
+        valid_route_types = ["Trad", "Sport"]
+        valid_terrain_types = ["Dirt", "Rocky", "Forest", "Mixed"]
+
+        if "difficulty" in data and data["difficulty"] not in valid_difficulties:
+            return jsonify({"message": "Invalid difficulty value"}), 400
+        if "riverClass" in data and data["riverClass"] not in valid_river_classes:
+            return jsonify({"message": "Invalid river class value"}), 400
+        if "routeType" in data and data["routeType"] not in valid_route_types:
+            return jsonify({"message": "Invalid route type value"}), 400
+        if "terrainType" in data and data["terrainType"] not in valid_terrain_types:
+            return jsonify({"message": "Invalid terrain type value"}), 400
+
+        # Check duplicates for name+city (excluding current location itself)
+        existing_location = Location.query.filter(
+            Location.name == data["name"],
+            Location.city == data["city"],
+            Location.id != location_id  # exclude self
+        ).first()
+        if existing_location:
+            return jsonify({"message": "A location with this name already exists in this city"}), 409
+
+        # Update fields
+        for field in required_fields:
+            setattr(loc, field, data[field])
+
+        db.session.commit()
+
+        # Build the response
+        response = {
+            "id": loc.id,
+            "ownerId": loc.ownerId,
+            "categoryId": loc.categoryId,
+            "name": loc.name,
+            "city": loc.city,
+            "description": loc.description,
+            "distance": loc.distance
+        }
+        # Add category-specific fields
+        for field in category_fields[category_id]:
+            response[field] = getattr(loc, field)
+
+        response["updatedAt"] = str(loc.updatedAt)
+
+        return jsonify(response), 200
+
+    except Exception as e:
+        import traceback
+        print(traceback.format_exc())
+        return jsonify({"message": f"Internal server error: {str(e)}"}), 500
+
+# ************************ DELETE /api/locations/<int:id> ************************
+@location_routes.route('/<int:location_id>', methods=['DELETE'])
+@login_required
+def delete_location(location_id):
+    """
+    Deletes an existing location. Only allowed if the current user is the owner.
+    """
+    try:
+        loc = Location.query.get(location_id)
+        if not loc:
+            return jsonify({"message": "Location not found"}), 404
+        if loc.ownerId != current_user.id:
+            return jsonify({"message": "Forbidden"}), 403
+
+        db.session.delete(loc)
+        db.session.commit()
+        return jsonify({"message": "Location deleted"}), 200
+
+    except Exception as e:
+        import traceback
+        print(traceback.format_exc())
+        return jsonify({"message": "Internal server error"}), 500
+    
+
+# ************************ LOCATION IMAGES ************************
+    # ************ POST /api/locations/:id/images ***************
+@location_routes.route('/<int:location_id>/images', methods=['POST'])
+@login_required
+def add_location_image(location_id):
+    """Adds a new image to a location."""
+    try:
+        location = Location.query.get(location_id)
+        if not location:
+            return jsonify({"message": "Location not found."}), 404
+        if location.ownerId != current_user.id:
+            return jsonify({"message": "Forbidden"}), 403
+
+        # Getting data from the request
+        data = request.get_json()
+        image_url = data.get("url")
+        preview = data.get("preview", False)  # False по умолчанию
+
+        # Check for URL presence
+        if not image_url:
+            return jsonify({"message": "Image URL is required"}), 400
+
+        # Checking the limit (5 images)
+        if len(location.images) >= 10:
+            return jsonify({"message": "Maximum number of images reached for this location (10)"}), 403
+
+        # Create an image
+        new_image = LocationImage(locationId=location_id, url=image_url, preview=preview)
+        db.session.add(new_image)
+        db.session.commit()
+
+        # We return only the necessary data
+        return jsonify({
+            "id": new_image.id,
+            "url": new_image.url,
+            "preview": new_image.preview
+        }), 201
+
+    except Exception as e:
+        print(e)
+        return jsonify({"message": "Internal server error"}), 500
+    
+
+     # ************ PUT /api/locations/:location_id/images/image_id ***************
+@location_routes.route('/<int:location_id>/images/<int:image_id>', methods=['PUT'])
+@login_required
+def update_location_image(location_id, image_id):
+    """Updates an existing image for a location."""
+    try:
+        location = Location.query.get(location_id)
+        if not location:
+            return jsonify({"message": "Location not found."}), 404
+        if location.ownerId != current_user.id:
+            return jsonify({"message": "Forbidden"}), 403
+
+        image = LocationImage.query.get(image_id)
+        if not image or image.locationId != location_id:
+            return jsonify({"message": "Image not found."}), 404
+
+        data = request.get_json()
+        if not data or "url" not in data or "preview" not in data:
+            return jsonify({"message": "URL and preview status are required"}), 400
+
+        # Обновляем данные изображения
+        image.url = data["url"]
+        image.preview = data["preview"]
+        # image.updatedAt = datetime.now(timezone.utc)
+
+        db.session.commit()
+
+        return jsonify({
+            "id": image.id,
+            "locationId": image.locationId,
+            "url": image.url,
+            "preview": image.preview,
+            "updatedAt": str(image.updatedAt)
+        }), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify({"message": "Internal server error"}), 500
+    
+    # ************ DELETE /api/locations/:id/images ***************
+@location_routes.route('/<int:location_id>/images/<int:image_id>', methods=['DELETE'])
+@login_required
+def delete_location_image(location_id, image_id):
+    """Deletes an existing image from a location."""
+    try:
+        location = Location.query.get(location_id)
+        if not location:
+            return jsonify({"message": "Location not found."}), 404
+        if location.ownerId != current_user.id:
+            return jsonify({"message": "Forbidden"}), 403
+
+        image = LocationImage.query.get(image_id)
+        if not image or image.locationId != location_id:
+            return jsonify({"message": "Image not found."}), 404
+
+        # Удаляем изображение
+        db.session.delete(image)
+        db.session.commit()
+
+        return jsonify({"message": "Image successfully deleted."}), 200
+
+    except Exception as e:
+        print(f"🔥 ERROR: {e}")
+        return jsonify({"message": "Internal server error"}), 500
+
+
+
+
+
+
+
