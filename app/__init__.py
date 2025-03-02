@@ -11,7 +11,7 @@ from .api.profile_routes import profile_routes
 from .api.categories_routes import category_routes
 from .api.locations_routes import location_routes
 from .api.review_routes import review_routes
-
+from .api.events_routes import events_routes 
 from .seeds import seed_commands
 from .config import Config
 
@@ -37,6 +37,7 @@ app.register_blueprint(profile_routes, url_prefix='/api/profile')
 app.register_blueprint(category_routes, url_prefix='/api/categories')
 app.register_blueprint(location_routes, url_prefix='/api/locations')
 app.register_blueprint(review_routes, url_prefix='/api/reviews')
+app.register_blueprint(events_routes, url_prefix='/api/events')
 db.init_app(app)
 Migrate(app, db)
 
