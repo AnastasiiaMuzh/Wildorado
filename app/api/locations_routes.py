@@ -1,10 +1,9 @@
 from flask import Blueprint, request, jsonify
 from flask_login import current_user, login_required
 from sqlalchemy import or_
-from datetime import datetime
+from datetime import datetime, timezone
 from app.models import db, Location, LocationImage, Review, ReviewImage, User
 from app.api.utils import apply_category_filters, get_location_images, calculate_average_rating, get_reviews_for_location
-from datetime import datetime, timezone
 
 location_routes = Blueprint('locations', __name__)
 
@@ -550,7 +549,7 @@ def delete_location_image(location_id, image_id):
         return jsonify({"message": "Image successfully deleted."}), 200
 
     except Exception as e:
-        print(f"🔥 ERROR: {e}")
+        print(e)
         return jsonify({"message": "Internal server error"}), 500
 
 
