@@ -1,45 +1,55 @@
-.home-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
+.category-container {
+  width: 100%;
+  background: linear-gradient(to bottom, rgba(238, 242, 243, 0.9), rgba(142, 54, 34, 0.9));
+  padding: 20px 0;
   
-  /* Фоновое изображение на верхней части экрана */
-  .fot-img {
-    width: 100%;
-    height: 80vh;
-    background-image: url("/images/photo2.png");
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-  }
+}
 
-  .fot-img::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.3);
+.category-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap; /* Запрещаем перенос на новую строку */
+  gap: 20px; /* Отступ между элементами */
+  padding: 0;
+  margin: 0 auto;
+  max-width: 100%;
+  overflow-x: auto; /* Добавляем горизонтальную прокрутку если не помещается */
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.category-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+  font-size: 22px;
+  font-weight: bold;
+  gap: 25px; /* Отступ между иконкой и текстом */
+}
+
+.category-icon {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ff7300;
+}
+
+.category-item:hover img {
+  transform: scale(0.9); /* Лёгкое увеличение */
+  transition: transform 0.5s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .category-list {
+    flex-direction: column;
+    align-items: center;
   }
-  
-  .fot-img h1 {
-    position: relative;
-    z-index: 1;
-    font-size: 2rem;
-  }
-  
-  .category-container {
-    background: white;
-    text-align: center;
-    padding: 50px 0;
-  }
-  
-  .category-container ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  
+}
