@@ -1,0 +1,136 @@
+/* .modal-overlay {
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; 
+}
+
+.signup-form-modal {
+  background: white; 
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 10000; 
+  position: relative;
+} */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  overflow: hidden;
+}
+
+
+
+.signup-form-modal {
+  width: 550px;
+  max-width: 90%;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px; /* Ограничение ширины */
+  gap: 10px;
+  margin-left: -25px; /* Двигаем чуть влево */
+}
+
+.signup-form label {
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.signup-form input,
+.signup-form textarea {
+  padding: 10px;
+  border: 2px solid lightgray;
+  border-radius: 6px;
+  font-size: 16px;
+  width: 100%;
+  transition: all 0.2s ease-in-out;
+}
+
+.signup-form input:focus,
+.signup-form textarea:focus {
+  outline: none;
+  border-color: #64B5F6;
+  box-shadow: 0 0 5px rgba(100, 181, 246, 0.5);
+}
+
+.signup-form textarea {
+  resize: none;
+  height: 70px;
+}
+
+.signup-form button {
+  width: 100%;
+  background-color: #FFB6C1;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  padding: 12px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.signup-form button:hover {
+  background-color: #FF80AB;
+}
+
+/* Делаем все поля одинаковыми */
+.signup-form input[type="text"],
+.signup-form input[type="password"],
+.signup-form textarea {
+  width: 100%;
+  margin-top: 5px;
+}
+
+/* Добавляем отступы между input и label */
+.signup-form label {
+  margin-bottom: 4px;
+}
+
+/* Улучшение адаптивности */
+@media (max-width: 500px) {
+  .signup-form-modal {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .signup-form input,
+  .signup-form textarea {
+    font-size: 14px;
+  }
+
+  .signup-form button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}

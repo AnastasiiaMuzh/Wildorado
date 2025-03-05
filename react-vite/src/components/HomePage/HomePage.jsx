@@ -1,13 +1,12 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkCategories } from "../../redux/categories";
 import { Link } from "react-router-dom";
+import "./HomePage.css";
 
 const HomePage = () => {
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories.allCategories);
-
-  console.log("Categories from Redux:", categories); 
 
   useEffect(() => {
     dispatch(thunkCategories());
@@ -18,18 +17,26 @@ const HomePage = () => {
   }
 
   return (
-    <div>
-      <h1>Welcome to Wildorado!</h1>
-      <p>Choose a category:</p>
-      <ul>
-        {categories.map((cat) => (
-          <li key={cat.id}>
-            <Link to={`/categories/${cat.id}`} style={{ textDecoration: "none", fontSize: "18px" }}>
-              {cat.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <div className="home-container">
+      <div className="fot-img">
+        {/* <h1>Explore the best outdoor adventures</h1> */}
+      </div>
+
+      <div className="category-container">
+        <p>Choose a category:</p>
+        <ul>
+          {categories.map((category) => (
+            <li key={category.id}>
+              <Link
+                to={`/categories/${category.id}`}
+                style={{ textDecoration: "none", fontSize: "18px" }}
+              >
+                {category.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

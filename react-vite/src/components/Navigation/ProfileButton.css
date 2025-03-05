@@ -1,0 +1,58 @@
+.profile-container {
+  position: relative;
+}
+
+.profile-button-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-button {
+  background: none;
+  border: none;
+  font-size: 32px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.profile-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 35px); /* Чуть ниже */
+  right: 0;
+  background: rgba(255, 255, 255, 0.9); /* Полупрозрачный фон */
+  list-style: none;
+  margin: 0; 
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 2000;
+  min-width: 180px;
+  max-width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-dropdown li {
+  padding: 8px 0;
+  width: 100%;
+  font-weight: bold;
+}
+
+.profile-dropdown .logout-button {
+  width: 100%;
+  padding: 10px;
+  background: rgba(85, 173, 227, 0.6); 
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+

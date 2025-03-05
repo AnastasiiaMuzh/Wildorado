@@ -1,0 +1,45 @@
+.home-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Фоновое изображение на верхней части экрана */
+  .fot-img {
+    width: 100%;
+    height: 80vh;
+    background-image: url("/images/photo2.png");
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+
+  .fot-img::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+  }
+  
+  .fot-img h1 {
+    position: relative;
+    z-index: 1;
+    font-size: 2rem;
+  }
+  
+  .category-container {
+    background: white;
+    text-align: center;
+    padding: 50px 0;
+  }
+  
+  .category-container ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
