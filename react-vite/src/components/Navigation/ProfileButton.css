@@ -56,3 +56,6 @@
   transition: background 0.3s ease;
 }
 
+.profile-dropdown .logout-button:hover {
+  background: rgba(185, 197, 226, 0.8); /* Немного темнее при наведении */
+}

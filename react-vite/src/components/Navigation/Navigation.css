@@ -18,10 +18,10 @@
 }
 
 .transparent-navbar {
-  background: rgba(255, 255, 255, 0.1); /* Легкая прозрачность */
-  backdrop-filter: blur(10px); /* Размытие */
-  transition: background 0.3s ease-in-out;
-  /* border-bottom: 1px solid rgba(255, 255, 255, 0.2); Легкая линия */
+  background: rgba(255, 255, 255, 0.1); /* Легкая прозрачность*/
+  backdrop-filter: blur(5px); /* Размытие */
+  transition: background 0.3s ease-in-out; 
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Легкая линия */
 }
 
 .solid-navbar {
@@ -152,7 +152,7 @@
 
 .transparent-navbar .nav-link,
 .transparent-navbar .calendar-button {
-  color: white;
+  color: rgb(15, 11, 21);
 }
 
 .profile-button {
