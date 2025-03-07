@@ -51,8 +51,8 @@
   display: flex;
   justify-content: center;
   width: 112%;
-  color: #8b575c;
-  background-color: #f6bdd1;
+  color: #e6e7ea;
+  background-color: #d56c27;
   padding: 12px;
   border: none;
   border-radius: 4px;
@@ -62,12 +62,12 @@
 }
 
 .login-form button:hover {
-  background-color: #f6bdd1;
+  background-color: #3266c8;
   transform: scale(1.02);
 }
 
 .login-form p {
-  color: lightskyblue;
+  color: rgb(224, 228, 230);
   font-size: 14px;
   margin-top: 4px;
 }
@@ -75,9 +75,10 @@
 .demo-login {
   margin-top: 10px !important;
   color: whitesmoke !important;
-  background-color: #8b575c !important;  
+  background-color: #266ccf !important;  
 }
 
 .demo-login:hover {
   transform: scale(1.02);
+  color: #d56c27;
 }

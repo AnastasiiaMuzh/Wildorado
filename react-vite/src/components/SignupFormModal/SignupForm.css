@@ -89,7 +89,7 @@
 
 .signup-form button {
   width: 100%;
-  background-color: #FFB6C1;
+  background-color: #d05d1a;
   border: none;
   border-radius: 6px;
   font-weight: bold;
@@ -101,7 +101,7 @@
 }
 
 .signup-form button:hover {
-  background-color: #FF80AB;
+  background-color: #557ade;
 }
 
 /* Делаем все поля одинаковыми */

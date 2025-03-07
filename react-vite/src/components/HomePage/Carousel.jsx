@@ -16,9 +16,9 @@ const Carousel = () => {
     useEffect(() => {
         // Interval to change the image every 6 seconds
         const interval = setInterval(() => {
-            setShowText(false); // Hide text before switching to the next image
+            // setShowText(false); 
             setIndex((prevIndex) => (prevIndex + 1) % images.length); // carousel
-        }, 6000);
+        }, 8000);
         return () => clearInterval(interval); // Cleanup interval on unmount
     }, []);
 
@@ -26,12 +26,12 @@ const Carousel = () => {
         // Show text after 1 second
         const showTextTimer = setTimeout(() => {
             setShowText(true);
-        }, 1000);
+        }, 2000);
         
         // Hide text after 5 seconds (1s delay + 4s display)
         const hideTextTimer = setTimeout(() => {
             setShowText(false);
-        }, 5000); 
+        }, 7000); 
         
         return () => {
             clearTimeout(showTextTimer); // Cleanup timers
@@ -48,10 +48,10 @@ const Carousel = () => {
                     src={images[index].src}
                     alt=""
                     className="carousel-image" 
-                    initial={{ opacity: 0, scale: 1.1 }} 
-                    animate={{ opacity: 1, scale: 1 }} 
-                    exit={{ opacity: 0, scale: 1.1 }} 
-                    transition={{ duration: 4, ease: "easeInOut" }} 
+                    initial={{ opacity: 0, scale: 1.1 }} //когда картинка только появляется, она невидимая и чуть-чуть увеличена.
+                    animate={{ opacity: 1, scale: 1 }} //затем она становится видимой и принимает нормальный размер.
+                    exit={{ opacity: 0, scale: 1.1 }} //когда настаёт время исчезнуть, она снова становится невидимой и увеличивается.
+                    transition={{ duration: 8, ease: "easeInOut" }} //все эти изменения происходят плавно в течение 6 секунд.
                 />
             </AnimatePresence>
             {/* Animated text appearing after 1 second and disappearing after 5 seconds */}
@@ -59,10 +59,10 @@ const Carousel = () => {
                 {showText && (
                     <motion.div
                         className={`carousel-text ${index === images.length - 1 ? "center-text" : ""}`}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.5 }}
+                        initial={{ opacity: 0, y: 20 }}   // Начинаем с 0 прозрачности и немного ниже
+                        animate={{ opacity: 1, y: 0 }}   // Делаем текст полностью видимым и ставим на место
+                        exit={{ opacity: 0, y: -20 }}   // Исчезает, уходя вверх
+                        transition={{ duration: 0.5 }} // Вся анимация длится 0.5 секунды
                     >
                         {images[index].text}
                     </motion.div>
