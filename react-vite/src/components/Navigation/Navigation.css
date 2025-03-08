@@ -7,6 +7,7 @@
   transition: background 0.3s ease-in-out;
 }
 
+
 .navbar-container {
   display: flex;
   align-items: center;
@@ -16,6 +17,15 @@
   margin: 0 auto;
   position: relative;
 }
+
+.page-content {
+  padding-top: 100px; /* Отступ сверху для всех страниц */
+}
+
+.home-page {
+  padding-top: 0; /* Для главной страницы убираем отступ */
+}
+
 
 .transparent-navbar {
   background: rgba(255, 255, 255, 0.1); /* Легкая прозрачность*/
@@ -104,7 +114,7 @@
 
 .nav-link:hover {
   background: rgba(255, 255, 255, 0.2);
-  color: #f8b400;
+  color: #e16024;
   transform: scale(1.05); 
 }
 
@@ -178,6 +188,8 @@
   cursor: pointer;
 }
 
+
+
 @media (max-width: 1024px) {
   .navbar-container {
     padding: 10px 20px;
@@ -210,11 +222,30 @@
     max-width: 100%;
     margin-top: 10px;
   }
+
+  .categories-container {
+    flex-wrap: nowrap; /* Запрещаем перенос на новую строку */
+    overflow-x: auto; /* Добавляем скролл */
+    white-space: nowrap;
+  }
+
+  .category-item {
+    min-width: 100px; /* Минимальная ширина */
+  }
 }
 
 @media (max-width: 480px) {
   .logo-img {
     height: 40px;
+  }
+  
+  .categories-container {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .category-item {
+    min-width: 90px;
   }
 }
 

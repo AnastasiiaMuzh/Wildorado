@@ -35,18 +35,14 @@ const deleteLocation = (locationId) => ({
 });
 
 // ---------- THUNKS ----------
-// Get all locations, with pagination, search, filters
-export const thunkGetAllLocations = (queryParams = "") => async (dispatch) => {
+//Get all locations
+export const thunkGetAllLocations = (queryParams="") => async (dispatch) => {
   const res = await csrfFetch(`/api/locations${queryParams}`);
   if (res.ok) {
     const data = await res.json();
-    dispatch(getLocations(data.Locations)); 
+    dispatch(getLocations(data.Locations || [])); 
     return data;
-  } else {
-    const errData = await res.json();
-    console.error("Error response:", errorData);
-    return errData;
-  }
+   }
 };
 
 // Get a specific location by ID
@@ -117,7 +113,7 @@ const initialState = { allLocations: [], currentLocation: null };
 const locationsReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ALL_LOCATIONS:
-      return { ...state, allLocations: action.payload }; // Исправлено на action.payload
+      return { ...state, allLocations: action.payload }; 
     case GET_LOCATION_DETAILS:
       return { ...state, currentLocation: action.payload };
     case CREATE_LOCATION:

@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_login import current_user, login_required
 from sqlalchemy import or_
 from datetime import datetime, timezone
-from app.models import db, Location, LocationImage, Review, ReviewImage, User
+from app.models import db, Location, LocationImage, Review, ReviewImage, User, Category
 from app.api.utils import apply_category_filters, get_location_images, calculate_average_rating, get_reviews_for_location
 
 location_routes = Blueprint('locations', __name__)
@@ -24,7 +24,7 @@ def get_locations():
 
         # Search and filter params
         search_query = request.args.get("search", "", type=str).strip().lower()
-        category = request.args.get("category", None, type=int)
+        category_name = request.args.get("category", None, type=str)
         elevation = request.args.get("elevation", None, type=str)
         distance = request.args.get("distance", None, type=str)
 
@@ -40,21 +40,36 @@ def get_locations():
             "terrainType": request.args.get("terrainType", None, type=str)
         }
 
-        query = Location.query
+        #query = Location.query
+
+         # Основной запрос с JOIN на таблицу категорий
+        query = Location.query.join(Category)
 
         # Search in name or city
         if search_query:
             query = query.filter(
                 or_(
                     Location.name.ilike(f"%{search_query}%"),
-                    Location.city.ilike(f"%{search_query}%")
+                    Location.city.ilike(f"%{search_query}%"),
+                    Category.name.ilike(f"%{search_query}%")
                 )
             )
 
         # If category is present, filter and apply category-specific logic
-        if category:
-            query = query.filter(Location.categoryId == category)
-            query = apply_category_filters(query, category, filters)
+        # if category:
+        #     query = query.filter(Location.categoryId == category)
+        #     query = apply_category_filters(query, category, filters)
+        # if category_name:
+        #     category = Category.query.filter(Category.name.ilike(f"%{category_name}%")).first()
+        #     if category:
+        #         query = query.filter(Location.categoryId == category.id)
+        #         query = apply_category_filters(query, category.id, filters)
+        #     else:
+        #         return jsonify({"message": "Category not found."}), 404
+
+        # search by category name
+        if category_name:
+            query = query.filter(Category.name.ilike(f"%{category_name}%"))
 
         # Filter by elevation (partial match) and distance (partial match)
         if elevation:

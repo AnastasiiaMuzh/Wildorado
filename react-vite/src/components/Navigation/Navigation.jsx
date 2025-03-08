@@ -5,6 +5,7 @@ import ProfileButton from "./ProfileButton";
 import Calendar from "react-calendar"; 
 import "react-calendar/dist/Calendar.css"; 
 import "./Navigation.css"; 
+import { csrfFetch } from "../../redux/csrf";
 
 function Navigation() {
   const navigate = useNavigate();
@@ -47,11 +48,29 @@ function Navigation() {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
-    navigate(`/search?q=${searchQuery.trim()}`);
-    setSearchQuery("");
-  };
+    const query = searchQuery.trim();
+    if (!query) return;
+    try {
+        const res = await csrfFetch(`/api/locations?search=${query}&page=1&perPage=12`);
+        if (res.ok) {
+          // Если запрос успешный, перенаправляем на страницу поиска
+          navigate(`/locations?search=${query}`);
+        } else {
+            // Если сервер вернул 404 (не найдено) – показываем alert и НЕ уходим со страницы
+          alert("No results found. Please try again!");
+        }
+    } catch (error) {
+      console.error("Error searching locations:", error);
+      alert("Something went wrong. Please try again.");
+    }
+
+    setSearchQuery(""); // Очищаем строку поиска после запроса
+};
+
+
+
 
   return (
     <nav className={`navbar ${isHomePage ? "transparent-navbar" : "solid-navbar"}`}>
@@ -68,7 +87,7 @@ function Navigation() {
           <button type="submit" className="search-button">🔍</button>
           <input
             type="text"
-            placeholder="Search category, city, elevation ..."
+            placeholder="Search category, city, mountains ..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="search-input"
@@ -83,8 +102,8 @@ function Navigation() {
         </button>
 
         <div className={`nav-links ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
-          <NavLink to="/events" className='nav-link'>LOCATION</NavLink>
-          <NavLink to="/locations" className='nav-link'>EVENT</NavLink>
+          <NavLink to="/locations" className='nav-link'>LOCATION</NavLink>
+          <NavLink to="/events" className='nav-link'>EVENT</NavLink>
           <NavLink to="/community" className='nav-link'>COMMUNITY</NavLink>
           <NavLink to="/contact" className='nav-link'>CONTACT</NavLink>
           <NavLink to="/blog" className='nav-link'>BLOG</NavLink>

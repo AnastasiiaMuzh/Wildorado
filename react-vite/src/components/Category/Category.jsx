@@ -29,7 +29,7 @@ const CategoryDetailPage = () => {
             <div>
               <h3>{location.name}</h3>
               <p>City: {location.city}</p>
-              <p>Avg. Rating: {location.avgRating} ({location.reviewCount} reviews)</p>
+              <p>★ {location.avgRating} ({location.reviewCount} reviews)</p>
             </div>
           </li>
         ))}
