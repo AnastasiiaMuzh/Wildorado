@@ -68,7 +68,7 @@ def get_locations():
         if not locations.items:
             return jsonify({"message": "No locations found."}), 404
 
-        # Build the response
+
         response = {
             "Locations": [{
                 "id": loc.id,
@@ -228,32 +228,32 @@ def create_location():
             6: ["terrainType", "elevation"]
         }
 
-        # 1) Check categoryId
+        # Check categoryId
         category_id = data.get("categoryId")
         if category_id not in category_fields:
             return jsonify({"message": "Invalid categoryId"}), 400
 
-        # 2) Combine base + category fields
+        # Combine base + category fields
         required_fields = base_required_fields + category_fields[category_id]
         missing_fields = [f for f in required_fields if f not in data]
         if missing_fields:
             return jsonify({"message": "Missing required fields", "missing": missing_fields}), 400
 
-        # 3) Validate that 'name', 'city', 'description' are non-empty
+        # Validate that 'name', 'city', 'description' are non-empty
         for field in ["name", "city", "description"]:
             if not data[field].strip():
                 return jsonify({"message": f"Field '{field}' cannot be empty"}), 400
 
-        # 4) Validate 'distance' as a positive number
+        # Validate 'distance' as a positive number
         if not isinstance(data["distance"], (int, float)) or data["distance"] <= 0:
             return jsonify({"message": "Distance must be a positive number"}), 400
 
-        # 5) If 'elevation' is required for this category, validate it as well
+        # If 'elevation' is required for this category, validate it as well
         if "elevation" in category_fields[category_id]:
             if not isinstance(data["elevation"], (int, float)) or data["elevation"] <= 0:
                 return jsonify({"message": "Elevation must be a positive number"}), 400
 
-        # 6) Validate enum fields (difficulty, riverClass, routeType, terrainType)
+        # Validate enum fields (difficulty, riverClass, routeType, terrainType)
         valid_difficulties = ["Easy", "Medium", "Hard"]
         valid_river_classes = ["I", "II", "III", "IV", "V"]
         valid_route_types = ["Trad", "Sport"]
@@ -268,12 +268,16 @@ def create_location():
         if "terrainType" in data and data["terrainType"] not in valid_terrain_types:
             return jsonify({"message": "Invalid terrain type value"}), 400
 
-        # 7) Check for duplicate (location name + city)
+        # Check for duplicate (location name + city)
         existing_location = Location.query.filter_by(name=data["name"], city=data["city"]).first()
         if existing_location:
             return jsonify({"message": "A location with this name already exists in this city"}), 409
+        
+        # Validate that at least four image is provided
+        if "images" not in data or len(data["images"]) != 4:
+            return jsonify({"message": "At least four image is required"}), 400
 
-        # 8) Create the new location
+        # Create the new location
         new_loc = Location(
             categoryId=category_id,
             ownerId=current_user.id,
@@ -291,11 +295,20 @@ def create_location():
             terrainType=data.get("terrainType"),
             bestSeason=data.get("bestSeason")
         )
-
         db.session.add(new_loc)
         db.session.commit()
 
-        # 9) Build a basic JSON response
+        # Add images
+        for img_data in data["images"]:
+            new_image = LocationImage(
+                locationId=new_loc.id,
+                url=img_data["url"],
+                preview=img_data.get("preview", False)
+            )
+            db.session.add(new_image)
+        db.session.commit()
+
+
         response = {
             "id": new_loc.id,
             "ownerId": new_loc.ownerId,
@@ -303,7 +316,15 @@ def create_location():
             "name": new_loc.name,
             "city": new_loc.city,
             "description": new_loc.description,
-            "distance": new_loc.distance
+            "distance": new_loc.distance,
+            "images": [
+                {
+                    "id": img.id,
+                    "url": img.url,
+                    "preview": img.preview
+                }
+                for img in new_loc.images
+            ]
         }
         # Add category-specific fields
         for field in category_fields[category_id]:
@@ -395,9 +416,24 @@ def update_location(location_id):
         for field in required_fields:
             setattr(loc, field, data[field])
 
-        db.session.commit()
+        # Delete old images
+        LocationImage.query.filter_by(locationId=location_id).delete()
+        db.session.commit()  # Сохраняем удаление старых изображений
 
-        # Build the response
+        # Add new images
+        if "images" in data:
+            for img_data in data["images"]:
+                new_image = LocationImage(
+                    locationId=location_id,
+                    url=img_data["url"],
+                    preview=img_data.get("preview", False)
+                )
+                db.session.add(new_image)
+            db.session.commit()  # Сохраняем добавление новых изображений
+
+        # Получаем обновленные изображения для ответа
+        updated_images = LocationImage.query.filter_by(locationId=location_id).all()
+
         response = {
             "id": loc.id,
             "ownerId": loc.ownerId,
@@ -405,8 +441,17 @@ def update_location(location_id):
             "name": loc.name,
             "city": loc.city,
             "description": loc.description,
-            "distance": loc.distance
+            "distance": loc.distance,
+            "images": [
+                {
+                    "id": img.id,
+                    "url": img.url,
+                    "preview": img.preview
+                }
+                for img in update_location
+            ]
         }
+
         # Add category-specific fields
         for field in category_fields[category_id]:
             response[field] = getattr(loc, field)

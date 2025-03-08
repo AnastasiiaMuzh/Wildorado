@@ -1,0 +1,146 @@
+// redux/locations.js
+import { csrfFetch } from "./csrf";
+
+// ---------- ACTION TYPES ----------
+const GET_ALL_LOCATIONS = "locations/GET_ALL_LOCATIONS";
+const GET_LOCATION_DETAILS = "locations/GET_DETAILS_LOCATION";
+const CREATE_LOCATION = "locations/CREATE_LOCATION";
+const UPDATE_LOCATION = "locations/UPDATE_LOCATION";
+const DELETE_LOCATION = "locations/DELETE_LOCATION";
+
+// ---------- ACTION CREATORS ----------
+const getLocations = (locationsArray) => ({
+  type: GET_ALL_LOCATIONS,
+  payload: locationsArray,
+});
+
+const getLocationDetails = (locationData) => ({
+  type: GET_LOCATION_DETAILS,
+  payload: locationData,
+});
+
+const createLocation = (locationData) => ({
+  type: CREATE_LOCATION,
+  payload: locationData,
+});
+
+const updateLocation = (locationData) => ({
+  type: UPDATE_LOCATION,
+  payload: locationData,
+});
+
+const deleteLocation = (locationId) => ({
+  type: DELETE_LOCATION,
+  payload: locationId,
+});
+
+// ---------- THUNKS ----------
+// Get all locations, with pagination, search, filters
+export const thunkGetAllLocations = (queryParams = "") => async (dispatch) => {
+  const res = await csrfFetch(`/api/locations${queryParams}`);
+  if (res.ok) {
+    const data = await res.json();
+    dispatch(getLocations(data.Locations)); 
+    return data;
+  } else {
+    const errData = await res.json();
+    console.error("Error response:", errorData);
+    return errData;
+  }
+};
+
+// Get a specific location by ID
+export const thunkGetLocationDetails = (locationId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/locations/${locationId}`);
+  if (res.ok) {
+    const data = await res.json();
+    dispatch(getLocationDetails(data)); 
+    return data; // Возвращаем данные для использования в компоненте
+  } else {
+    const errData = await res.json();
+    console.error("Error response:", errorData);
+    return errData; // Возвращаем ошибку для обработки в компоненте
+  }
+};
+
+// Create a new location
+export const thunkCreateLocation = (locationData) => async (dispatch) => {
+  const res = await csrfFetch("/api/locations/", {
+    method: "POST",
+    body: JSON.stringify(locationData),
+  });
+  if (res.ok) {
+    const data = await res.json();
+    dispatch(createLocation(data));
+    return data;
+  } else {
+    const errData = await res.json();
+    return errData; 
+  }
+};
+
+// Update an existing location
+export const thunkUpdateLocation = (locationId, locationData) => async (dispatch) => {
+  const res = await csrfFetch(`/api/locations/${locationId}`, {
+    method: "PUT",
+    body: JSON.stringify(locationData),
+  });
+  if (res.ok) {
+    const data = await res.json();
+    dispatch(updateLocation(data));
+    return data;
+  } else {
+    const errData = await res.json();
+    console.error("Error response:", errorData);
+    return errData; 
+  }
+};
+
+// Delete a location
+export const thunkDeleteLocation = (locationId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/locations/${locationId}`, {
+    method: "DELETE",
+  });
+  if (res.ok) {
+    dispatch(deleteLocation(locationId));
+  } else {
+    const errData = await res.json();
+    console.error("Error response:", errorData);
+    return errData; 
+  }
+};
+
+// ---------- REDUCER ----------
+//Если пользователь переходит на другую страницу или закрывает детали локации, можем сбросить currentLocation в null, чтобы освободить память и избежать ошибок.
+const initialState = { allLocations: [], currentLocation: null };
+
+const locationsReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case GET_ALL_LOCATIONS:
+      return { ...state, allLocations: action.payload }; // Исправлено на action.payload
+    case GET_LOCATION_DETAILS:
+      return { ...state, currentLocation: action.payload };
+    case CREATE_LOCATION:
+      return { ...state, allLocations: [...state.allLocations, action.payload] };
+    case UPDATE_LOCATION:
+      return {
+        ...state,
+        allLocations: state.allLocations.map((loc) =>
+          loc.id === action.payload.id ? action.payload : loc
+        ),
+        currentLocation:
+          state.currentLocation?.id === action.payload.id ? action.payload : state.currentLocation,
+      };
+    case DELETE_LOCATION:
+      return {
+        ...state,
+        allLocations: state.allLocations.filter((loc) => loc.id !== action.payload),
+        currentLocation:
+          state.currentLocation?.id === action.payload ? null : state.currentLocation,
+      };
+    default:
+      return state;
+  }
+}
+
+export default locationsReducer;
