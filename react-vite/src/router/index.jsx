@@ -4,6 +4,8 @@ import SignupFormPage from '../components/SignupFormPage';
 import HomePage from '../components/HomePage/HomePage';
 import Category from '../components/Category/Category'
 import LocationPage from '../components/Locations/LocationsPage';
+import LocationDetailsPage from '../components/Locations/LocationDetailsPage';
+import CreateLocations from '../components/Locations/CreateLocationForm';
 import Layout from './Layout';
 
 
@@ -30,6 +32,14 @@ export const router = createBrowserRouter([
       {
         path: "/locations",
         element: <LocationPage />,
+      },
+      {
+        path: "/locations/:id",
+        element: <LocationDetailsPage />,
+      },
+      {
+        path: "/locations/new",
+        element: <CreateLocations />,
       },
     ],
   },

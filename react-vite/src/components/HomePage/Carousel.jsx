@@ -12,6 +12,7 @@ const images = [
 const Carousel = () => {
     const [index, setIndex] = useState(0); // State to track the current image index
     const [showText, setShowText] = useState(false); // State to control text visibility
+    
 
     useEffect(() => {
         // Interval to change the image every 6 seconds

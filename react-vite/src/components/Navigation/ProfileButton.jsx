@@ -64,6 +64,10 @@ function ProfileButton() {
                 <li>My profile</li>
               </div>
 
+              <div className="my-profile">
+                <li>Manage Locations</li>
+              </div>
+
               <li>
                 <button onClick={logout} className="logout-button">Log Out</button>
               </li>

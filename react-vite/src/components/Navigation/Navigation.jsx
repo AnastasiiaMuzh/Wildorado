@@ -19,6 +19,8 @@ function Navigation() {
   const calendarRef = useRef(null);
   const profileRef = useRef(null);
 
+  const isHomePage = location.pathname === "/";
+
   // Закрытие попапов при клике вне их области
   useEffect(() => {
     function handleClickOutside(event) {
@@ -26,12 +28,12 @@ function Navigation() {
         setShowCalendar(false);
       }
     }
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
 
   useEffect(() => {
     const today = new Date().toLocaleDateString("en-US", {
@@ -42,11 +44,11 @@ function Navigation() {
     setCurrentDate(today);
   }, []);
 
-  const isHomePage = location.pathname === "/";
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+  
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -58,19 +60,15 @@ function Navigation() {
           // Если запрос успешный, перенаправляем на страницу поиска
           navigate(`/locations?search=${query}`);
         } else {
-            // Если сервер вернул 404 (не найдено) – показываем alert и НЕ уходим со страницы
+            // Если сервер вернул 404 
           alert("No results found. Please try again!");
         }
     } catch (error) {
       console.error("Error searching locations:", error);
       alert("Something went wrong. Please try again.");
     }
-
     setSearchQuery(""); // Очищаем строку поиска после запроса
-};
-
-
-
+  };
 
   return (
     <nav className={`navbar ${isHomePage ? "transparent-navbar" : "solid-navbar"}`}>
@@ -106,7 +104,9 @@ function Navigation() {
           <NavLink to="/events" className='nav-link'>EVENT</NavLink>
           <NavLink to="/community" className='nav-link'>COMMUNITY</NavLink>
           <NavLink to="/contact" className='nav-link'>CONTACT</NavLink>
-          <NavLink to="/blog" className='nav-link'>BLOG</NavLink>
+          {user && (
+          <NavLink to="/locations/new" className='nav-link'>POST</NavLink>
+          )}
 
           <div className="dropdown-container" ref={calendarRef}>
             <button 

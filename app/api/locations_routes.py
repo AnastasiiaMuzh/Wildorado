@@ -147,10 +147,19 @@ def get_location_detail(id):
 
         # Generate a dictionary of only the relevant fields for this category
         category_specific = {
-            field: getattr(location, field)
+
+            field: (
+                
+                f"{getattr(location, field)} mi" if field == "distance" 
+                else f"{int(getattr(location, field))} ft" if field == "elevation" and getattr(location, field) % 1 == 0
+                else f"{getattr(location, field)} ft" if field == "elevation"
+                else getattr(location, field)
+            )
             for field in category_fields.get(location.categoryId, [])
         }
 
+            
+        
         # Owner info (username, avatar, etc.)
         owner = User.query.get(location.ownerId)
 
@@ -219,7 +228,7 @@ def get_current_user_locations():
 
 
 # ************************ POST /api/locations ************************
-@location_routes.route('/', methods=['POST'])
+@location_routes.route('/new', methods=['POST'])
 @login_required
 def create_location():
     """
@@ -284,9 +293,9 @@ def create_location():
             return jsonify({"message": "Invalid terrain type value"}), 400
 
         # Check for duplicate (location name + city)
-        existing_location = Location.query.filter_by(name=data["name"], city=data["city"]).first()
-        if existing_location:
-            return jsonify({"message": "A location with this name already exists in this city"}), 409
+        # existing_location = Location.query.filter_by(name=data["name"], city=data["city"]).first()
+        # if existing_location:
+        #     return jsonify({"message": "A location with this name already exists in this city"}), 409
         
         # Validate that at least four image is provided
         if "images" not in data or len(data["images"]) != 4:

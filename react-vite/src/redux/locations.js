@@ -1,4 +1,3 @@
-// redux/locations.js
 import { csrfFetch } from "./csrf";
 
 // ---------- ACTION TYPES ----------
@@ -38,58 +37,76 @@ const deleteLocation = (locationId) => ({
 //Get all locations
 export const thunkGetAllLocations = (queryParams="") => async (dispatch) => {
   const res = await csrfFetch(`/api/locations${queryParams}`);
-  if (res.ok) {
-    const data = await res.json();
-    dispatch(getLocations(data.Locations || [])); 
+  if (!res.ok) {
+    console.error("Error fetching locations")
+    return null;
+  }
+  const data = await res.json();
+  dispatch(getLocations(data.Locations || [])); 
     return data;
-   }
 };
 
 // Get a specific location by ID
 export const thunkGetLocationDetails = (locationId) => async (dispatch) => {
   const res = await csrfFetch(`/api/locations/${locationId}`);
-  if (res.ok) {
-    const data = await res.json();
-    dispatch(getLocationDetails(data)); 
-    return data; // Возвращаем данные для использования в компоненте
-  } else {
-    const errData = await res.json();
-    console.error("Error response:", errorData);
-    return errData; // Возвращаем ошибку для обработки в компоненте
+  if (!res.ok) {
+    console.error("Error fetching location details");
+    return null;
   }
+  const data = await res.json();
+  dispatch(getLocationDetails(data)); 
+    return data; // Возвращаем данные для использования в компоненте
 };
 
 // Create a new location
 export const thunkCreateLocation = (locationData) => async (dispatch) => {
-  const res = await csrfFetch("/api/locations/", {
+  const res = await csrfFetch("/api/locations/new", {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(locationData),
   });
-  if (res.ok) {
-    const data = await res.json();
-    dispatch(createLocation(data));
-    return data;
-  } else {
-    const errData = await res.json();
-    return errData; 
+  if (!res.ok) {
+    console.error("Error creating location")
+    return null;
   }
+  const data = await res.json(); 
+  dispatch(createLocation(data));
+    return data;
 };
+// export const thunkCreateLocation = (locationData) => async (dispatch) => {
+//   const res = await csrfFetch('/api/locations/new', {
+//       method: 'POST',
+//       headers: {
+//           'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(locationData),
+//   });
+
+//   if (res.ok) {
+//       const data = await res.json();
+//       dispatch(createLocation(data));
+//       return data;
+//   } else {
+//       const errorData = await res.json();
+//       throw new Error(errorData.message || 'Failed to create location');
+//   }
+// };
+
 
 // Update an existing location
 export const thunkUpdateLocation = (locationId, locationData) => async (dispatch) => {
   const res = await csrfFetch(`/api/locations/${locationId}`, {
     method: "PUT",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(locationData),
   });
-  if (res.ok) {
-    const data = await res.json();
-    dispatch(updateLocation(data));
-    return data;
-  } else {
-    const errData = await res.json();
-    console.error("Error response:", errorData);
-    return errData; 
+  if (!res.ok) {
+    console.error("Error updating location")
+    return null;
   }
+  const data = await res.json();
+  dispatch(updateLocation(data));
+    return data;
 };
 
 // Delete a location
@@ -97,25 +114,23 @@ export const thunkDeleteLocation = (locationId) => async (dispatch) => {
   const res = await csrfFetch(`/api/locations/${locationId}`, {
     method: "DELETE",
   });
-  if (res.ok) {
-    dispatch(deleteLocation(locationId));
-  } else {
-    const errData = await res.json();
-    console.error("Error response:", errorData);
-    return errData; 
+  if (!res.ok) {
+    console.error("Error deleting location")
+    return null;
   }
+    dispatch(deleteLocation(locationId));
 };
 
 // ---------- REDUCER ----------
-//Если пользователь переходит на другую страницу или закрывает детали локации, можем сбросить currentLocation в null, чтобы освободить память и избежать ошибок.
-const initialState = { allLocations: [], currentLocation: null };
+//Если пользователь переходит на другую страницу или закрывает детали локации, можем сбросить locationDetail в null, чтобы освободить память и избежать ошибок.
+const initialState = { allLocations: [], locationDetail: null };
 
 const locationsReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ALL_LOCATIONS:
       return { ...state, allLocations: action.payload }; 
     case GET_LOCATION_DETAILS:
-      return { ...state, currentLocation: action.payload };
+      return { ...state, locationDetail: action.payload };
     case CREATE_LOCATION:
       return { ...state, allLocations: [...state.allLocations, action.payload] };
     case UPDATE_LOCATION:
@@ -124,15 +139,15 @@ const locationsReducer = (state = initialState, action) => {
         allLocations: state.allLocations.map((loc) =>
           loc.id === action.payload.id ? action.payload : loc
         ),
-        currentLocation:
-          state.currentLocation?.id === action.payload.id ? action.payload : state.currentLocation,
+        locationDetail:
+          state.locationDetail?.id === action.payload.id ? action.payload : state.locationDetail,
       };
     case DELETE_LOCATION:
       return {
         ...state,
         allLocations: state.allLocations.filter((loc) => loc.id !== action.payload),
-        currentLocation:
-          state.currentLocation?.id === action.payload ? null : state.currentLocation,
+        locationDetail:
+          state.locationDetail?.id === action.payload ? null : state.locationDetail,
       };
     default:
       return state;
