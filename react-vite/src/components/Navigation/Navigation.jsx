@@ -7,7 +7,8 @@ import "react-calendar/dist/Calendar.css";
 import "./Navigation.css"; 
 import { csrfFetch } from "../../redux/csrf";
 
-function Navigation() {
+const Navigation = () => {
+  
   const navigate = useNavigate();
   const location = useLocation(); 
   const user = useSelector((state) => state.session.user);

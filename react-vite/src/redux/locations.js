@@ -59,38 +59,44 @@ export const thunkGetLocationDetails = (locationId) => async (dispatch) => {
 };
 
 // Create a new location
-export const thunkCreateLocation = (locationData) => async (dispatch) => {
-  const res = await csrfFetch("/api/locations/new", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(locationData),
-  });
-  if (!res.ok) {
-    console.error("Error creating location")
-    return null;
-  }
-  const data = await res.json(); 
-  dispatch(createLocation(data));
-    return data;
-};
 // export const thunkCreateLocation = (locationData) => async (dispatch) => {
-//   const res = await csrfFetch('/api/locations/new', {
-//       method: 'POST',
-//       headers: {
-//           'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify(locationData),
+//   const res = await fetch("/api/locations/new", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify(locationData),
 //   });
-
-//   if (res.ok) {
-//       const data = await res.json();
-//       dispatch(createLocation(data));
-//       return data;
-//   } else {
-//       const errorData = await res.json();
-//       throw new Error(errorData.message || 'Failed to create location');
+//   if (!res.ok) {
+//     console.error("Error creating location")
+//     return null;
 //   }
+//   const data = await res.json(); 
+//   dispatch(createLocation(data));
+//     return data;
 // };
+
+export const thunkCreateLocation = (locationData) => async (dispatch) => {
+  try {
+    const res = await fetch('/api/locations/new', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(locationData),
+    });
+    
+    const data = await res.json();
+    if (!res.ok) {
+      // This properly throws an error with the response data
+      const error = new Error(data.message || 'Failed to create location');
+      error.res = { data };
+      throw error;
+    }
+    
+    dispatch(createLocation(data));
+    return data;
+  } catch (error) {
+    // Make sure to rethrow the error so the component can catch it
+    throw error;
+  }
+};
 
 
 // Update an existing location

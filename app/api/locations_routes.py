@@ -292,10 +292,10 @@ def create_location():
         if "terrainType" in data and data["terrainType"] not in valid_terrain_types:
             return jsonify({"message": "Invalid terrain type value"}), 400
 
-        # Check for duplicate (location name + city)
-        # existing_location = Location.query.filter_by(name=data["name"], city=data["city"]).first()
-        # if existing_location:
-        #     return jsonify({"message": "A location with this name already exists in this city"}), 409
+        #Check for duplicate (location name + city)
+        existing_location = Location.query.filter_by(name=data["name"], city=data["city"]).first()
+        if existing_location:
+            return jsonify({"message": "A location with this name already exists in this city"}), 400
         
         # Validate that at least four image is provided
         if "images" not in data or len(data["images"]) != 4:
