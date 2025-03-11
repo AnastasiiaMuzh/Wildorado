@@ -6,6 +6,7 @@ import Category from '../components/Category/Category'
 import LocationPage from '../components/Locations/LocationsPage';
 import LocationDetailsPage from '../components/Locations/LocationDetailsPage';
 import CreateLocations from '../components/Locations/CreateLocationForm';
+import ManageLocations from '../components/ManageLocations/ManageLocations';
 import Layout from './Layout';
 
 
@@ -39,6 +40,14 @@ export const router = createBrowserRouter([
       },
       {
         path: "/locations/new",
+        element: <CreateLocations />,
+      },
+      {
+        path: "/locations/current",
+        element: <ManageLocations />,
+      },
+      {
+        path: "/locations/current/edit",
         element: <CreateLocations />,
       },
     ],

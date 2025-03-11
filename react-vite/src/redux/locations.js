@@ -76,7 +76,7 @@ export const thunkGetLocationDetails = (locationId) => async (dispatch) => {
 
 export const thunkCreateLocation = (locationData) => async (dispatch) => {
   try {
-    const res = await fetch('/api/locations/new', {
+    const res = await csrfFetch('/api/locations/new', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(locationData),

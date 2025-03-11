@@ -2,10 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FaUserCircle } from 'react-icons/fa';
 import { thunkLogout } from "../../redux/session";
-// import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import OpenModalMenuItem from "./OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
+import ManageLocations from "../ManageLocations/ManageLocations";
 import "./ProfileButton.css";
 
 function ProfileButton() {
@@ -64,8 +65,10 @@ function ProfileButton() {
                 <li>My profile</li>
               </div>
 
-              <div className="my-profile">
-                <li>Manage Locations</li>
+              <div className="manage-locations">
+              <NavLink to="/locations/current" onClick={closeMenu} className="nav-link">
+                  Manage Location
+              </NavLink>
               </div>
 
               <li>

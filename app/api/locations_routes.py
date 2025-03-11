@@ -88,6 +88,7 @@ def get_locations():
             "Locations": [{
                 "id": loc.id,
                 "name": loc.name,
+                "ownerId": loc.ownerId,  # <== обязательно!
                 "city": loc.city,
                 # For 'imageUrl', we fetch the first image if it exists
                 "imageUrl": (
@@ -165,6 +166,7 @@ def get_location_detail(id):
 
         response = {
             "id": location.id,
+            # "ownerId": location.ownerId,
             "name": location.name,
             "city": location.city,
             "description": location.description,

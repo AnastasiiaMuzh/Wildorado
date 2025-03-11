@@ -31,7 +31,7 @@ const enumOptions = {
   lake: ["Yes", "No"],
 };
 
-const CreateLocationForm = () => {
+const CreateLocationForm = ( {existingLocation }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -39,6 +39,10 @@ const CreateLocationForm = () => {
   const [formData, setFormData] = useState({ images: ["", "", "", ""] });
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
+
+  useEffect(() => {
+    
+  })
 
   const handleCategoryChange = (e) => {
     setSelectedCategory(Number(e.target.value));
@@ -103,13 +107,18 @@ const CreateLocationForm = () => {
       setSuccessMessage("✅ Location created!");
       setTimeout(() => navigate(`/locations/${newLoc.id}`), 1500);
     } catch (err) {
-      setErrors({ general: err.message || "Error creating location." });
+      const mesErr = await err.json()
+      console.error(mesErr)
+      console.error(err.message)
+      setErrors({ general: mesErr.message });
     }
   };
 
   return (
     <div className="create-location-form">
       <h2>Create a New Location</h2>
+      <p>Important: All submitted information and photos must be accurate and truthful.
+      Any false or misleading information may result in the removal of the location and could lead to account suspension or deletion.</p>
       {errors.general && <p className="error">{errors.general}</p>}
       {successMessage && <p className="success-message">{successMessage}</p>}
 
