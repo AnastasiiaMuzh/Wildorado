@@ -4,6 +4,7 @@ from sqlalchemy import or_
 from datetime import datetime, timezone
 from app.models import db, Location, LocationImage, Review, ReviewImage, User, Category
 from app.api.utils import apply_category_filters, get_location_images, calculate_average_rating, get_reviews_for_location
+from sqlalchemy import func
 
 location_routes = Blueprint('locations', __name__)
 
@@ -54,18 +55,6 @@ def get_locations():
                     Category.name.ilike(f"%{search_query}%")
                 )
             )
-
-        # If category is present, filter and apply category-specific logic
-        # if category:
-        #     query = query.filter(Location.categoryId == category)
-        #     query = apply_category_filters(query, category, filters)
-        # if category_name:
-        #     category = Category.query.filter(Category.name.ilike(f"%{category_name}%")).first()
-        #     if category:
-        #         query = query.filter(Location.categoryId == category.id)
-        #         query = apply_category_filters(query, category.id, filters)
-        #     else:
-        #         return jsonify({"message": "Category not found."}), 404
 
         # search by category name
         if category_name:
@@ -148,6 +137,15 @@ def get_location_detail(id):
 
         # Generate a dictionary of only the relevant fields for this category
         category_specific = {
+
+            # field: (
+                
+            #     {getattr(location, field)} if field == "distance" 
+            #     else {int(getattr(location, field))} if field == "elevation" and getattr(location, field) % 1 == 0
+            #     else {getattr(location, field)} if field == "elevation"
+            #     else getattr(location, field)
+            # )
+            # for field in category_fields.get(location.categoryId, [])
 
             field: (
                 
@@ -379,6 +377,10 @@ def update_location(location_id):
             return jsonify({"message": "Forbidden"}), 403
 
         data = request.get_json() or {}
+        print("DAT FOR UPDATING:", data)  # Логируем данные
+
+        if "images" not in data or len(data["images"]) != 4:
+            return jsonify({"message": "Exactly 4 images are required"}), 400
 
         # Same approach as in create_location:
         base_required_fields = ["categoryId", "name", "city", "description", "distance"]
@@ -429,18 +431,30 @@ def update_location(location_id):
         if "terrainType" in data and data["terrainType"] not in valid_terrain_types:
             return jsonify({"message": "Invalid terrain type value"}), 400
 
-        # Check duplicates for name+city (excluding current location itself)
-        existing_location = Location.query.filter(
-            Location.name == data["name"],
-            Location.city == data["city"],
-            Location.id != location_id  # exclude self
-        ).first()
-        if existing_location:
-            return jsonify({"message": "A location with this name already exists in this city"}), 409
+        # Приводим текущие значения из БД к "чистому" виду:
+        current_name = loc.name.strip().lower()
+        current_city = loc.city.strip().lower()
+        new_name = data["name"].strip().lower()
+        new_city = data["city"].strip().lower()
 
-        # Update fields
-        for field in required_fields:
-            setattr(loc, field, data[field])
+        # Если изменилось хотя бы одно из значений,  проверку дубликатов
+        if new_name != current_name or new_city != current_city:
+            existing_location = Location.query.filter(
+                func.lower(Location.name) == new_name,
+                func.lower(Location.city) == new_city,
+                Location.id != int(location_id)
+            ).first()
+            if existing_location:
+                return jsonify({"message": "A location with this name already exists in this city"}), 409
+        
+
+        # Обновляем все поля, которые пришли в data
+        for field in data:
+            if field == "images":
+                continue
+            if hasattr(loc, field):
+                setattr(loc, field, data[field])
+
 
         # Delete old images
         LocationImage.query.filter_by(locationId=location_id).delete()
@@ -474,7 +488,7 @@ def update_location(location_id):
                     "url": img.url,
                     "preview": img.preview
                 }
-                for img in update_location
+                for img in updated_images
             ]
         }
 
@@ -490,6 +504,7 @@ def update_location(location_id):
         import traceback
         print(traceback.format_exc())
         return jsonify({"message": f"Internal server error: {str(e)}"}), 500
+    
 
 # ************************ DELETE /api/locations/<int:id> ************************
 @location_routes.route('/<int:location_id>', methods=['DELETE'])
@@ -515,8 +530,8 @@ def delete_location(location_id):
         return jsonify({"message": "Internal server error"}), 500
     
 
-# ************************ LOCATION IMAGES ************************
-    # ************ POST /api/locations/:id/images ***************
+# # ************************ LOCATION IMAGES ************************
+#     # ************ POST /api/locations/:id/images ***************
 @location_routes.route('/<int:location_id>/images', methods=['POST'])
 @login_required
 def add_location_image(location_id):
@@ -556,9 +571,8 @@ def add_location_image(location_id):
     except Exception as e:
         print(e)
         return jsonify({"message": "Internal server error"}), 500
-    
 
-     # ************ PUT /api/locations/:location_id/images/image_id ***************
+# ************ PUT /api/locations/:location_id/images/image_id ***************
 @location_routes.route('/<int:location_id>/images/<int:image_id>', methods=['PUT'])
 @login_required
 def update_location_image(location_id, image_id):

@@ -42,7 +42,7 @@ const LocationDetailsPage = (locationId) => {
             <h2>About {location.name}</h2>
             <p>{location.description}</p>
             <ul>
-                {Object.entries(location.categorySpecific).map(([key, value]) => (
+                {Object.entries(location.categorySpecific || {}).map(([key, value]) => (
                     <li key={key}>
                         <strong>{key}: </strong> 
                         {typeof value === "boolean" ? (value ? "Yes" : "No") : value}

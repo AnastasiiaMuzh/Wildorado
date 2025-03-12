@@ -99,7 +99,7 @@ export const thunkCreateLocation = (locationData) => async (dispatch) => {
 };
 
 
-// Update an existing location
+//Update an existing location
 export const thunkUpdateLocation = (locationId, locationData) => async (dispatch) => {
   const res = await csrfFetch(`/api/locations/${locationId}`, {
     method: "PUT",
@@ -114,6 +114,7 @@ export const thunkUpdateLocation = (locationId, locationData) => async (dispatch
   dispatch(updateLocation(data));
     return data;
 };
+
 
 // Delete a location
 export const thunkDeleteLocation = (locationId) => async (dispatch) => {

@@ -1,11 +1,18 @@
 import { useState, useEffect } from 'react';
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 const ManageLocations = () => {
   const [locations, setLocations] = useState([]); 
   const [isLoading, setIsLoading] = useState(true); 
   const [error, setError] = useState(null); 
+  const navigate = useNavigate();
+
+  const handleEdit = (locationId) => {
+    navigate(`/locations/${locationId}/edit`);
+  };
 
   // loading current user locations
   const fetchUserLocations = async () => {
@@ -44,7 +51,7 @@ const ManageLocations = () => {
             <div className='manage-log-info'></div>
             {locations.map((location) => (
               <li key={location.id}>
-                <img src={location.imageUrl} alt={location.name} /> {/* Перемещаем фото вверх */}
+                <img src={location.imageUrl} alt={location.name} /> 
                 <h3>{location.name}</h3>
                 <p>📍 {location.city}</p>
                 <p>★ {location.avgRating} ({location.reviewCount} reviews)</p>

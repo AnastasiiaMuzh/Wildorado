@@ -5,9 +5,13 @@ import HomePage from '../components/HomePage/HomePage';
 import Category from '../components/Category/Category'
 import LocationPage from '../components/Locations/LocationsPage';
 import LocationDetailsPage from '../components/Locations/LocationDetailsPage';
-import CreateLocations from '../components/Locations/CreateLocationForm';
+// import CreateLocations from '../components/Locations/CreateLocationForm';
 import ManageLocations from '../components/ManageLocations/ManageLocations';
+// import UpdateLocationForm from '../components/ManageLocations/UpdateLocation';
+import CreateLocationForm from '../components/LocationForm/CreateLocationForm';
+import UpdateLocationForm from '../components/LocationForm/UpdateLocationForm';
 import Layout from './Layout';
+
 
 
 export const router = createBrowserRouter([
@@ -40,16 +44,18 @@ export const router = createBrowserRouter([
       },
       {
         path: "/locations/new",
-        element: <CreateLocations />,
+        element: <CreateLocationForm />,
       },
       {
         path: "/locations/current",
         element: <ManageLocations />,
       },
       {
-        path: "/locations/current/edit",
-        element: <CreateLocations />,
+        path: "/locations/:locationId/edit",
+        element: <UpdateLocationForm />,
       },
+      
+      
     ],
   },
 ]);
