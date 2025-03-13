@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { csrfFetch } from '../../redux/csrf';
 
 
 const ManageLocations = () => {
@@ -14,7 +15,7 @@ const ManageLocations = () => {
     navigate(`/locations/${locationId}/edit`);
   };
 
-  // loading current user locations
+  //loading current user locations
   const fetchUserLocations = async () => {
     try {
       const response = await csrfFetch('/api/locations/current');
@@ -22,6 +23,7 @@ const ManageLocations = () => {
         throw new Error('Failed to fetch locations');
       }
       const data = await response.json();
+      console.error("LOOK USER LOCATION->", data)
       setLocations(data.Locations || []); // Обновляем состояние с локациями (// Сохраняем только локации текущего пользователя)
     } catch (err) {
       setError(err.message); // ошибкa, если что-то пошло не так
