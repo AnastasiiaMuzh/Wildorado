@@ -149,7 +149,7 @@ const LocationForm = ({
     if (payload.name) payload.name = payload.name.trim();
     if (payload.city) payload.city = payload.city.trim();
 
-    console.log("Сабмит payload:", payload);
+    console.log("SUBMIT payload:", payload);
 
     try {
       const result = await onSubmit(payload); // вызываем переданный проп

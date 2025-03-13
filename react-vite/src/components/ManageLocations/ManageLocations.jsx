@@ -3,6 +3,8 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { csrfFetch } from '../../redux/csrf';
+import OpenModalButton from '../OpenModalButton/OpenModalButton';
+import DeleteLocationModal from './DeleteLocationModal';
 
 
 const ManageLocations = () => {
@@ -13,6 +15,10 @@ const ManageLocations = () => {
 
   const handleEdit = (locationId) => {
     navigate(`/locations/${locationId}/edit`);
+  };
+
+  const handleDelete = (locationId) => {
+    navigate(`/locations/${locationId}`);
   };
 
   //loading current user locations
@@ -62,9 +68,13 @@ const ManageLocations = () => {
                   <button className="edit-btn" onClick={() => handleEdit(location.id)}>
                     <FaEdit className="icon" />
                   </button>
-                  <button className="delete-btn" onClick={() => handleDelete(location.id)}>
+                  <OpenModalButton
+                    buttonText={<FaTrash className='icon-trash'/>}
+                    modalComponent={<DeleteLocationModal locationId={location.id} onDelete={fetchUserLocations}/>}
+                  />
+                  {/* <button className="delete-btn" onClick={() => handleDelete(location.id)}>
                     <FaTrash className="icon" />
-                  </button>
+                  </button> */}
                 </div>
               </li>
             ))}

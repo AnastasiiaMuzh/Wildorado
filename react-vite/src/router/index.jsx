@@ -10,6 +10,7 @@ import ManageLocations from '../components/ManageLocations/ManageLocations';
 // import UpdateLocationForm from '../components/ManageLocations/UpdateLocation';
 import CreateLocationForm from '../components/LocationForm/CreateLocationForm';
 import UpdateLocationForm from '../components/LocationForm/UpdateLocationForm';
+
 import Layout from './Layout';
 
 

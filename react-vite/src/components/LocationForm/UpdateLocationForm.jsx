@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { thunkUpdateLocation } from "../../redux/locations";
 import LocationForm from "./LocationForm";
+import { useNavigate } from "react-router-dom";
 
 function removeSuffix(str, suffix) {
   if (!str) return "";
@@ -12,6 +13,7 @@ function removeSuffix(str, suffix) {
 const UpdateLocationForm = () => {
   const { locationId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate(); 
 
   const [initialData, setInitialData] = useState(null);
   const [error, setError] = useState("");
@@ -69,11 +71,15 @@ const UpdateLocationForm = () => {
         setInitialData(newFormData);
       } catch (err) {
         console.error("Error loading:", err);
-        setError(err.message);
+        // setError(err.message);
       }
     }
     fetchData();
   }, [locationId]);
+
+  const handleCancel = () => {
+    navigate(`/locations/current`); 
+  };
 
 
   const handleSubmit = async (payload) => {
@@ -89,12 +95,17 @@ const UpdateLocationForm = () => {
   }
 
   return (
+    <div className="update-loc-container">
     <LocationForm
       initialData={initialData}
       onSubmit={handleSubmit}
       submitButtonText="Update Location"
       disableCategory={true}  // Can't change!!!!!!
     />
+    <button type="button" className="cancel-btn" onClick={handleCancel}>
+      Cancel
+    </button>
+  </div>
   );
 };
 
