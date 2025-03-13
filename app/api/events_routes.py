@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_login import current_user, login_required
 from datetime import datetime
-from app.models import db, Location, User, Event, EventComment, EventParticipant
+from app.models import db, Location, User, Event, EventComment, EventParticipant, LocationImage
 from sqlalchemy import func
 
 
@@ -11,14 +11,15 @@ events_routes = Blueprint('events', __name__)
 # ************************ GET /api/events ************************
 @events_routes.route("/", methods=["GET"])
 def get_events():
-    """Getting a list of all events."""
     try:
         events = Event.query.all()
         if not events:
-            return jsonify({"message": "Location not found"}), 404
-        
-        event_ids = [event.id for event in events]
+            return jsonify({"message": "Events not found"}), 404
 
+        event_ids = [event.id for event in events]
+        location_ids = [event.locationId for event in events]
+
+        # получаем количество участников для всех событий одним запросом
         participant_counts = dict(
             db.session.query(
                 EventParticipant.eventId,
@@ -28,9 +29,23 @@ def get_events():
             .group_by(EventParticipant.eventId)
             .all()
         )
-        
+
+        # получаем location вместе с их превью-фото одним запросом
+        locations = Location.query.filter(Location.id.in_(location_ids)).all()
+        locations_data = {loc.id: loc for loc in locations}
+
+        preview_images = dict(
+            db.session.query(LocationImage.locationId, LocationImage.url)
+            .filter(
+                LocationImage.locationId.in_(location_ids),
+                LocationImage.preview == True
+            )
+            .all()
+        )
+
         events_data = []
         for ev in events:
+            location = locations_data.get(ev.locationId)
             events_data.append({
                 "id": ev.id,
                 "locationId": ev.locationId,
@@ -39,17 +54,21 @@ def get_events():
                 "description": ev.description,
                 "date": ev.date,
                 "maxParticipants": ev.maxParticipants,
-                "participantCount": participant_counts.get(ev.id, 0), 
+                "participantCount": participant_counts.get(ev.id, 0),
                 "createdAt": ev.createdAt,
-                "updatedAt": ev.updatedAt
+                "updatedAt": ev.updatedAt,
+                "location": {
+                    "name": location.name if location else None,
+                    "city": location.city if location else None,
+                    "previewImage": preview_images.get(ev.locationId, None),
+                }
             })
 
         return jsonify({"events": events_data}), 200
         
     except Exception as e:
         print(e)
-        return jsonify({"message": "Internal server error"}), 500  
-
+        return jsonify({"message": "Internal server error"}), 500
 # ************************ GET /api/events/:eventId ************************   
 @events_routes.route('/<int:event_id>', methods=["GET"]) 
 def get_event_detail(event_id):
