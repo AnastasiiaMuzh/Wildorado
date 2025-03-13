@@ -17,6 +17,8 @@ def get_events():
 
         events_data = []
         for ev in events:
+            participant_count = EventParticipant.query.filter_by(eventId=ev.id).count()
+
             events_data.append({
                 "id": ev.id,
                 "locationId": ev.locationId,
@@ -25,6 +27,7 @@ def get_events():
                 "description": ev.description,
                 "date": ev.date,
                 "maxParticipants": ev.maxParticipants,
+                "participantCount": participant_count, 
                 "createdAt": ev.createdAt,
                 "updatedAt": ev.updatedAt
             })

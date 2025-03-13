@@ -10,6 +10,7 @@ import ManageLocations from '../components/ManageLocations/ManageLocations';
 // import UpdateLocationForm from '../components/ManageLocations/UpdateLocation';
 import CreateLocationForm from '../components/LocationForm/CreateLocationForm';
 import UpdateLocationForm from '../components/LocationForm/UpdateLocationForm';
+import EventsPage from '../components/Events/Events';
 
 import Layout from './Layout';
 
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
       {
         path: "/locations/:locationId/edit",
         element: <UpdateLocationForm />,
+      },
+      {
+        path: "/events",
+        element: <EventsPage />,
       },
       
       

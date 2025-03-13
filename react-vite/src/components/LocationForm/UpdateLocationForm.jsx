@@ -71,7 +71,7 @@ const UpdateLocationForm = () => {
         setInitialData(newFormData);
       } catch (err) {
         console.error("Error loading:", err);
-        // setError(err.message);
+        setError(err.message);
       }
     }
     fetchData();

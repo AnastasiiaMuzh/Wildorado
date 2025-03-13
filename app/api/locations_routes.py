@@ -299,7 +299,7 @@ def create_location():
         
         # Validate that at least four image is provided
         if "images" not in data or len(data["images"]) != 4:
-            return jsonify({"message": "At least four image is required"}), 400
+            return jsonify({"message": "At least 4 image is required"}), 400
 
         # Create the new location
         new_loc = Location(

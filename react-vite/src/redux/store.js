@@ -8,12 +8,14 @@ import thunk from "redux-thunk";
 import sessionReducer from "./session";
 import categoriesReducer from "./categories";
 import locationsReducer from "./locations";
+import eventsReducer from "./events";
 
 
 const rootReducer = combineReducers({
   session: sessionReducer,
   categories: categoriesReducer,
   locations: locationsReducer,
+  events: eventsReducer,
 });
 
 let enhancer;

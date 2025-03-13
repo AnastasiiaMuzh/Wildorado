@@ -27,9 +27,9 @@ const LocationDetailsPage = (locationId) => {
 
     return (
         <div className="location-detail">
-            <Link to="/locations" className="back-link">
+            {/* <Link to="/locations" className="back-link">
                 ← Back to Locations
-            </Link>
+            </Link> */}
 
             <h1>{location.name}</h1>
             <p>📍

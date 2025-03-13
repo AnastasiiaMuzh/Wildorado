@@ -29,12 +29,7 @@ export const enumOptions = {
 
 };
 
-const LocationForm = ({
-  initialData,
-  onSubmit,            // (payload) => Promise<location>
-  submitButtonText,    // "Update Location" или "Create Location"
-  disableCategory = false,
-}) => {
+const LocationForm = ({ initialData, onSubmit, submitButtonText, disableCategory = false,}) => {
   const navigate = useNavigate();
 
   // Категория – если initialData.categoryId задан, ставим его
@@ -89,9 +84,10 @@ const LocationForm = ({
 
     // Проверка картинок
     const nonEmptyImages = formData.images.filter((url) => url !== "");
-    if (nonEmptyImages.length === 0) {
-      newErrors.images = "At least one image is required.";
-    } else if (new Set(nonEmptyImages).size !== nonEmptyImages.length) {
+    // if (nonEmptyImages.length === 0) {
+    //   newErrors.images = "At least one image is required.";
+  //} else
+     if (new Set(nonEmptyImages).size !== nonEmptyImages.length) {
       newErrors.images = "All image URLs must be unique.";
     } else if (!nonEmptyImages.every((url) => /\.(png|jpe?g)$/i.test(url))) {
       newErrors.images = "Images must end with .png/.jpg/.jpeg";
@@ -151,19 +147,33 @@ const LocationForm = ({
 
     console.log("SUBMIT payload:", payload);
 
-    try {
-      const result = await onSubmit(payload); // вызываем переданный проп
-      if (result) {
-        setSuccessMessage(`${submitButtonText} successful!`);
-        setTimeout(() => navigate(`/locations/${result.id}`), 1500); //dateilsPage
-      } else {
-        setErrors({ general: "Operation failed." });
-      }
-    } catch (err) {
-      console.error("Submission error:", err);
-      setErrors({ general: err.message || "Error during submission" });
+
+  try {
+    const result = await onSubmit(payload); // вызываем переданный проп
+    if (result) {
+      setSuccessMessage(`${submitButtonText} successful!`);
+      setTimeout(() => navigate(`/locations/${result.id}`), 1500);
+    } else {
+      setErrors({ general: "Operation failed." });
     }
-  };
+  } catch (err) {
+    // Если произошла ошибка, сначала берем сообщение из ошибки, если оно есть!
+    let errorMessage = err.message || "Error during submission";
+    // Если объект ошибки имеет метод json (например, Response от fetch), пытаемся извлечь из него подробное сообщение
+    if (err.json) {
+      try {
+        const errData = await err.json();
+        if (errData && errData.message) {
+          errorMessage = errData.message;
+        }
+      } catch (jsonErr) {
+        console.error("Error parsing error response:", jsonErr);
+      }
+    }
+    //сообщение об ошибке, dlya пользователya
+    setErrors({ general: errorMessage });
+  }
+}
 
   return (
     <div className="create-location-form">
