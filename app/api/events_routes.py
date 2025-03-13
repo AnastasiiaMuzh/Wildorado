@@ -2,6 +2,8 @@ from flask import Blueprint, request, jsonify
 from flask_login import current_user, login_required
 from datetime import datetime
 from app.models import db, Location, User, Event, EventComment, EventParticipant
+from sqlalchemy import func
+
 
 events_routes = Blueprint('events', __name__)
 
@@ -14,11 +16,21 @@ def get_events():
         events = Event.query.all()
         if not events:
             return jsonify({"message": "Location not found"}), 404
+        
+        event_ids = [event.id for event in events]
 
+        participant_counts = dict(
+            db.session.query(
+                EventParticipant.eventId,
+                func.count(EventParticipant.userId)
+            )
+            .filter(EventParticipant.eventId.in_(event_ids))
+            .group_by(EventParticipant.eventId)
+            .all()
+        )
+        
         events_data = []
         for ev in events:
-            participant_count = EventParticipant.query.filter_by(eventId=ev.id).count()
-
             events_data.append({
                 "id": ev.id,
                 "locationId": ev.locationId,
@@ -27,7 +39,7 @@ def get_events():
                 "description": ev.description,
                 "date": ev.date,
                 "maxParticipants": ev.maxParticipants,
-                "participantCount": participant_count, 
+                "participantCount": participant_counts.get(ev.id, 0), 
                 "createdAt": ev.createdAt,
                 "updatedAt": ev.updatedAt
             })
