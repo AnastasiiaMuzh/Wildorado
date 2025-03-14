@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_login import current_user, login_required
 from sqlalchemy import or_
 from datetime import datetime, timezone
-from app.models import db, Location, LocationImage, Review, ReviewImage, User, Category
+from app.models import db, Location, LocationImage, User, Category
 from app.api.utils import apply_category_filters, get_location_images, calculate_average_rating, get_reviews_for_location
 from sqlalchemy import func
 

@@ -5,12 +5,11 @@ import HomePage from '../components/HomePage/HomePage';
 import Category from '../components/Category/Category'
 import LocationPage from '../components/Locations/LocationsPage';
 import LocationDetailsPage from '../components/Locations/LocationDetailsPage';
-// import CreateLocations from '../components/Locations/CreateLocationForm';
 import ManageLocations from '../components/ManageLocations/ManageLocations';
-// import UpdateLocationForm from '../components/ManageLocations/UpdateLocation';
 import CreateLocationForm from '../components/LocationForm/CreateLocationForm';
 import UpdateLocationForm from '../components/LocationForm/UpdateLocationForm';
 import EventsPage from '../components/Events/Events';
+import DiscussionPage from '../components/Events/Discussion';
 
 import Layout from './Layout';
 
@@ -59,6 +58,10 @@ export const router = createBrowserRouter([
       {
         path: "/events",
         element: <EventsPage />,
+      },
+      {
+        path: "/events/:eventId",
+        element: <DiscussionPage />,
       },
       
       

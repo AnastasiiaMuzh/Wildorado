@@ -19,16 +19,27 @@ def get_events():
         event_ids = [event.id for event in events]
         location_ids = [event.locationId for event in events]
 
+        # participant_count = EventParticipant.query.filter_by(eventId=ev.id).count()<--BAD!!!
+
         # получаем количество участников для всех событий одним запросом
         participant_counts = dict(
             db.session.query(
-                EventParticipant.eventId,
-                func.count(EventParticipant.userId)
+                EventParticipant.eventId,               # Получаем ID события
+                func.count(EventParticipant.userId)     # Считаем количество участников
             )
-            .filter(EventParticipant.eventId.in_(event_ids))
-            .group_by(EventParticipant.eventId)
-            .all()
+            .filter(EventParticipant.eventId.in_(event_ids)) # Фильтруем только события из event_ids
+            .group_by(EventParticipant.eventId)             # Группируем по eventId, чтобы посчитать участников для каждого события
+            .all()                                          # Выполняем запрос и получаем список результатов
         )
+
+        # Если пользователь залогинен, заранее достанем все eventId,
+        # где он является участником. Избегаем n-запросов в цикле
+        current_user_event_ids = set()
+        if current_user.is_authenticated:
+            # Найдём все записи EventParticipant для current_user
+            user_participations = EventParticipant.query.filter_by(userId=current_user.id).all()
+            current_user_event_ids = {ep.eventId for ep in user_participations}
+
 
         # получаем location вместе с их превью-фото одним запросом
         locations = Location.query.filter(Location.id.in_(location_ids)).all()
@@ -46,6 +57,8 @@ def get_events():
         events_data = []
         for ev in events:
             location = locations_data.get(ev.locationId)
+            is_current_user_participant = ev.id in current_user_event_ids
+
             events_data.append({
                 "id": ev.id,
                 "locationId": ev.locationId,
@@ -57,6 +70,7 @@ def get_events():
                 "participantCount": participant_counts.get(ev.id, 0),
                 "createdAt": ev.createdAt,
                 "updatedAt": ev.updatedAt,
+                 "isCurrentUserParticipant": is_current_user_participant,
                 "location": {
                     "name": location.name if location else None,
                     "city": location.city if location else None,

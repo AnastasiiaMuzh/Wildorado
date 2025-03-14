@@ -58,21 +58,6 @@ export const thunkGetLocationDetails = (locationId) => async (dispatch) => {
     return data; // Возвращаем данные для использования в компоненте
 };
 
-// Create a new location
-// export const thunkCreateLocation = (locationData) => async (dispatch) => {
-//   const res = await fetch("/api/locations/new", {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify(locationData),
-//   });
-//   if (!res.ok) {
-//     console.error("Error creating location")
-//     return null;
-//   }
-//   const data = await res.json(); 
-//   dispatch(createLocation(data));
-//     return data;
-// };
 
 export const thunkCreateLocation = (locationData) => async (dispatch) => {
   try {
@@ -143,9 +128,7 @@ const locationsReducer = (state = initialState, action) => {
     case UPDATE_LOCATION:
       return {
         ...state,
-        allLocations: state.allLocations.map((loc) =>
-          loc.id === action.payload.id ? action.payload : loc
-        ),
+        allLocations: state.allLocations.map((loc) =>loc.id === action.payload.id ? action.payload : loc),
         locationDetail:
           state.locationDetail?.id === action.payload.id ? action.payload : state.locationDetail,
       };

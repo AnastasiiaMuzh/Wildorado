@@ -58,17 +58,15 @@ const Navigation = () => {
     try {
         const res = await csrfFetch(`/api/locations?search=${query}&page=1&perPage=12`);
         if (res.ok) {
-          // Если запрос успешный, перенаправляем на страницу поиска
           navigate(`/locations?search=${query}`);
         } else {
-            // Если сервер вернул 404 
           alert("No results found. Please try again!");
         }
     } catch (error) {
       console.error("Error searching locations:", error);
       alert("Something went wrong. Please try again.");
     }
-    setSearchQuery(""); // Очищаем строку поиска после запроса
+    setSearchQuery(""); 
   };
 
   return (
