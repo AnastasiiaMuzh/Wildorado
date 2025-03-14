@@ -6,7 +6,6 @@ import { NavLink } from "react-router-dom";
 import OpenModalMenuItem from "./OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
-import ManageLocations from "../ManageLocations/ManageLocations";
 import "./ProfileButton.css";
 
 function ProfileButton() {
@@ -67,7 +66,13 @@ function ProfileButton() {
 
               <div className="manage-locations">
               <NavLink to="/locations/current" onClick={closeMenu} className="nav-link">
-                  Manage Location
+                  My Location
+              </NavLink>
+              </div>
+
+              <div className="manage-events">
+              <NavLink to="/events/current" onClick={closeMenu} className="nav-link">
+                  My Events
               </NavLink>
               </div>
 

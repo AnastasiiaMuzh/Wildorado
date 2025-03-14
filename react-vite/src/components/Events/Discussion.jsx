@@ -41,6 +41,26 @@ const DiscussionPage = ({comment, eventsId}) => {
         }
     }
 
+    moment.updateLocale("en", {
+      relativeTime: {
+        future: "%s", // вместо "in %s"
+        past: "%s ago",
+        s: "few seconds",
+        ss: "%d seconds",
+        m: "minute",
+        mm: "%d minutes",
+        h: "hour",
+        hh: "%d hours ago",
+        d: "Yesterday",
+        dd: "%d days",
+        M: "month",
+        MM: "%d months",
+        y: "a year",
+        yy: "%d years"
+      }
+    });
+    
+
     return (
         <div className="event-detail-container">
            
@@ -70,9 +90,7 @@ const DiscussionPage = ({comment, eventsId}) => {
                       <FaUserAlt className="message-avatar-default" />
                     )}
                   <strong> {comment.username}</strong>
-                  <span className="message-date">
-                    {moment(comment.createdAt).format("MMM D, YYYY [at] h:mm A")}
-                  </span>
+                  
                   {comment.userId === currentUser?.id && (
                     <button
                       onClick={() => handleDelete(comment.id)}
@@ -83,7 +101,12 @@ const DiscussionPage = ({comment, eventsId}) => {
                   )}
                 </div>
                 <p className="message">{comment.message}</p>
+                <span className="message-date">
+                    {moment(comment.createdAt).fromNow()}
+                    {/* {getRelativeTime(comment.createdAt)} */}
+                  </span>
               </div>
+              
             ))}
           </ul>
             ) : (
@@ -98,6 +121,7 @@ const DiscussionPage = ({comment, eventsId}) => {
             placeholder="Write your message..."
             className="message-input"
             />
+            
             <button type="submit" className="message-send-btn">
             Send
             </button>
