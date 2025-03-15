@@ -1,4 +1,4 @@
-import { csrfFetch } from './csrf';
+import { csrfFetch } from "./csrf";
 
 // ---------- ACTION TYPES ----------
 const GET_ALL_EVENTS = 'events/GET_ALL_EVENTS';
@@ -75,7 +75,7 @@ export const thunkGetAllEvents = () => async (dispatch) => {
     }
 };
 
-// get details event
+// Discussion (message)
 export const thunkGetEventDetail = (eventId) => async (dispatch) => {
     const res = await fetch(`/api/events/${eventId}`);
     if (res.ok) {
@@ -97,18 +97,23 @@ export const thunkGetCurrentUserEvents = () => async (dispatch) => {
 
 // Create event
 export const thunkCreateEvent = (payload) => async (dispatch) => {
-    const res = await csrfFetch('/api/events', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-    });
-
-    if (!res.ok) {
+    try{
+        const res = await csrfFetch('/api/events/new', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
         const data = await res.json();
-        throw new Error(data.message || 'Failed to create event');
+        if (!res.ok) {
+            const error = new Error(data.message || 'Failed to create event');
+            error.res = { data };
+            throw error;
+        }
+        dispatch(createEvent(data));
+        return data;
+    } catch (error) {
+        throw error;
     }
-    const data = await res.json();
-    dispatch(createEvent(data));
-    return data;
 };
 
 // Update event

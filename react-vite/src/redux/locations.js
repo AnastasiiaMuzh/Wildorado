@@ -58,7 +58,7 @@ export const thunkGetLocationDetails = (locationId) => async (dispatch) => {
     return data; // Возвращаем данные для использования в компоненте
 };
 
-
+//Create location
 export const thunkCreateLocation = (locationData) => async (dispatch) => {
   try {
     const res = await csrfFetch('/api/locations/new', {
@@ -78,7 +78,6 @@ export const thunkCreateLocation = (locationData) => async (dispatch) => {
     dispatch(createLocation(data));
     return data;
   } catch (error) {
-    // Make sure to rethrow the error so the component can catch it
     throw error;
   }
 };

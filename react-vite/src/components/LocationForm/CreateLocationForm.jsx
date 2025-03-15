@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { thunkCreateLocation } from "../../redux/locations";
 import LocationForm from "./LocationForm";
 
@@ -13,7 +13,7 @@ const initialData = {
   elevation: "",
   difficulty: "",
   bestSeason: "",
-  riverClass: "",
+  river_class: "",
   maxTents: "",
   fireAllowed: "No",
   lake: "No",
@@ -24,7 +24,7 @@ const initialData = {
 
 const CreateLocationForm = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleSubmit = async (payload) => {
     const newLoc = await dispatch(thunkCreateLocation(payload));

@@ -17,9 +17,9 @@ const ManageLocations = () => {
     navigate(`/locations/${locationId}/edit`);
   };
 
-  const handleDelete = (locationId) => {
-    navigate(`/locations/${locationId}`);
-  };
+  // const handleDelete = (locationId) => {
+  //   navigate(`/locations/${locationId}`);
+  // };
 
   //loading current user locations
   const fetchUserLocations = async () => {
@@ -29,7 +29,7 @@ const ManageLocations = () => {
         throw new Error('Failed to fetch locations');
       }
       const data = await response.json();
-      console.error("LOOK USER LOCATION->", data)
+      // console.error("LOOK USER LOCATION->", data)
       setLocations(data.Locations || []); // Обновляем состояние с локациями (// Сохраняем только локации текущего пользователя)
     } catch (err) {
       setError(err.message); // ошибкa, если что-то пошло не так

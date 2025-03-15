@@ -66,8 +66,8 @@ def apply_category_filters(query, category, filters):
             query = query.filter(Location.bestSeason.ilike(f"%{filters['bestSeason']}%"))
     
     elif category == 2:  # Rafting
-        if filters.get("riverClass"):
-            query = query.filter(Location.river_class == filters["riverClass"])
+        if filters.get("river_class"):
+            query = query.filter(Location.river_class == filters["river_class"])
     
     elif category == 3:  # Camping
         if filters.get("maxTents"):

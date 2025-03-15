@@ -102,7 +102,7 @@ const Navigation = () => {
           <NavLink to="/locations" className='nav-link'>LOCATION</NavLink>
           <NavLink to="/events" className='nav-link'>EVENT</NavLink>
           <NavLink to="/community" className='nav-link'>COMMUNITY</NavLink>
-          <NavLink to="/contact" className='nav-link'>CONTACT</NavLink>
+          {/* <NavLink to="/contact" className='nav-link'>CONTACT</NavLink> */}
           {user && (
           <NavLink to="/locations/new" className='nav-link'>POST</NavLink>
           )}

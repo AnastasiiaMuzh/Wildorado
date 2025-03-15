@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_login import current_user, login_required
 from sqlalchemy import or_
 from datetime import datetime, timezone
-from app.models import db, Location, LocationImage, User, Category
+from app.models import db, Location, LocationImage, Review, ReviewImage, User, Category
 from app.api.utils import apply_category_filters, get_location_images, calculate_average_rating, get_reviews_for_location
 from sqlalchemy import func
 
@@ -33,7 +33,7 @@ def get_locations():
         filters = {
             "difficulty": request.args.get("difficulty", None, type=str),
             "bestSeason": request.args.get("bestSeason", None, type=str),
-            "riverClass": request.args.get("riverClass", None, type=str),
+            "river_class": request.args.get("riverClass", None, type=str),
             "maxTents": request.args.get("maxTents", None, type=int),
             "fireAllowed": request.args.get("fireAllowed", None, type=bool),
             "lake": request.args.get("lake", None, type=bool),
@@ -245,7 +245,7 @@ def create_location():
         # Category-specific fields
         category_fields = {
             1: ["difficulty", "bestSeason", "elevation"],  
-            2: ["riverClass"],  
+            2: ["river_class"],  
             3: ["maxTents", "fireAllowed", "lake", "elevation"],
             4: ["routeType", "difficulty", "elevation"],
             5: ["bestSeason", "elevation"],
@@ -299,7 +299,7 @@ def create_location():
         
         # Validate that at least four image is provided
         if "images" not in data or len(data["images"]) != 4:
-            return jsonify({"message": "At least 4 image is required"}), 400
+            return jsonify({"message": "All fields for images must be filled in."}), 400
 
         # Create the new location
         new_loc = Location(
@@ -386,7 +386,7 @@ def update_location(location_id):
         base_required_fields = ["categoryId", "name", "city", "description", "distance"]
         category_fields = {
             1: ["difficulty", "bestSeason", "elevation"],
-            2: ["riverClass"],
+            2: ["river_class"],
             3: ["maxTents", "fireAllowed", "lake", "elevation"],
             4: ["routeType", "difficulty", "elevation"],
             5: ["bestSeason", "elevation"],

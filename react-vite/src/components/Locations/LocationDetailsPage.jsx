@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkGetLocationDetails } from "../../redux/locations"; 
-import "./LocationsDetailsPage.css";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { thunkCategory } from "../../redux/categories";
 
 const LocationDetailsPage = (locationId) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { id } = useParams(); //ID from URL
     // console.log("Location ID from URL: ", id);
+    const user = useSelector((state) => state.session.user);
+    console.log("Текущий пользователь:", user);
     const location = useSelector((state) => state.locations.locationDetail);
     const categoryData = useSelector((state) => state.categories.currentCategory);
+    
 
     useEffect(() => {
         dispatch(thunkGetLocationDetails(id)).then((location) => {
@@ -52,7 +55,16 @@ const LocationDetailsPage = (locationId) => {
 
             <h2>Plan Your Trip</h2>
             <p>Organize a {categoryData.category.name} event or join others planning to visit {location.name}.</p>
-            <button>Create Event</button>
+            
+            {user ? (
+                <button onClick={() => navigate(`/events/new?locationId=${id}`)}>
+                    Create Event
+                </button>
+            ) : (
+                <p style={{ color: "red", fontWeight: "bold" }}>
+                    To create your own event, please log in to your account.
+                </p>
+            )}
 
             <div className="reviews-locDetails">
                 <h2>REVIEWS</h2>

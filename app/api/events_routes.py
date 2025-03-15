@@ -70,7 +70,7 @@ def get_events():
                 "participantCount": participant_counts.get(ev.id, 0),
                 "createdAt": ev.createdAt,
                 "updatedAt": ev.updatedAt,
-                 "isCurrentUserParticipant": is_current_user_participant,
+                "isCurrentUserParticipant": is_current_user_participant,
                 "location": {
                     "name": location.name if location else None,
                     "city": location.city if location else None,
@@ -203,7 +203,7 @@ def get_current_user_event():
         return jsonify({"message": "Internal server error"}), 500
     
 # ************************ POST /api/events ************************
-@events_routes.route("/", methods=["POST"])
+@events_routes.route("/new", methods=["POST"])
 @login_required
 def create_event():
     """Create a new event."""
@@ -221,8 +221,14 @@ def create_event():
         errors = {}
         if not title:
             errors["title"] = "Title is required"
+        if not description:
+            errors["description"] = "Description is required"    
         if not date:
             errors["date"] = "Date is required"
+        if not max_participants:
+            errors["max_participants"] = "Max Participant is required"    
+        if max_participants is None and (not isinstance(max_participants, int) or max_participants <= 0):
+            errors["maxParticipants"] = "Max participants must be a positive number"    
         else:
             try:
                 event_date = datetime.fromisoformat(date)
@@ -230,14 +236,18 @@ def create_event():
                     errors["date"] = "Date must be in the future"
             except ValueError:
                 errors["date"] = "Invalid date format"
+                
 
 
         location = Location.query.get(location_id)
+
         if not location:
             return jsonify({"message": "Location not found"}), 404
+        print("MAX CHECK", max_participants)
 
-        if max_participants is not None and (not isinstance(max_participants, int) or max_participants <= 0):
-            errors["maxParticipants"] = "Max participants must be a positive number"
+        # if max_participants is None and (not isinstance(max_participants, int) or max_participants <= 0):
+        #     errors["maxParticipants"] = "Max participants must be a positive number"
+        # print("CHeck HERE!!!", errors)
 
         if errors:
             return jsonify({"message": "Bad Request", "errors": errors}), 400
