@@ -9,7 +9,7 @@ const EventsPage = () => {
   const navigate = useNavigate();
   
   const events = useSelector((state) => state.events.allEvents);
-  const locations = useSelector((state) => state.locations.allLocations);
+//   const locations = useSelector((state) => state.locations.allLocations);
   const currentUser = useSelector((state) => state.session.user); 
 
   useEffect(() => {
@@ -93,7 +93,11 @@ const EventsPage = () => {
               )}
 
               <div className="event-page-links" style={{ marginTop: "1rem" }}>
-                {isJoined ? (
+                {!currentUser ? (
+                    <p style={{color: "red"}}>
+                        To participate in events, you must be registered.
+                    </p>
+                    ) : isJoined ? (
                   <>
                     <NavLink
                       to="#"

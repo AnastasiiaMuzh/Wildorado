@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
+import { FaTrash } from "react-icons/fa";
 import { FaUserFriends, FaRegCalendarAlt, FaUserAlt } from "react-icons/fa";
 import { thunkGetEventDetail, thunkCreateComment, thunkDeleteComment } from '../../redux/events';
 
@@ -25,32 +26,32 @@ const DiscussionPage = ({comment, eventsId}) => {
         e.preventDefault();
         if (!commentText.trim()) return;
         try {
-            await dispatch(thunkCreateComment(event.id, commentText));
-            await dispatch(thunkGetEventDetail(event.id))
-            setCommentText("");
+          await dispatch(thunkCreateComment(event.id, commentText));
+          await dispatch(thunkGetEventDetail(event.id))
+          setCommentText("");
         } catch (error) {
-            console.err(error.message);
+          console.err(error.message);
         }
     };
 
     const handleDelete = async (commentId) => {
         try {
-            await dispatch(thunkDeleteComment(eventId, commentId));
+          await dispatch(thunkDeleteComment(eventId, commentId));
         }catch (error) {
-            console.err(error.message);
+          console.err(error.message);
         }
     }
 
     moment.updateLocale("en", {
       relativeTime: {
-        future: "%s", // вместо "in %s"
+        future: "%s", 
         past: "%s ago",
         s: "few seconds",
         ss: "%d seconds",
         m: "minute",
         mm: "%d minutes",
         h: "hour",
-        hh: "%d hours ago",
+        hh: "%d hours",
         d: "Yesterday",
         dd: "%d days",
         M: "month",
@@ -63,25 +64,24 @@ const DiscussionPage = ({comment, eventsId}) => {
 
     return (
         <div className="event-detail-container">
-           
-        <header className="event-header">
-            <h1>{event.title}</h1>
-            <p className="event-date"><FaRegCalendarAlt /> {moment(event.date).format("ddd, MMM D, YYYY")}</p>
-            <h2 className="event-description">{event.description}</h2>
-            <h3 className="event-participants"> <FaUserFriends /> Participants: {event.participants?.length}/{event.maxParticipants}</h3>
-        </header>
 
-        <hr />
+          <header className="event-header">
+              <h1>{event.title}</h1>
+              <p className="event-date"><FaRegCalendarAlt /> {moment(event.date).format("ddd, MMM D, YYYY")}</p>
+              <h2 className="event-description">{event.description}</h2>
+              <h3 className="event-participants"> <FaUserFriends /> Participants: {event.participants?.length}/{event.maxParticipants}</h3>
+          </header>
+             <hr />
+          <div className="message-container">
+              <h2>Discussion</h2>
+              {event.comments && event.comments.length > 0 ? (
+              <ul className="message-list">
 
-        <div className="message-container">
-            <h2>Discussion</h2>
-            {event.comments && event.comments.length > 0 ? (
-            <ul className="message-list">
-            {event.comments.map((comment) => (
-              <div key={comment.id} className="message-item">
-                <div className="message-header">
+              {event.comments.map((comment) => (
+                <div key={comment.id} className="message-item">
+                  <div className="message-header">
                     {comment.avatar ? (
-                        <img 
+                      <img 
                         src={comment.avatar} 
                         alt="User avatar" 
                         className="message-avatar" 
@@ -89,26 +89,28 @@ const DiscussionPage = ({comment, eventsId}) => {
                     ) : (
                       <FaUserAlt className="message-avatar-default" />
                     )}
-                  <strong> {comment.username}</strong>
-                  
-                  {comment.userId === currentUser?.id && (
-                    <button
-                      onClick={() => handleDelete(comment.id)}
-                      className="message-delete-btn"
-                    >
-                      Delete
-                    </button>
-                  )}
+                    <strong>{comment.username}</strong>
+                  </div>
+
+                  <div className="message-content">
+                    <p className="message">{comment.message}</p>
+                    <span className="message-date">
+                      {moment(comment.createdAt).local().fromNow()}
+                      {comment.userId === currentUser?.id && (
+                        <button
+                          onClick={() => handleDelete(comment.id)}
+                          className="message-delete-btn"
+                        >
+                          <FaTrash />
+                        </button>
+                      )}
+                    </span>
+                  </div>
+
                 </div>
-                <p className="message">{comment.message}</p>
-                <span className="message-date">
-                    {moment(comment.createdAt).fromNow()}
-                    {/* {getRelativeTime(comment.createdAt)} */}
-                  </span>
-              </div>
-              
-            ))}
-          </ul>
+              ))}
+
+            </ul>
             ) : (
             <p>No messages yet. Be the first live a message!</p>
             )}
@@ -126,7 +128,7 @@ const DiscussionPage = ({comment, eventsId}) => {
             Send
             </button>
         </form>
-        </div>
+      </div>
     );
     };
 
