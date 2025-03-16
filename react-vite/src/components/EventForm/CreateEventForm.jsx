@@ -1,12 +1,11 @@
 import EventForm from "./EventForm";
 import { thunkCreateEvent } from "../../redux/events";
 import { useDispatch } from "react-redux";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 const CreateEventForm = () => {
     const [searchParams] = useSearchParams(); 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const locationId = searchParams.get("locationId"); 
 
     const handleCreate = async (formData) => {

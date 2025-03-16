@@ -1,12 +1,12 @@
-from flask import Blueprint, request, jsonify
-from flask_login import current_user, login_required
-from datetime import datetime
+from flask import Blueprint, jsonify, request
 from app.models import db, Location, User, Event, EventComment, EventParticipant, LocationImage
 from sqlalchemy import func
-
+from flask_login import login_required, current_user
+from datetime import datetime, timezone
+from dateutil.parser import isoparse
+from app.models import db, Event
 
 events_routes = Blueprint('events', __name__)
-
 
 # ************************ GET /api/events ************************
 @events_routes.route("/", methods=["GET"])
@@ -24,12 +24,12 @@ def get_events():
         # получаем количество участников для всех событий одним запросом
         participant_counts = dict(
             db.session.query(
-                EventParticipant.eventId,               # Получаем ID события
-                func.count(EventParticipant.userId)     # Считаем количество участников
+                EventParticipant.eventId,               
+                func.count(EventParticipant.userId)    
             )
-            .filter(EventParticipant.eventId.in_(event_ids)) # Фильтруем только события из event_ids
-            .group_by(EventParticipant.eventId)             # Группируем по eventId, чтобы посчитать участников для каждого события
-            .all()                                          # Выполняем запрос и получаем список результатов
+            .filter(EventParticipant.eventId.in_(event_ids))
+            .group_by(EventParticipant.eventId)            
+            .all()                                          
         )
 
         # Если пользователь залогинен, заранее достанем все eventId,
@@ -83,6 +83,8 @@ def get_events():
     except Exception as e:
         print(e)
         return jsonify({"message": "Internal server error"}), 500
+    
+    
 # ************************ GET /api/events/:eventId ************************   
 @events_routes.route('/<int:event_id>', methods=["GET"]) 
 def get_event_detail(event_id):
@@ -92,52 +94,50 @@ def get_event_detail(event_id):
         if not event:
             return jsonify({"message": "Event not found"}), 404
         
-        # Get current user's ID if authenticated
+        # Получаем данные о локации
+        location = Location.query.get(event.locationId)
+        
+        # превью-изображение
+        preview_image = db.session.query(LocationImage.url).filter_by(locationId=event.locationId, preview=True).scalar()
+
+        # данные о создателе события
+        creator = User.query.get(event.userId)
+        
+        # ID текущего пользователя, если он залогинен
         current_user_id = current_user.id if current_user.is_authenticated else None
         
-        # Retrieve all event participants in one query
+        # участников события
         participants = EventParticipant.query.filter_by(eventId=event.id).all()
         participant_ids = [p.userId for p in participants]
         
-        # Check if current user is participant or creator
-        is_participant = (
-            current_user_id is not None and
-            (current_user_id == event.userId or current_user_id in participant_ids)
-        )
+        # является ли текущий пользователь создателем или участником
+        is_participant = current_user_id in {event.userId, *participant_ids}
+
+        # все userId, которые нам нужны
+        user_ids = set(participant_ids + [event.userId])
         
-        # Collect all user IDs we need to fetch
-        user_ids = set(participant_ids)
-        if event.userId:
-            user_ids.add(event.userId)
-            
-        # Initialize comments data
+        # комментарии, если пользователь — участник или создатель
         comments_data = []
-        
-        # Get comments only if user is participant or creator
         if is_participant:
             comments = EventComment.query.filter_by(eventId=event.id).all()
-            
-            # Add comment author IDs to the list of users we need to fetch
             comment_author_ids = [c.userId for c in comments]
             user_ids.update(comment_author_ids)
-        
-        # Fetch all needed users
-        users = {user.id: user for user in User.query.filter(User.id.in_(list(user_ids))).all()} if user_ids else {}
-        
-        # Get creator data
-        creator_data = {
-            "id": event.userId,
-            "username": users.get(event.userId).username if users.get(event.userId) else "Unknown"
-        } if event.userId else None
-        
-        # Format participants data
+
+        # всех нужных пользователей
+        users = {user.id: user for user in User.query.filter(User.id.in_(user_ids)).all()}
+
+        # Формируем список участников (добавляем avatar)
         participants_data = [
-            {"id": p.userId, "username": users.get(p.userId).username if users.get(p.userId) else "Unknown"} 
+            {
+                "id": p.userId,
+                "username": users.get(p.userId).username if users.get(p.userId) else "Unknown",
+                "avatar": users.get(p.userId).avatar if users.get(p.userId) else None
+            }
             for p in participants
         ]
-        
-        # Format comments data if user is participant/creator
-        if is_participant and 'comments' in locals():
+
+        # список комментариев
+        if is_participant:
             comments_data = [
                 {
                     "id": c.id,
@@ -149,6 +149,7 @@ def get_event_detail(event_id):
                 for c in comments
             ]
         
+        # ответ
         event_data = {
             "id": event.id,
             "locationId": event.locationId,
@@ -159,49 +160,89 @@ def get_event_detail(event_id):
             "maxParticipants": event.maxParticipants,
             "createdAt": event.createdAt,
             "updatedAt": event.updatedAt,
-            "creator": creator_data,
+            "creator": {
+                "id": creator.id if creator else None,
+                "username": creator.username if creator else "Unknown",
+                "avatar": creator.avatar if creator else None
+            },
             "participants": participants_data,
-            "comments": comments_data
+            "comments": comments_data,
+            "location": {
+                "id": location.id if location else None,
+                "name": location.name if location else None,
+                "city": location.city if location else None,
+                "previewImage": preview_image
+            } if location else None
         }
         
         return jsonify({"event": event_data}), 200
         
     except Exception as e:
-        print(f"🔥 ERROR: {str(e)}")
+        print(f"ERROR DETAILS LOCATION: {str(e)}")
         return jsonify({"message": "Internal server error"}), 500
 
     
 # ************************ GET /api/events/current ************************
-@events_routes.route('/current', methods=["GET"])
+@events_routes.route('/current', methods=['GET'])
 @login_required
-def get_current_user_event():
-    """Get all events created by the current user."""
-
+def get_current_user_events():
+    """
+    Returns a list of all events, которые текущий пользователь СОЗДАЛ.
+    """
     try:
-        events = Event.query.filter_by(userId=current_user.id).all()
-        if not events:
-            return jsonify({"message": "You do not have any Events!"}), 200
-        
-        events_data = []
-        for ev in events:
-            events_data.append({
-                "id": ev.id,
-                "locationId": ev.locationId,
-                "userId": ev.userId,
-                "title": ev.title,
-                "description": ev.description,
-                "date": ev.date,
-                "maxParticipants": ev.maxParticipants,
-                "createdAt": ev.createdAt,
-                "updatedAt": ev.updatedAt
-            })
+        user_id = current_user.id
 
-        return jsonify({"events": events_data}), 200
+        # события, которые СОЗДАЛ текущий пользователь
+        created_events = Event.query.filter_by(userId=user_id).all()
+
+        # ❌ Убираем события, в которых пользователь только участник
+        all_events = created_events  # Теперь список содержит ТОЛЬКО СОЗДАННЫЕ события
+
+        if not all_events:
+            return jsonify({"message": "You have no events"}), 200
+
+        event_ids = [event.id for event in all_events]
+        location_ids = [event.locationId for event in all_events]
+
+        # Получаем только локации этих событий
+        locations = Location.query.filter(Location.id.in_(location_ids)).all()
+        locations_data = {loc.id: loc for loc in locations}
+
+        # Получаем превью-изображения для этих локаций
+        preview_images = dict(
+            db.session.query(LocationImage.locationId, LocationImage.url)
+            .filter(
+                LocationImage.locationId.in_(location_ids),
+                LocationImage.preview == True
+            )
+            .all()
+        )
+
+        response = {
+            "events": [{
+                "id": event.id,
+                "title": event.title,
+                "description": event.description,
+                "date": event.date,
+                "maxParticipants": event.maxParticipants,
+                "locationId": event.locationId,
+                "location": {
+                    "id": location.id if location else None,
+                    "name": location.name if location else None,
+                    "city": location.city if location else None,
+                    "previewImage": preview_images.get(event.locationId, None)
+                } if (location := locations_data.get(event.locationId)) else None,
+                "createdAt": event.createdAt,
+                "updatedAt": event.updatedAt
+            } for event in all_events]
+        }
+
+        return jsonify(response), 200
 
     except Exception as e:
-        print(e)
+        print(f"ERROR EVENT CURRENT: {str(e)}")  
         return jsonify({"message": "Internal server error"}), 500
-    
+
 # ************************ POST /api/events ************************
 @events_routes.route("/new", methods=["POST"])
 @login_required
@@ -237,7 +278,6 @@ def create_event():
             except ValueError:
                 errors["date"] = "Invalid date format"
                 
-
 
         location = Location.query.get(location_id)
 
@@ -276,6 +316,14 @@ def create_event():
 
         db.session.add(new_event)
         db.session.commit()
+
+        #Add the creator to the participants
+        creator_participant = EventParticipant(
+            eventId=new_event.id,
+            userId=current_user.id
+        )
+        db.session.add(creator_participant)
+        db.session.commit()  # Сохраняем участника
 
         return jsonify({
             "id": new_event.id,
@@ -425,7 +473,7 @@ def delete_comment(event_id, comment_id):
         print (e)
         return jsonify({"message": "Internal server error"}), 500
 
-# ************************ PUT /api/events/event_id ************************
+# # ************************ PUT /api/events/event_id ************************
 @events_routes.route('/<int:event_id>', methods=["PUT"])
 @login_required
 def update_event(event_id):
@@ -438,42 +486,58 @@ def update_event(event_id):
         if event.userId != current_user.id:
             return jsonify({"message": "Forbidden"}), 403
         
-        # Get data from request
+        # данные из запроса
         data = request.get_json() or {}
         
         title = data.get("title", "").strip()
         description = data.get("description", "").strip()
-        date = data.get("date")
+        date_str = data.get("date")
         max_participants = data.get("maxParticipants")
 
         errors = {}
 
+        # Обновляем заголовок и описание (если переданы)
         if title:
             event.title = title
         if description:
             event.description = description
-        if date:
+
+        # Обработка даты
+        if date_str:
             try:
-                event_date = datetime.fromisoformat(date)
-                if event_date < datetime.utcnow():
+                # Преобразуем дату в объект datetime
+                event_date = isoparse(date_str)
+
+                # Если в дате нет часового пояса, добавляем UTC
+                if event_date.tzinfo is None:
+                    event_date = event_date.replace(tzinfo=timezone.utc)
+
+                # Проверяем, чтобы дата была в будущем
+                if event_date < datetime.now(timezone.utc):
                     errors["date"] = "Date must be in the future"
                 else:
                     event.date = event_date
-            except ValueError:
+
+            except ValueError as e:
                 errors["date"] = "Invalid date format"
+
+        # Проверка maxParticipants
         if max_participants is not None:
-            if not isinstance(max_participants, int) or max_participants <= 0:
-                errors["maxParticipants"] = "Max participants must be a positive number"
-            else:
+            try:
+                max_participants = int(max_participants)  # Принудительно преобразуем в int
+                if max_participants <= 0:
+                    raise ValueError
                 event.maxParticipants = max_participants
+            except ValueError:
+                errors["maxParticipants"] = "Max participants must be a positive number"
 
         if errors:
             return jsonify({"message": "Bad Request", "errors": errors}), 400
 
-        # Update date
-        event.updatedAt = datetime.now()
+        # Обновляем время изменения
+        event.updatedAt = datetime.now(timezone.utc)
 
-        # Save changes
+        # Сохраняем изменения
         db.session.commit()
 
         return jsonify({
@@ -482,14 +546,14 @@ def update_event(event_id):
             "userId": event.userId,
             "title": event.title,
             "description": event.description,
-            "date": event.date,
+            "date": event.date.isoformat(),  # Отправляем в ISO формате
             "maxParticipants": event.maxParticipants,
-            "createdAt": event.createdAt,
-            "updatedAt": event.updatedAt
+            "createdAt": event.createdAt.isoformat(),
+            "updatedAt": event.updatedAt.isoformat()
         }), 200
 
     except Exception as e:
-        print(e)
+        print(f" ERROR from update event: {e}")
         db.session.rollback()
         return jsonify({"message": "Internal server error"}), 500
 

@@ -12,7 +12,8 @@ import EventsPage from '../components/Events/Events';
 import DiscussionPage from '../components/Events/Discussion';
 import ManageEvents from '../components/ManageEvents/ManageEvents';
 import CreateEventForm from '../components/EventForm/CreateEventForm';
-
+import UpdateEventForm from '../components/EventForm/UpdateEventForm';
+import DeleteEvent from '../components/ManageEvents/DeleteEventModal';
 import Layout from './Layout';
 
 
@@ -72,6 +73,14 @@ export const router = createBrowserRouter([
       {
         path: "/events/new",
         element: <CreateEventForm />,
+      },
+      {
+        path: "/events/:eventId/edit",
+        element: <UpdateEventForm />,
+      },
+      {
+        path: "/events/:eventId",
+        element: <DeleteEvent />,
       },
       
       

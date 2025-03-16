@@ -151,15 +151,18 @@ export const thunkDeleteEvent = (eventId) => async (dispatch) => {
 export const thunkJoinEvent = (eventId) => async (dispatch) => {
     const res = await csrfFetch(`/api/events/${eventId}/join`, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
     });
 
+    const data = await res.json();
+
     if (!res.ok) {
-        const data = await res.json();
+        // const data = await res.json();
         throw new Error(data.message || 'Failed to join event');
         }
 
     dispatch(joinEvent(eventId));
-    return res.json();
+    return data;
 };
 
 // Leave event
