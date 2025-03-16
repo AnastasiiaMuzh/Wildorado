@@ -195,7 +195,7 @@ def get_current_user_events():
         # события, которые СОЗДАЛ текущий пользователь
         created_events = Event.query.filter_by(userId=user_id).all()
 
-        # ❌ Убираем события, в которых пользователь только участник
+        # Убираем события, в которых пользователь только участник
         all_events = created_events  # Теперь список содержит ТОЛЬКО СОЗДАННЫЕ события
 
         if not all_events:

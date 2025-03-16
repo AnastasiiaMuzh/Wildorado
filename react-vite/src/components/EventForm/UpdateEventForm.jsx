@@ -39,7 +39,6 @@ const UpdateEventForm = () => {
       console.error("Update error:", err);
     }
   };
-
   
   if (!event) return <p>Loading...</p>;
 

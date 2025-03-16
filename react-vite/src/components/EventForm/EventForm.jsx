@@ -15,13 +15,28 @@ const EventForm = ({ initialData = { title: "", description: "", maxParticipants
 
     // send form
     const handleSubmit = async (e) => {
-
         e.preventDefault();
+
+        const newErrors = {}
+
+        const selectDate = new Date(formData.date)
+        const now = new Date();
+
+        if(selectDate < now) {
+            newErrors.date = "Date must be in the future";
+        }
+
+        if (Object.keys(newErrors).length > 0) {
+            console.log("Validation errors:", newErrors);
+            await setErrors(newErrors); // Ждем обновления состояния
+            return; // Прерываем отправку запроса
+        }
 
         try {
             const result = await onSubmit(formData); 
             if (result) {
                 setSuccessMessage(`${submitButtonText} successful!`);
+                setErrors({});
                 setTimeout(() => navigate("/events"), 1500);
             } else {
                 setErrors({general: "Events form failed."})
@@ -37,15 +52,17 @@ const EventForm = ({ initialData = { title: "", description: "", maxParticipants
                         errorMessage = errData.message;
                     }
                     if (errData && errData.errors) {
-                        setErrors(errData.errors);
+                        console.log("Backend errors", errData.errors)
+                        await setErrors(errData.errors)
                         return; 
                     }
                 } catch (jsonErr) {
                     console.error("Error parsing error response:", jsonErr);
                 }
             }          
-            //сообщение об ошибке, dlya пользователya
-            setErrors({ general: errorMessage });
+            // Ошибка НЕ с бэка — записываем в общий блок
+            await setErrors({ general: errorMessage });
+
         }
     };
 
