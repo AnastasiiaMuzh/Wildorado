@@ -65,7 +65,7 @@ const LocationsPage = () => {
                         <div key={index} className="carousel-slide-loc">
                             <img src={img} alt={`Slide ${index}`} className="carousel-image-loc" />
                             <div className="carousel-text-loc">
-                                <h1>Find your outside here ...</h1>
+                            <h1 className="special-heading">Find your outside here ...</h1>
                             </div>
                         </div>
                     ))}

@@ -135,17 +135,19 @@
    
   }
    */
-   .locations-page {
+
+   /* .locations-page {
     background-color: #f7e5d2;
-   }
+    padding-top: 0px;/* чтобы контент не уезжал под шапку *
+   } */
   
   /* Carousel container taking full width */
-  .carousel-container-loc {
+  /* .carousel-container-loc {
     width: 100%;
     height: 100%; 
     overflow: hidden;   
     position: relative;   
-  }
+  } */
 
   .carousel-slide-loc {
     width: 100%;
@@ -198,12 +200,13 @@
     padding-top: 40px;
 }
 
-h1 {
+.special-heading{
+    /* font-family: 'Rock Salt'; */
     text-align: center;
     font-size: 3rem;
     color: #d7552a;
     margin-top: -15px;
-    /* font-family: 'Dancing Script', cursive; */
+    font-family: 'Dancing Script', cursive;
 }
 
 /* Локация */
@@ -219,8 +222,8 @@ h1 {
   
     background: linear-gradient(
     to bottom,
-    #ecb781, /* темнее */
-    #f2e3da  /* светлее */
+    #ecb781, 
+    #f2e3da  
   );
     border-radius: 15px;
     padding: 8px 20px;
@@ -294,7 +297,7 @@ h1 {
 }
 
 .pagination button {
-    background: #e0e0e0;
+    background: #f2e3da;
     border: none;
     padding: 8px 12px;
     margin: 0 5px;
@@ -305,7 +308,7 @@ h1 {
 }
 
 .pagination button:hover {
-    background: #b0c4de;
+    background: #d28130;
     transform: scale(1.1);
 }
 

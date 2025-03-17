@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { thunkGetAllEvents, thunkJoinEvent, thunkLeaveEvent } from "../../redux/events";
 import { FaUserFriends, FaRegCalendarAlt, FaMapMarkerAlt } from "react-icons/fa";
+import './Events.css'
 
 const EventsPage = () => {
   const dispatch = useDispatch();
@@ -39,65 +40,54 @@ const EventsPage = () => {
 
   return (
     <div className="events-page">
-      <h1>Active Events – Join Now!</h1>
-
       <div className="event-loc-list">
         {events.map((event) => {
           const isFull = event.maxParticipants && event.participantCount >= event.maxParticipants;
           const isJoined = event.isCurrentUserParticipant;
+  
           return (
             <div key={event.id} className="event-item">
-              <h2>{event.title}</h2>
-
-              <p>
-                <FaRegCalendarAlt />{" "}
-                {new Date(event.date).toLocaleString("en-US", {
-                  weekday: "short",
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })}
-              </p>
-
-              <div className="event-page-info">
-                <p>
+              {/* Контейнер заголовка и информации */}
+              <div className="event-header-info">
+                <h2 className="event-title">{event.title}</h2>
+                <p className="event-date">
+                  <FaRegCalendarAlt />{" "}
+                  {new Date(event.date).toLocaleString("en-US", {
+                    weekday: "short",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </p>
+                <p className="event-participants">
                   <FaUserFriends /> {event.participantCount}/{event.maxParticipants} participants
                 </p>
-
                 {event.location && (
-                  <>
+                  <div className="event-location-info">
                     <p>
                       <FaMapMarkerAlt /> {event.location.name}, {event.location.city}
                     </p>
-                    <p>
-                      <NavLink to={`/locations/${event.locationId}`} state={{ from: "events" }}>
-                        Details Location
-                      </NavLink>
-                    </p>
-                  </>
+                    <NavLink to={`/locations/${event.locationId}`} state={{ from: "events" }}>
+                      Details Location
+                    </NavLink>
+                  </div>
                 )}
               </div>
-
+  
+              {/* Контейнер изображения */}
               {event.location?.previewImage && (
-                <img
-                  src={event.location.previewImage}
-                  alt={event.location.name}
-                  style={{
-                    width: "50%",
-                    height: "400px",
-                    objectFit: "cover",
-                    borderRadius: "10px",
-                    marginTop: "10px",
-                  }}
-                />
+                <div className="event-image-container">
+                  <img src={event.location.previewImage} alt={event.location.name} />
+                </div>
               )}
-
-              <div className="event-page-links" style={{ marginTop: "1rem" }}>
+  
+              {/* Кнопки управления */}
+              <div className="event-page-links">
                 {!currentUser ? (
-                    <p style={{color: "red"}}>
-                        To participate in events, you must be registered.
-                    </p>
-                    ) : isJoined ? (
+                  <p style={{ color: "red" }}>
+                    To participate in events, you must be registered.
+                  </p>
+                ) : isJoined ? (
                   <>
                     <NavLink
                       to="#"
@@ -108,11 +98,7 @@ const EventsPage = () => {
                     >
                       Leave Event
                     </NavLink>
-
-                    <NavLink
-                      to={`/events/${event.id}`}
-                      style={{ marginLeft: "1rem" }}
-                    >
+                    <NavLink to={`/events/${event.id}`} style={{ marginLeft: "1rem" }}>
                       Discussion
                     </NavLink>
                   </>
@@ -136,6 +122,7 @@ const EventsPage = () => {
       </div>
     </div>
   );
-};
+  
+}  
 
 export default EventsPage;
