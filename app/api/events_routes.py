@@ -201,7 +201,7 @@ def get_current_user_events():
         if not all_events:
             return jsonify({"message": "You have no events"}), 200
 
-        event_ids = [event.id for event in all_events]
+        # event_ids = [event.id for event in all_events]
         location_ids = [event.locationId for event in all_events]
 
         # Получаем только локации этих событий

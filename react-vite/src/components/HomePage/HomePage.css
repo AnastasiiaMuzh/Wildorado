@@ -1,7 +1,11 @@
 .category-container {
   position: absolute;
   width: 100%;
-  background: linear-gradient(to bottom, rgba(238, 242, 243, 0.9), rgba(142, 54, 34, 0.9));
+  background: linear-gradient(
+    to bottom,
+    #ecb781, /* темнее */
+    #f2e3da  /* светлее */
+  );
   /* background: linear-gradient(to bottom, rgba(238, 242, 243, 0.9), rgba(106, 147, 201, 0.9)); */
   padding: 10px 3px;
   

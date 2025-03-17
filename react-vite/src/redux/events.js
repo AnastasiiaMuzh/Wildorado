@@ -88,16 +88,18 @@ export const thunkGetEventDetail = (eventId) => async (dispatch) => {
 // Get MY events
 export const thunkGetCurrentUserEvents = () => async (dispatch) => {
     const res = await csrfFetch('/api/events/current');
+    console.log("RES FROM MY EVENT", res)
     if (res.ok) {
         const data = await res.json();
+        console.log("DATA FROM MY EVENT Before", data)
         dispatch(getCurrentUserEvents(data.events || []));
+        console.log("DATA FROM MY EVENT FTER", data)
         return data.events;
     }
 };
 
 // Create event
 export const thunkCreateEvent = (payload) => async (dispatch) => {
-    try{
         const res = await csrfFetch('/api/events/new', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -111,9 +113,7 @@ export const thunkCreateEvent = (payload) => async (dispatch) => {
         }
         dispatch(createEvent(data));
         return data;
-    } catch (error) {
-        throw error;
-    }
+    
 };
 
 // Update event
@@ -202,9 +202,10 @@ export const thunkDeleteComment = (eventId, commentId) => async (dispatch) => {
         method: 'DELETE', 
     });
     if (!res.ok) {
-        const errData = await res.json();
+        const errorData = await res.json()
+        return errorData;
     }
-    const data = await res.json()
+    const data = await res.json();
     dispatch(deleteComment(commentId))
     return data;
 }

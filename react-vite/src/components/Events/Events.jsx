@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { thunkGetAllEvents, thunkJoinEvent, thunkLeaveEvent } from "../../redux/events";
 import { FaUserFriends, FaRegCalendarAlt, FaMapMarkerAlt } from "react-icons/fa";
 
 const EventsPage = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   
   const events = useSelector((state) => state.events.allEvents);
 //   const locations = useSelector((state) => state.locations.allLocations);

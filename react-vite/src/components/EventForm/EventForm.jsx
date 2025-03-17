@@ -39,9 +39,10 @@ const EventForm = ({ initialData = { title: "", description: "", maxParticipants
                 setErrors({});
                 setTimeout(() => navigate("/events"), 1500);
             } else {
-                setErrors({general: "Events form failed."})
+                setErrors({general: "All fields must to be completed."})
             }
         } catch (err) {
+            console.log("ERR for ERIKA", err)
             // Если произошла ошибка, сначала берем сообщение из ошибки, если оно есть!
             let errorMessage = err.message || "Error during submission";
             // Если объект ошибки имеет метод json (например, Response от fetch), пытаемся извлечь из него подробное сообщение

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { thunkGetCurrentUserEvents} from "../../redux/events";
@@ -67,8 +67,7 @@ const ManageEvents = () => {
           ))}
         </ul>
       ) : (
-        <p>
-          You haven't created any events yet. <br />
+        <p>You haven&apos;t created any events yet. <br />
           <a href="/events/new" className="create-event-link">Create a new event</a>
         </p>
       )}

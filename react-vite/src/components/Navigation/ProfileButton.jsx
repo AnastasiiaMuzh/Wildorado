@@ -64,7 +64,7 @@ function ProfileButton() {
                 <li>My profile</li>
               </div>
 
-              <div className="manage-locations">
+              <div className="manage-locations-prof">
               <NavLink to="/locations/current" onClick={closeMenu} className="nav-link">
                   My Location
               </NavLink>

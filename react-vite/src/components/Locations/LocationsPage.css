@@ -1,0 +1,316 @@
+/* .locations-page {
+    max-width: 1450px;
+    margin: auto;
+    padding: 20px;
+  }
+  
+  h1 {
+    text-align: start;
+    font-size: 2.5rem;
+    margin-bottom: 35px;
+    color: #e84c18;
+    margin-top: 10px;
+  }
+
+  
+  /* Сетка 
+  .locations-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+    gap: 35px;
+    justify-content: center;
+    
+  }
+  
+  /* Стили 
+  .location-item {
+    background: #f3ebe9;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* transition: transform 0.3s ease, box-shadow 0.3s ease; 
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .location-item:hover {
+    /* transform: translateY(-5px); 
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    /* transition: transform 0.3s ease-in-out; 
+  }
+
+  .location-item:hover img {
+    transform: scale(1.07);
+  }
+  
+  .location-item img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  /* Заголовок и рейтинг в строку 
+.location-header {
+    display: flex;
+    flex-wrap: wrap;       /* Позволяем перенос строк 
+    justify-content: space-between;
+    align-items: center;
+    padding: 1px 15px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #333;
+    gap: 8px;
+  }
+  .location-header .location-title {
+    flex: 1 1 auto;        /* Чтобы заголовок мог сжиматься и переноситься 
+    white-space: normal;   /* Разрешаем обычный перенос текста 
+    word-break: break-word;/* Переносим длинные слова 
+  }
+
+  .location-info {
+    display: flex;
+    align-items: center;    /* Выравниваем по вертикали 
+    justify-content: space-between;
+    padding: 0 15px 10px;   /* Снизу небольшой отступ 
+  }
+  
+  
+  /* Рейтинг справа 
+  .location-rating {
+    font-size: 1.3rem;
+    color: #515050;
+    display: flex;
+    align-items: center;
+    margin-top: -40px;
+  }
+  
+  /* звезда 
+  .location-rating .star {
+    display: flex;
+    color: gold;
+    margin-right: 5px;
+    font-size: 24px;
+    margin-top: -4px;
+  }
+  
+  /* Текст "City" 
+  .location-item p {
+    margin: 1px 15px;
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: -5px;
+    margin-bottom: 25px;
+    margin-left: 3px;
+  
+  }
+
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+  }
+  
+  .pagination button {
+    background: #e0e0e0;
+    border: none;
+    padding: 8px 12px;
+    margin: 0 5px;
+    border-radius: 50%;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  
+  .pagination button:hover {
+    background: #b0c4de;
+    transform: scale(1.1);
+  }
+  
+  .pagination .active {
+    background: #4a90e2;
+    color: white;
+    font-weight: bold;
+   
+  }
+   */
+   .locations-page {
+    background-color: #f7e5d2;
+   }
+  
+  /* Carousel container taking full width */
+  .carousel-container-loc {
+    width: 100%;
+    height: 100%; 
+    overflow: hidden;   
+    position: relative;   
+  }
+
+  .carousel-slide-loc {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  
+  /* Images cover full area */
+  .carousel-image-loc {
+    width: 100%;
+    height: 45vh;
+   /* object-fit: contain; */
+    object-position: center;  
+    object-fit: cover;
+  }
+  
+  /* Text overlay */
+  .carousel-text-loc {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    /* background: rgba(0, 0, 0, 0.5); */
+    background: transparent; 
+    padding: 15px 30px;
+    border-radius: 10px;
+    z-index: 10;
+  }
+  
+  
+  /* Reset content container to normal width */
+  .locations-list {
+    max-width: 1450px;
+    margin: 40px auto 0;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+    
+  }
+/* Основной контейнер с локациями */
+.locations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    justify-content: center;
+    max-width: 1450px;
+    margin: auto;
+    padding-top: 40px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 3rem;
+    color: #d7552a;
+    margin-top: -15px;
+    /* font-family: 'Dancing Script', cursive; */
+}
+
+/* Локация */
+.location-item-loc {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+        "image header"
+        "image info";
+    gap: 15px;
+    align-items: start;
+  
+    background: linear-gradient(
+    to bottom,
+    #ecb781, /* темнее */
+    #f2e3da  /* светлее */
+  );
+    border-radius: 15px;
+    padding: 8px 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease;
+}
+
+.location-item-loc:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
+}
+
+/* Фото в кружке */
+.location-item-loc img {
+    grid-area: image;
+    width: 145px;
+    height: 135px;
+    object-fit: cover;
+    border-radius: 50%;
+    padding: 10px;
+}
+
+/* Заголовок */
+.location-header {
+    grid-area: header;
+}
+
+.location-header h3 {
+    font-size: 2rem;
+    margin-bottom: -25px;
+    margin-top: 55px;
+}
+
+/* Город и рейтинг */
+.location-info {
+    grid-area: info;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: -5px;
+}
+
+/* Город */
+.location-info p {
+    font-size: 1.6rem;
+    color: #666;
+    margin: 0;
+}
+
+/* Рейтинг */
+.location-rating {
+    display: flex;
+    align-items: center;
+    font-size: 1.7rem;
+    color: #515050;
+}
+
+.location-rating .star {
+    color: gold;
+    margin-right: 5px;
+    font-size: 2rem;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+  
+}
+
+.pagination button {
+    background: #e0e0e0;
+    border: none;
+    padding: 8px 12px;
+    margin: 0 5px;
+    border-radius: 50%;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.pagination button:hover {
+    background: #b0c4de;
+    transform: scale(1.1);
+}
+
+.pagination .active {
+    background: #d28130;
+    color: white;
+    font-weight: bold;
+}

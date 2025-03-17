@@ -24,7 +24,7 @@ const UpdateEventForm = () => {
     if (!event) {
     dispatch(thunkGetEventDetail(eventId));
     }
-  }, [dispatch, eventId]);
+  }, [dispatch, event, eventId]); //dobavila [event]
 
 
   const handleUpdate = async (formData) => {

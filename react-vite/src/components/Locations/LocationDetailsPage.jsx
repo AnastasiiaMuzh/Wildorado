@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkGetLocationDetails } from "../../redux/locations"; 
 import { useParams, useNavigate } from "react-router-dom";
 import { thunkCategory } from "../../redux/categories";
 
-const LocationDetailsPage = (locationId) => {
+const LocationDetailsPage = () => { //ubrala locationId iz ()
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { id } = useParams(); //ID from URL

@@ -84,7 +84,7 @@ const Navigation = () => {
           <button type="submit" className="search-button">🔍</button>
           <input
             type="text"
-            placeholder="Search category, city, mountains ..."
+            placeholder="Search by category, city, or mountain name"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="search-input"
@@ -101,8 +101,20 @@ const Navigation = () => {
         <div className={`nav-links ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
           <NavLink to="/locations" className='nav-link'>LOCATION</NavLink>
           <NavLink to="/events" className='nav-link'>EVENT</NavLink>
-          <NavLink to="/community" className='nav-link'>COMMUNITY</NavLink>
-          {/* <NavLink to="/contact" className='nav-link'>CONTACT</NavLink> */}
+          {/* <NavLink to="/community" className='nav-link'>COMMUNITY</NavLink>
+          <NavLink to="/contact" className='nav-link'>CONTACT</NavLink> */}
+          <span className="nav-link" onClick={() => alert("Feature coming soon!")} >
+            COMMUNITY
+          </span>
+
+          <span 
+            className="nav-link" 
+            onClick={() => alert("Feature coming soon!")} 
+            style={{ cursor: "pointer" }}
+          >
+            CONTACT
+          </span>
+          
           {user && (
           <NavLink to="/locations/new" className='nav-link'>POST</NavLink>
           )}

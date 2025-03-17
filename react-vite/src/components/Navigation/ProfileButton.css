@@ -38,6 +38,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  
 }
 
 .profile-dropdown li {
@@ -58,4 +59,8 @@
 
 .profile-dropdown .logout-button:hover {
   background: rgba(185, 197, 226, 0.8); /* Немного темнее при наведении */
+}
+
+.manage-locations-prof {
+  margin-top: 7px;
 }
