@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 1450px;
+    max-width: 1400px;
     margin: auto;
     padding: 20px;
   }
@@ -162,13 +162,23 @@
   
   /* Адаптивность для мобильных устройств */
   @media (max-width: 768px) {
-    .event-header-info {
-      flex-direction: column;
-      align-items: flex-start;
+    .event-item {
+        max-width: 95%; /* Чтобы блоки уменьшались при уменьшении экрана */
+        padding: 15px; /* Сделаем отступы меньше */
     }
-  
+    
+    .event-header-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
     .event-header-info p {
-      width: 100%;
+        width: 100%;
+    }
+
+    .event-image-container {
+        height: 300px; /* Сделаем изображение меньше на мобильных устройствах */
     }
   }
   

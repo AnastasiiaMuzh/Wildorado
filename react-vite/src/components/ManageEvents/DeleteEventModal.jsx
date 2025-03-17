@@ -8,7 +8,7 @@ const DeleteEventModal = ({ eventId }) => {
 
     const handleDelete = async () => {
         await dispatch(thunkDeleteEvent(eventId));
-        await dispatch(thunkGetCurrentUserEvents()); // ✅ Обновляем список
+        await dispatch(thunkGetCurrentUserEvents()); 
         closeModal();
     };
 

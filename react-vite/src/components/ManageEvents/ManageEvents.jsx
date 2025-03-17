@@ -8,6 +8,7 @@ import DeleteEventModal from "./DeleteEventModal";
 import "./ManageEvent.css";
 
 
+
 const ManageEvents = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
