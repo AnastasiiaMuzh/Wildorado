@@ -47,16 +47,14 @@ function SignupFormModal() {
   };
 
   return (
-    <div className="modal-overlay" onClick={(e) => {
-      if (e.target.classList.contains("modal-overlay")) {
-        closeModal();
-      }
-      }}>
+    // <div className="modal-overlay" onClick={(e) => {
+    //   if (e.target.classList.contains("modal-overlay")) {
+    //     closeModal();
+    //   }
+    //   }}>
       <div className="signup-form-modal">
         <h1>Sign Up</h1>
-  
         {errors.server && <p>{errors.server}</p>}
-  
         <form onSubmit={handleSubmit} className="signup-form">
           <label>
             Email
@@ -133,7 +131,7 @@ function SignupFormModal() {
           <button type="submit">Sign Up</button>
         </form>
       </div>
-    </div>
+    // </div>
   );
 }
 export default SignupFormModal;
