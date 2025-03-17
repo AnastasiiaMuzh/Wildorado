@@ -22,7 +22,6 @@ const Navigation = () => {
 
   const isHomePage = location.pathname === "/";
 
-  // Закрытие попапов при клике вне их области
   useEffect(() => {
     function handleClickOutside(event) {
       if (calendarRef.current && !calendarRef.current.contains(event.target)) {

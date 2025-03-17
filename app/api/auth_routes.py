@@ -84,7 +84,7 @@ def sign_up():
         db.session.add(user)
         db.session.commit()
 
-        login_user(user, remember=True)  # ✅ исправлено, чтобы сессия сохранялась
+        login_user(user, remember=True)  # чтобы сессия сохранялась
 
         return jsonify(user.to_dict())
 
