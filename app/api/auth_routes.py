@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from app.models import User, db
 from app.forms import LoginForm
 from app.forms import SignUpForm
@@ -43,13 +43,38 @@ def logout():
     return {'message': 'User logged out'}
 
 
+# @auth_routes.route('/signup', methods=['POST'])
+# def sign_up():
+#     """
+#     Creates a new user and logs them in
+#     """
+#     form = SignUpForm()
+#     form['csrf_token'].data = request.cookies['csrf_token']
+#     if form.validate_on_submit():
+#         user = User(
+#             username=form.data['username'],
+#             email=form.data['email'],
+#             password=form.data['password']
+#         )
+#         db.session.add(user)
+#         db.session.commit()
+#         login_user(user)
+#         return user.to_dict()
+#     return form.errors, 401
+
 @auth_routes.route('/signup', methods=['POST'])
 def sign_up():
     """
     Creates a new user and logs them in
     """
-    form = SignUpForm()
+    data = request.get_json()
+    form = SignUpForm(data=data)
+
+    if 'csrf_token' not in request.cookies:
+        return jsonify({"error": "CSRF token missing"}), 400
+
     form['csrf_token'].data = request.cookies['csrf_token']
+
     if form.validate_on_submit():
         user = User(
             username=form.data['username'],
@@ -58,9 +83,13 @@ def sign_up():
         )
         db.session.add(user)
         db.session.commit()
-        login_user(user)
-        return user.to_dict()
-    return form.errors, 401
+
+        login_user(user, remember=True)  # ✅ исправлено, чтобы сессия сохранялась
+
+        return jsonify(user.to_dict())
+
+    return jsonify(form.errors), 401
+
 
 
 @auth_routes.route('/unauthorized')

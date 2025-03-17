@@ -19,14 +19,15 @@ function SignupFormModal() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (password !== confirmPassword) {
       return setErrors({
-        confirmPassword:
-          "Confirm Password field must be the same as the Password field",
+        confirmPassword: "Confirm Password field must be the same as the Password field",
       });
     }
-
+  
+    console.log("Отправка данных на сервер...", { email, username, password, avatar, bio, interests });
+  
     const serverResponse = await dispatch(
       thunkSignup({
         email,
@@ -35,16 +36,18 @@ function SignupFormModal() {
         avatar: avatar || null,
         bio: bio || null,
         interests: interests || null
-
       })
     );
-
-    if (serverResponse) {
-      setErrors(serverResponse);
-    } else {
+  
+    console.log("✅ Ответ сервера:", serverResponse); // ✅ Теперь должно быть не undefined
+  
+    if (serverResponse && !serverResponse.errors) {
       closeModal();
+    } else {
+      setErrors(serverResponse);
     }
   };
+  
 
   return (
     // <div className="modal-overlay" onClick={(e) => {

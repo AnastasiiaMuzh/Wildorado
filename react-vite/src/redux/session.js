@@ -47,16 +47,45 @@ export const thunkSignup = (user) => async (dispatch) => {
     body: JSON.stringify(user)
   });
 
-  if(response.ok) {
+  if (response.ok) {
     const data = await response.json();
     dispatch(setUser(data));
+    return data;  // ✅ Добавляем return, чтобы вернуть данные в компонент
   } else if (response.status < 500) {
     const errorMessages = await response.json();
-    return errorMessages
+    return errorMessages;
   } else {
-    return { server: "Something went wrong. Please try again" }
+    return { server: "Something went wrong. Please try again" };
   }
 };
+
+
+// export const thunkSignup = (user) => async (dispatch) => {
+//   const response = await fetch("/api/auth/signup", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify(user)
+//   });
+
+//   console.log("Response status:", response.status);
+//   console.log("Response headers:", response.headers);
+
+//   if(response.ok) {
+//     try {
+//       const data = await response.json();
+//       console.log("Response data:", data);
+//       dispatch(setUser(data));
+//     } catch (error) {
+//       console.error("Ошибка при парсинге JSON:", error);
+//       return { server: "Server response is invalid." };
+//     }
+//   } else if (response.status < 500) {
+//     const errorMessages = await response.json();
+//     return errorMessages;
+//   } else {
+//     return { server: "Something went wrong. Please try again" };
+//   }
+// };
 
 export const thunkLogout = () => async (dispatch) => {
   await fetch("/api/auth/logout");
