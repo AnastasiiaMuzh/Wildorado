@@ -4,7 +4,6 @@ import { useModal } from "../../context/Modal";
 import { thunkSignup } from "../../redux/session";
 import "./SignupForm.css";
 
-
 function SignupFormModal() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
@@ -19,15 +18,14 @@ function SignupFormModal() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (password !== confirmPassword) {
       return setErrors({
-        confirmPassword: "Confirm Password field must be the same as the Password field",
+        confirmPassword:
+          "Confirm Password field must be the same as the Password field",
       });
     }
-  
-    console.log("Отправка данных на сервер...", { email, username, password, avatar, bio, interests });
-  
+
     const serverResponse = await dispatch(
       thunkSignup({
         email,
@@ -36,28 +34,28 @@ function SignupFormModal() {
         avatar: avatar || null,
         bio: bio || null,
         interests: interests || null
+
       })
     );
-  
-    console.log("✅ Ответ сервера:", serverResponse); // ✅ Теперь должно быть не undefined
-  
-    if (serverResponse && !serverResponse.errors) {
-      closeModal();
-    } else {
+
+    if (serverResponse) {
       setErrors(serverResponse);
+    } else {
+      closeModal();
     }
   };
-  
 
   return (
-    // <div className="modal-overlay" onClick={(e) => {
-    //   if (e.target.classList.contains("modal-overlay")) {
-    //     closeModal();
-    //   }
-    //   }}>
+    <div className="modal-overlay" onClick={(e) => {
+      if (e.target.classList.contains("modal-overlay")) {
+        closeModal();
+      }
+      }}>
       <div className="signup-form-modal">
         <h1>Sign Up</h1>
+  
         {errors.server && <p>{errors.server}</p>}
+  
         <form onSubmit={handleSubmit} className="signup-form">
           <label>
             Email
@@ -134,7 +132,7 @@ function SignupFormModal() {
           <button type="submit">Sign Up</button>
         </form>
       </div>
-    // </div>
+    </div>
   );
 }
 export default SignupFormModal;
