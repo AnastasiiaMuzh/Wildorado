@@ -17,8 +17,7 @@ const Carousel = () => {
     useEffect(() => {
         // Interval to change the image every 6 seconds
         const interval = setInterval(() => {
-            // setShowText(false); 
-            setIndex((prevIndex) => (prevIndex + 1) % images.length); // carousel
+            setIndex((prevIndex) => (prevIndex + 1) % images.length); 
         }, 8000);
         return () => clearInterval(interval); // Cleanup interval on unmount
     }, []);
