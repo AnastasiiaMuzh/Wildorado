@@ -25,7 +25,6 @@ export default defineConfig((mode) => ({
           react: ["react", "react-dom"],
           redux: ["@reduxjs/toolkit", "react-redux"],
           moment: ["moment"],
-          slider: ["slider"],
         },
       },
     },
