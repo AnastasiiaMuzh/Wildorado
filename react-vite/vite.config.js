@@ -17,16 +17,16 @@ export default defineConfig((mode) => ({
       "/api": "http://127.0.0.1:8000",
     },
   },
-  // build: {
-  //   chunkSizeWarningLimit: 1000,
-  //   rollupOptions: {
-  //     output: {
-  //       manualChunks: {
-  //         react: ["react", "react-dom"],
-  //         redux: ["@reduxjs/toolkit", "react-redux"],
-  //         moment: ["moment"],
-  //       },
-  //     },
-  //   },
-  // },
+  build: {
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // react: ["react", "react-dom"],
+          redux: ["react-redux"],
+          // moment: ["moment"],
+        },
+      },
+    },
+  },
 }));
