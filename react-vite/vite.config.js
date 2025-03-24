@@ -21,15 +21,11 @@ export default defineConfig((mode) => ({
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
-        // manualChunks: {
-        //   // react: ["react", "react-dom"],
-        //   redux: ["react-redux"],
-        //   // moment: ["moment"],
-         },
+        manualChunks: {
+          // react: ["react", "react-dom"],
+          redux: ["react-redux"],
+          // moment: ["moment"],
+        },
       },
     },
   },
