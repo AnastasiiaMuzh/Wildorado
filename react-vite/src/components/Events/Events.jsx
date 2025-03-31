@@ -2,15 +2,13 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { thunkGetAllEvents, thunkJoinEvent, thunkLeaveEvent } from "../../redux/events";
-import { FaUserFriends, FaRegCalendarAlt, FaMapMarkerAlt } from "react-icons/fa";
+import { FaUserFriends, FaRegCalendarAlt, FaMapMarkerAlt, FaSearch, FaSignOutAlt, FaComments  } from "react-icons/fa";
 import './Events.css'
 
 const EventsPage = () => {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
   
   const events = useSelector((state) => state.events.allEvents);
-//   const locations = useSelector((state) => state.locations.allLocations);
   const currentUser = useSelector((state) => state.session.user); 
 
   useEffect(() => {
@@ -47,9 +45,10 @@ const EventsPage = () => {
   
           return (
             <div key={event.id} className="event-item">
+              <h2 className="event-title">{event.title}</h2>
               {/* Контейнер заголовка и информации */}
               <div className="event-header-info">
-                <h2 className="event-title">{event.title}</h2>
+                
                 <p className="event-date">
                   <FaRegCalendarAlt />{" "}
                   {new Date(event.date).toLocaleString("en-US", {
@@ -67,9 +66,12 @@ const EventsPage = () => {
                     <p>
                       <FaMapMarkerAlt /> {event.location.name}, {event.location.city}
                     </p>
-                    <NavLink to={`/locations/${event.locationId}`} state={{ from: "events" }}>
-                      Details Location
-                    </NavLink>
+                    <p className="event-details-link">
+                      <FaSearch />
+                      <NavLink to={`/locations/${event.locationId}`} >
+                        Details Location
+                      </NavLink>
+                    </p>
                   </div>
                 )}
               </div>
@@ -96,10 +98,12 @@ const EventsPage = () => {
                         handleLeave(event.id);
                       }}
                     >
-                      Leave Event
+                      <FaSignOutAlt style={{marginRight: "8px"}} />
+                      <span>Leave Event</span>
                     </NavLink>
-                    <NavLink to={`/events/${event.id}`} style={{ marginLeft: "1rem" }}>
-                      Discussion
+                    <NavLink to={`/events/${event.id}`} >
+                    <FaComments style={{ marginRight: "8px" }} />
+                    <span>Discussion</span>
                     </NavLink>
                   </>
                 ) : isFull ? (
