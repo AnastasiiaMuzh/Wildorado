@@ -1,5 +1,4 @@
 import { useDispatch } from "react-redux";
-// import { useNavigate } from "react-router-dom";
 import { thunkCreateLocation } from "../../redux/locations";
 import LocationForm from "./LocationForm";
 
@@ -22,9 +21,8 @@ const initialData = {
   images: ["", "", "", ""],
 };
 
-const CreateLocationForm = () => {
+const CreateLocationFormModal = () => {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
 
   const handleSubmit = async (payload) => {
     const newLoc = await dispatch(thunkCreateLocation(payload));
@@ -35,10 +33,10 @@ const CreateLocationForm = () => {
     <LocationForm
       initialData={initialData}
       onSubmit={handleSubmit}
-      submitButtonText="Create Location"
+      submitButtonText="Create New Location"
       disableCategory={false}
     />
   );
 };
 
-export default CreateLocationForm;
+export default CreateLocationFormModal;

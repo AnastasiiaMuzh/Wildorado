@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import EventForm from "./EventForm";
 import { thunkGetEventDetail, thunkUpdateEvent } from "../../redux/events";
+import { useModal } from "../../context/Modal";
 
 // Utility to format existing date/time for <input type="datetime-local" />
 const formatDateForInput = (dateString) => {
@@ -12,11 +13,12 @@ const formatDateForInput = (dateString) => {
   return offsetDate.toISOString().slice(0, 16);
 };
 
-const UpdateEventForm = () => {
+const UpdateEventFormModal = () => {
   const { eventId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const event = useSelector((state) => state.events.eventDetail);
+  const { closeModal } = useModal();
 
 
   useEffect(() => {
@@ -58,5 +60,5 @@ const UpdateEventForm = () => {
   );
 };
 
-export default UpdateEventForm;
+export default UpdateEventFormModal;
 

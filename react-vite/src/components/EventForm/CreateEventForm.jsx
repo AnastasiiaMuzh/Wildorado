@@ -2,11 +2,13 @@ import EventForm from "./EventForm";
 import { thunkCreateEvent } from "../../redux/events";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
+import { useModal } from "../../context/Modal";
 
-const CreateEventForm = () => {
+const CreateEventFormModal = () => {
     const [searchParams] = useSearchParams(); 
     const dispatch = useDispatch();
     const locationId = searchParams.get("locationId"); 
+    const { closeModal } = useModal();
 
     const handleCreate = async (formData) => {
         try {
@@ -30,4 +32,4 @@ const CreateEventForm = () => {
     )
 
 }
-export default CreateEventForm;
+export default CreateEventFormModal;

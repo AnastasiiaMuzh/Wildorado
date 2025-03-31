@@ -6,6 +6,9 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; 
 import "./Navigation.css"; 
 import { csrfFetch } from "../../redux/csrf";
+import OpenModalMenuItem from "./OpenModalMenuItem";
+import { useModal } from "../../context/Modal";
+import CreateLocationFormModal from "../LocationForm/CreateLocationForm";
 
 const Navigation = () => {
   
@@ -115,7 +118,14 @@ const Navigation = () => {
           </span>
           
           {user && (
-          <NavLink to="/locations/new" className='nav-link'>POST</NavLink>
+            <span className="nav-link">
+            <OpenModalMenuItem 
+            itemText="POST"
+            modalComponent={<CreateLocationFormModal />}
+          />
+          </span>
+
+          // <NavLink to="/locations/new" className='nav-link'>POST</NavLink>
           )}
 
           <div className="dropdown-container" ref={calendarRef}>

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { categoryNames, categoryFields, enumOptions } from "./LocationForm.utils";
+import "./LocationForm.css"; 
+import { useModal } from "../../context/Modal";
 
 
 const LocationForm = ({initialData, onSubmit, submitButtonText,   disableCategory = false}) => {
@@ -9,6 +11,8 @@ const LocationForm = ({initialData, onSubmit, submitButtonText,   disableCategor
   const [formData, setFormData] = useState(initialData);
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
+  const { closeModal } = useModal();
+
 
 
   const handleCategoryChange = (e) => {
@@ -124,8 +128,11 @@ const LocationForm = ({initialData, onSubmit, submitButtonText,   disableCategor
     const result = await onSubmit(payload); // вызываем переданный проп
     if (result) {
       setSuccessMessage(`${submitButtonText} successful!`);
-      setTimeout(() => navigate(`/locations/${result.id}`), 1000);
-    } else {
+      setTimeout(() => {
+        closeModal();
+        navigate(`/locations/${result.id}`); 
+    },1000);
+   } else {
       setErrors({ general: "Operation failed." });
     }
   } catch (err) {
@@ -150,7 +157,7 @@ const LocationForm = ({initialData, onSubmit, submitButtonText,   disableCategor
     <div className="create-location-form">
       <h2>{submitButtonText}</h2>
       <p>
-        Important: All submitted information and photos must be accurate and truthful.
+      <span className="highlight">Important:</span> All submitted information and photos must be accurate and truthful.
         Any false or misleading information may result in removal or account suspension.
       </p>
       {errors.general && <p className="error">{errors.general}</p>}

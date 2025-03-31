@@ -8,12 +8,12 @@ export const categoryNames = {
 };
 
 export const categoryFields = {
-  1: ["name", "city", "description", "elevation", "difficulty", "distance", "bestSeason"],
-  2: ["name", "city", "description", "river_class", "distance"],
-  3: ["name", "city", "description", "maxTents", "fireAllowed", "lake", "distance", "elevation"],
-  4: ["name", "city", "description", "routeType", "difficulty", "elevation", "distance"],
-  5: ["name", "city", "description", "bestSeason", "elevation", "distance"],
-  6: ["name", "city", "description", "terrainType", "distance", "elevation"],
+  1: ["name", "city", "elevation", "difficulty", "distance", "bestSeason", "description"],
+  2: ["name", "city", "river_class", "distance", "description"],
+  3: ["name", "city", "maxTents", "fireAllowed", "lake", "distance", "elevation", "description"],
+  4: ["name", "city", "routeType", "difficulty", "elevation", "distance", "description"],
+  5: ["name", "city", "bestSeason", "elevation", "distance", "description"],
+  6: ["name", "city", "terrainType", "distance", "elevation", "description"],
 };
 
 export const enumOptions = {
