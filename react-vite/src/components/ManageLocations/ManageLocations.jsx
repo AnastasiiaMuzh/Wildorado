@@ -1,25 +1,27 @@
 import { useState, useEffect } from 'react';
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { csrfFetch } from '../../redux/csrf';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import DeleteLocationModal from './DeleteLocationModal';
-
+import "./ManageLocations.css"
+import { useModal } from "../../context/Modal";
+import UpdateLocationFormModal from '../LocationForm/UpdateLocationForm';
 
 const ManageLocations = () => {
   const [locations, setLocations] = useState([]); 
   const [isLoading, setIsLoading] = useState(true); 
   const [error, setError] = useState(null); 
+  const { closeModal } = useModal();
   const navigate = useNavigate();
 
   const handleEdit = (locationId) => {
     navigate(`/locations/${locationId}/edit`);
   };
 
-  // const handleDelete = (locationId) => {
-  //   navigate(`/locations/${locationId}`);
-  // };
+  const handleLocClick = (locationId) => {
+    navigate(`/locations/${locationId}`);
+  };
 
   //loading current user locations
   const fetchUserLocations = async () => {
@@ -49,50 +51,108 @@ const ManageLocations = () => {
 
 
   return (
-    <div className='manage-loc-container'>
-      
-      <h2>Manage Your Locations</h2>
+    <div className="manage-loc-container">
+      <h2>My Locations</h2>
       
       {locations.length > 0 ? (
-        <div className='manage-loc-info'>
-          <ul>
-            <div className='manage-log-info'></div>
-            {locations.map((location) => (
-              <li key={location.id}>
-                <img src={location.imageUrl} alt={location.name} /> 
-                <h3>{location.name}</h3>
-                <p>📍 {location.city}</p>
-                <p>★ {location.avgRating} ({location.reviewCount} reviews)</p>
-
-                <div className='manage-loc-btn'>
-                  <button className="edit-btn" onClick={() => handleEdit(location.id)}>
-                    <FaEdit className="icon" />
-                  </button>
-                  <OpenModalButton
-                    buttonText={<FaTrash className='icon-trash'/>}
-                    modalComponent={<DeleteLocationModal locationId={location.id} onDelete={fetchUserLocations}/>}
-                  />
-                  {/* <button className="delete-btn" onClick={() => handleDelete(location.id)}>
-                    <FaTrash className="icon" />
-                  </button> */}
+        <div className="manage-loc-grid">
+          {locations.map((location) => (
+            <div key={location.id} className="location-card">
+              <div className="location-card-image" onClick={() => handleLocClick(location.id)}>
+                <img src={location.imageUrl} alt={location.name} />
+              </div>
+            
+              <div className="location-card-content">
+                <div className="my-location-header">
+                  <h3>{location.name}</h3>
+                  <p className="location-city">
+                    <span className="location-pin">📍</span> {location.city}
+                  </p>
                 </div>
-              </li>
-            ))}
-          </ul>
-          <div className='manage-loc-btn'>
+                
+                <div className="location-footer">
+                  <div className="location-rating">
+                    {[1, 2, 3, 4, 5].map((star) => {
+                      const hasRating = location.avgRating > 0 && location.reviewCount > 0;
+                      const rating = location.avgRating;
 
+                      if (!hasRating) {
+                        return (
+                          <span key={star} className="star empty">
+                            ★
+                          </span>
+                        );
+                      }
 
-          </div>
-      </div>
-      
+                      const isFilled = star <= Math.floor(rating);
+                      const isHalf = star === Math.ceil(rating) && (rating % 1 >= 0.3);
+
+                      let starClass = "star";
+                      if (isFilled) {
+                        starClass += " filled";
+                      } else if (isHalf) {
+                        starClass += " half";
+                      } else {
+                        // "empty" star that comes after the filled ones
+                        // with "the existing" rating-> unfilled (not to be confused with .empty)
+                        starClass += " unfilled";
+                      }
+
+                      return (
+                        <span key={star} className={starClass}>
+                          ★
+                        </span>
+                      );
+                    })}
+
+                    <span className="rating-text">
+                      {location.avgRating > 0 && location.reviewCount > 0 
+                        ? `${location.avgRating.toFixed(1)} (${location.reviewCount} reviews)` 
+                        : 'No reviews yet'}
+                    </span>
+                  </div>
+                  
+                  <div className="location-card-actions">
+                  <OpenModalButton
+                    buttonText={<FaEdit className="icon" />}
+                    modalComponent={
+                      <UpdateLocationFormModal 
+                        locationId={location.id} 
+                        onUpdate={fetchUserLocations}
+                      />
+                    }
+                    onButtonClick={(e) => {
+                      if (e?.stopPropagation) e.stopPropagation();
+                      if (e?.preventDefault) e.preventDefault();
+                    }}
+                  />
+
+                    <OpenModalButton
+                      buttonText={<FaTrash className="icon-trash" />}
+                      modalComponent={
+                        <DeleteLocationModal 
+                          locationId={location.id} 
+                          onDelete={fetchUserLocations}
+                        />
+                      }
+                      onButtonClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       ) : (
-        <p>You currently have no created locations.<br />  
-          To create a new location, please <Link to="/locations/new">click here</Link>.</p>
+        <div className="empty-locations">
+          <p>You currently have no created locations.</p>
+          <Link to="/locations/new" className="create-location-link">Create a new location</Link>
+        </div>
       )}
     </div>
   );
-};
-
+}
 export default ManageLocations;
-
-//esli ya zagrujau locacii cherez redux (location), to dannie teryauytsya, po etomy sdelala derectivno na backend!

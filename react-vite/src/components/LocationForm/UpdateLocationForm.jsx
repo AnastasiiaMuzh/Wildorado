@@ -10,8 +10,7 @@ function removeSuffix(str, suffix) {
   return str.replace(suffix, "").trim();
 }
 
-const UpdateLocationForm = () => {
-  const { locationId } = useParams();
+const UpdateLocationFormModal = ({ locationId, onUpdate }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate(); 
 
@@ -109,4 +108,4 @@ const UpdateLocationForm = () => {
   );
 };
 
-export default UpdateLocationForm;
+export default UpdateLocationFormModal;

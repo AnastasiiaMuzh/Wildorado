@@ -1,0 +1,87 @@
+.del-loc-container {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 30px 40px;
+    max-width: 450px;
+    margin: 0 auto;
+    top: -130px;
+    transform: translateY(0);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative;
+  }
+  
+  
+  /* Заголовок */
+  .del-loc-header {
+    color: #d34026;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  
+  /* Текст подтверждения */
+  .confirm-del-loc h4 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 30px;
+  }
+  
+  /* Кнопки действий */
+  .action-btn {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  /* Общий стиль кнопок */
+  .action-btn button {
+    padding: 12px 22px;
+    font-size: 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border: none;
+  }
+  
+  /* Кнопка удаления */
+  .yes {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  .yes:hover {
+    background-color: #c0392b;
+  }
+  
+  /* Кнопка отмены */
+  .no {
+    background-color: #f4f4f4;
+    color: #333;
+    border: 1px solid #ccc;
+  }
+  
+  .no:hover {
+    background-color: #e0e0e0;
+  }
+  
+  @media (max-width: 480px) {
+    .del-loc-container {
+      padding: 25px 20px;
+    }
+  
+    .del-loc-header {
+      font-size: 1.5rem;
+    }
+  
+    .confirm-del-loc h4 {
+      font-size: 1rem;
+    }
+  
+    .action-btn button {
+      width: 100%;
+    }
+  }

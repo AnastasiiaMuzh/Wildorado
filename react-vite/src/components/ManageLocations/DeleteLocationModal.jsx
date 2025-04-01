@@ -1,6 +1,7 @@
 import { useModal } from '../../context/Modal';
 import { useDispatch } from 'react-redux';
 import { thunkDeleteLocation } from '../../redux/locations';
+import "./DeleteLocationModal.css"
 
 const DeleteLocationModal = ({ locationId, onDelete }) => {
     const { closeModal } = useModal();
@@ -25,7 +26,7 @@ const DeleteLocationModal = ({ locationId, onDelete }) => {
             </div>
 
             <div className='action-btn'>
-                <button onClick={handleDelete} className='yes'>(Delete Location)</button>
+                <button onClick={handleDelete} className='yes'>Yes (Delete Location)</button>
                 <button onClick={handleCancel} className='no'>No (Keep Location)</button>
             </div>
 
