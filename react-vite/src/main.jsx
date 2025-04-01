@@ -7,6 +7,7 @@ import { router } from "./router";
 import * as sessionActions from "./redux/session";
 import { restoreCSRF, csrfFetch } from "./redux/csrf";
 import "./index.css";
+import 'leaflet/dist/leaflet.css';
 
 const store = configureStore();
 
