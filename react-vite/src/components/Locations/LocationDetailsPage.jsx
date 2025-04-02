@@ -84,11 +84,15 @@ const LocationDetailsPage = () => { //ubrala locationId iz ()
     }
 
     return (
-        <div className="location-detail">
+        <div className="location-detail-main">
             <div className="details-left">
                 <div className="details-header">
                     <h1 className="location-title">{location.name}</h1>
-                    <p className="location-city">📍 {location.city}</p>
+                    
+                </div>
+                
+                <div className="location-city-rating">
+                    <p>📍 {location.city}</p>
                     <div className="location-rating">
                         <span className="star">★</span> {location.avgRating} ({location.reviewCount} reviews)
                     </div>
@@ -120,7 +124,7 @@ const LocationDetailsPage = () => { //ubrala locationId iz ()
                     <p>{location.description}</p>
                 </div>
                     
-                <div className="reviews-locDetails">
+                <div className="reviews-loc-details">
                     <h2>REVIEWS</h2>
                 </div>
             </div>
