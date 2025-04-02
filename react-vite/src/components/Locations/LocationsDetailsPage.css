@@ -176,7 +176,7 @@
     border-radius: 10px;
   }
   
-  .trip-plan button {
+  .trip-plan button{
     background: #4CAF50;
     color: white;
     padding: 12px 20px;
@@ -186,7 +186,11 @@
     font-size: 1rem;
     margin-top: 10px;
     transition: background 0.3s;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
   }
+  
   
   .trip-plan button:hover {
     background: #3e8e41;

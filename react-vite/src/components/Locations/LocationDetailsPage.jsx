@@ -1,25 +1,17 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkGetLocationDetails } from "../../redux/locations"; 
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { thunkCategory } from "../../redux/categories";
+import OpenModalButton from '../OpenModalButton/OpenModalButton';
+import CreateEventFormModal from "../EventForm/CreateEventForm";
 import './LocationsDetailsPage.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-// import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-// import markerIcon from 'leaflet/dist/images/marker-icon.png';
-// import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
-// import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-// L.Icon.Default.mergeOptions({
-//     iconRetinaUrl: markerIcon2x,
-//     iconUrl: markerIcon,
-//     shadowUrl: markerShadow,
-//   });
   
 const LocationDetailsPage = () => { //ubrala locationId iz ()
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const { id } = useParams(); //ID from URL
     const user = useSelector((state) => state.session.user);
     const location = useSelector((state) => state.locations.locationDetail);
@@ -134,9 +126,13 @@ const LocationDetailsPage = () => { //ubrala locationId iz ()
                     <p>Organize a {categoryData.category.name} event or join others planning to visit {location.name}.</p>
                     
                     {user ? (
-                        <button onClick={() => navigate(`/events/new?locationId=${id}`)}>
-                            Create Event
-                        </button>
+                        <OpenModalButton 
+                          buttonText="Create Event"
+                          modalComponent={<CreateEventFormModal locationId={location.id}/>}
+                        />
+                        // <button onClick={() => navigate(`/events/new?locationId=${id}`)}>
+                        //     Create Event
+                        // </button>
                     ) : (
                         <p style={{ color: "red", fontWeight: "bold" }}>
                             To create your own event, please log in to your account.

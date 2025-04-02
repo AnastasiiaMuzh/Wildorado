@@ -13,12 +13,12 @@ const DeleteEventModal = ({ eventId }) => {
     };
 
     return (
-        <div className='delete-event-modal'>
-            <h1 className='modal-header'>Confirm Delete</h1>
+        <div className='del-loc-container'>
+            <h1 className='del-loc-header'>Confirm Delete</h1>
             <p>Are you sure you want to delete this event?</p>
-            <div className='modal-actions'>
-                <button onClick={handleDelete} className='delete-btn'>Yes (Delete Event)</button>
-                <button onClick={closeModal} className='cancel-btn'>No (Keep Event)</button>
+            <div className='action-btn'>
+                <button onClick={handleDelete} className='yes'>Yes (Delete Event)</button>
+                <button onClick={closeModal} className='no'>No (Keep Event)</button>
             </div>
         </div>
     );

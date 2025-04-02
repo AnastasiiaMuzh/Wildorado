@@ -3,16 +3,22 @@ import { thunkCreateEvent } from "../../redux/events";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { useModal } from "../../context/Modal";
+import "./EventFormModal.css";
 
-const CreateEventFormModal = () => {
+const CreateEventFormModal = ({ locationId }) => {
     const [searchParams] = useSearchParams(); 
     const dispatch = useDispatch();
-    const locationId = searchParams.get("locationId"); 
+
     const { closeModal } = useModal();
 
     const handleCreate = async (formData) => {
         try {
             const result = await dispatch(thunkCreateEvent({ ...formData, locationId }));
+            if (result) {
+                setTimeout(() => {
+                    closeModal(); // закрыть модалку через 1.5 секунды
+                }, 1500);
+            }
             return result;
         } catch (error) {
             console.error("Error creating event:", error);

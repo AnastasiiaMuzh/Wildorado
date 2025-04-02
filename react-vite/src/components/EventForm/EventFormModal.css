@@ -1,0 +1,83 @@
+.modal-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* затемнение */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* по центру экрана */
+    z-index: 999;
+  }
+  
+  .create-event-main {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 500px;
+    max-width: 90%;
+    max-height: 90vh;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+
+  .crete-event-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* равный отступ между полями */
+  }
+
+  .create-event-main h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+
+  .create-event-main form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .create-event-main label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    
+  }
+  
+  .create-event-main input,
+  .create-event-main textarea {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .create-event-main textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+  
+  .create-event-main button {
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    background-color: #4caf50;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .create-event-main button:hover {
+    background-color: #45a049;
+  }
+  
+  .create-event-main p {
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  

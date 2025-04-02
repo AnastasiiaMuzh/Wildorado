@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import EventForm from "./EventForm";
-import { thunkGetEventDetail, thunkUpdateEvent } from "../../redux/events";
+import { thunkGetEventDetail, thunkUpdateEvent, thunkGetCurrentUserEvents } from "../../redux/events";
 import { useModal } from "../../context/Modal";
+import "./EventFormModal.css";
 
 // Utility to format existing date/time for <input type="datetime-local" />
 const formatDateForInput = (dateString) => {
@@ -13,8 +14,8 @@ const formatDateForInput = (dateString) => {
   return offsetDate.toISOString().slice(0, 16);
 };
 
-const UpdateEventFormModal = () => {
-  const { eventId } = useParams();
+const UpdateEventFormModal = ({ eventId }) => {
+  // const { eventId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const event = useSelector((state) => state.events.eventDetail);
@@ -22,7 +23,7 @@ const UpdateEventFormModal = () => {
 
 
   useEffect(() => {
-    if (!event) {
+    if (!event || event.id !== +eventId) {
     dispatch(thunkGetEventDetail(eventId));
     }
   }, [dispatch, event, eventId]); //dobavila [event]
@@ -35,6 +36,8 @@ const UpdateEventFormModal = () => {
     };
     try {
       await dispatch(thunkUpdateEvent(eventId, payload));
+      await dispatch(thunkGetCurrentUserEvents());
+      closeModal();
       navigate("/events/current");
     } catch (err) {
       console.error("Update error:", err);
@@ -54,7 +57,7 @@ const UpdateEventFormModal = () => {
           date: formatDateForInput(event.date),
         }}
         onSubmit={handleUpdate}
-        submitButtonText="Save Changes"
+        submitButtonText="Update Your Event"
       />
     </div>
   );

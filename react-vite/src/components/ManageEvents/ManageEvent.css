@@ -1,72 +1,162 @@
-.manage-events {
-    max-width: 800px;
-    margin: 20px auto;
-    text-align: center;
-  }
+.manage-events-main {
+  max-width: 1400px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: center;
   
-  .event-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .event-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    margin: 10px 0;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .event-image {
-    width: 100%;
-    max-height: 200px;
-    object-fit: cover;
-    border-radius: 6px;
-  }
-  
-  .event-info {
-    text-align: center;
-    margin: 10px 0;
-  }
-  
-  .event-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
-  
-  .event-actions button {
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .edit-btn {
-    background: #007bff;
-    color: white;
-  }
-  
-  .delete-btn {
-    background: #dc3545;
-    color: white;
-  }
-  
-  .discussion-btn {
-    background: #28a745;
-    color: white;
-  }
-  
-  .create-event-link {
-    color: #007bff;
-    font-weight: bold;
-    text-decoration: none;
-  }
-  
-  .create-event-link:hover {
-    text-decoration: underline;
-  }
-  
+}
+
+.manage-your-event {
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: #3a2e2e;
+  margin-top: 0px;
+  margin-bottom: 45px;
+}
+
+.event-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 40px;
+  justify-items: center;
+  padding: 0;
+}
+
+
+.event-card-manage {
+  background: #f3e8de;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
+  max-width: 650px;
+
+  display: flex;              /* ✅ добавляем */
+  flex-direction: column;     /* элементы сверху вниз */
+  justify-content: space-between; 
+}
+
+/* .event-title-manage {
+  font-size: 35px;
+  font-weight: 700;
+  color: #d33f2f;
+  margin-bottom: 15px;
+  margin-top: 20px;
+  text-decoration: none;
+  border-bottom: 2px solid currentColor; 
+} */
+
+.event-meta-manage {
+  display: flex;
+  justify-content: space-around;
+  font-size: 20px;
+  color: #3f3f3f;
+  flex-wrap: wrap;
+}
+
+.event-title-link {
+  font-size: 35px;
+  font-weight: 550;
+  color: #d33f2f; /* 🔴 как сейчас */
+  text-decoration: none;
+  border-bottom: 2px solid currentColor; /* ⬅️ всегда подчёркивание того же цвета */
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.event-title-link:hover {
+  color: #1b4fa3; /* 🔵 при ховере */
+  border-color: #1b4fa3;
+}
+
+
+.event-title-link:hover {
+  border-color: #1b4fa3;
+  color: #143e80;
+}
+
+.event-img-manage {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.event-description-manage {
+  font-size: 20px;
+  color: #2f2f2f;
+  margin: 10px 0 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 35px;
+}
+
+.event-btn-manage {
+  display: flex;
+  justify-content: center;
+  gap: 35px;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+
+.event-btn-manage button,
+.event-btn-manage .edit-btn-manage,
+.event-btn-manage .delete-btn-manage,
+.event-btn-manage .discussion-btn-manage {
+  width: 140px; /* ✅ фиксированная ширина для всех */
+  height: 45px;  /* ✅ одинаковая высота */
+  padding: 10px;
+  font-size: 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* ✅ выравнивание текста и иконки */
+  gap: 8px;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.edit-btn-manage {
+  background-color: #1b4fa3;
+  color: white;
+}
+
+.edit-btn-manage:hover {
+  background-color: #143e80;
+}
+
+.delete-btn-manage {
+  background-color: #d93b2c;
+  color: white;
+}
+
+.delete-btn-manage:hover {
+  background-color: #b12f24;
+}
+
+.discussion-btn-manage {
+  background-color: #207b30;
+  color: white;
+}
+
+.discussion-btn-manage:hover {
+  background-color: #196327;
+}
+
+.create-event-link {
+  color: #007bff;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.create-event-link:hover {
+  text-decoration: underline;
+}

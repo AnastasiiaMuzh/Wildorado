@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./EventFormModal.css";
 
 const EventForm = ({ initialData = { title: "", description: "", maxParticipants: "", date: "" }, onSubmit, submitButtonText }) => {
     const [formData, setFormData] = useState(initialData);
@@ -68,30 +69,41 @@ const EventForm = ({ initialData = { title: "", description: "", maxParticipants
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-        <h1>{submitButtonText}</h1>
+        <div className="create-event-main">
+            <form onSubmit={handleSubmit}>
+            <h1>{submitButtonText}</h1>
 
-        {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
-        {errors.general && <p style={{ color: "red" }}>{errors.general}</p>}
+            {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+            {errors.general && <p style={{ color: "red" }}>{errors.general}</p>}
 
-        <label>Title:</label>
-        <input type="text" name="title" value={formData.title} onChange={handleChange} />
-        {errors.title && <p style={{color: "red"}}>{errors.title}</p>}
+            <div className="crete-event-fields">
+                <div className="form-group">
+                    <label>Title:</label>
+                    <input type="text" name="title" value={formData.title} onChange={handleChange} />
+                    {errors.title && <p style={{color: "red"}}>{errors.title}</p>}
+                </div>
 
-        <label>Description:</label>
-        <textarea name="description" value={formData.description} onChange={handleChange} />
-        {errors.description && <p style={{color: "red"}}>{errors.description}</p>}
+                <div className="form-group">
+                    <label>Description:</label>
+                    <textarea name="description" value={formData.description} onChange={handleChange} />
+                    {errors.description && <p style={{color: "red"}}>{errors.description}</p>}
+                </div>
 
-        <label>Date:</label>
-        <input type="datetime-local" name="date" value={formData.date} onChange={handleChange} />
-        {errors.date && <p style={{color: "red"}}>{errors.date}</p>}
+                <div className="form-group">
+                    <label>Date:</label>
+                    <input type="datetime-local" name="date" value={formData.date} onChange={handleChange} />
+                    {errors.date && <p style={{color: "red"}}>{errors.date}</p>}
+                </div>
 
-        <label>Max Participants:</label>
-        <input type="number" name="maxParticipants" value={formData.maxParticipants} onChange={handleChange} />
-        {errors.maxParticipants && <p style={{color: "red"}}>{errors.maxParticipants}</p>}
-
-        <button type="submit">{submitButtonText}</button>
-        </form>
+                <div className="form-group">
+                    <label>Max Participants:</label>
+                    <input type="number" name="maxParticipants" value={formData.maxParticipants} onChange={handleChange} />
+                    {errors.maxParticipants && <p style={{color: "red"}}>{errors.maxParticipants}</p>}
+                </div>    
+            </div>
+            <button type="submit">{submitButtonText}</button>
+            </form>
+        </div>
     );
 };
 
