@@ -5,6 +5,7 @@ import moment from 'moment';
 import { FaTrash } from "react-icons/fa";
 import { FaUserFriends, FaRegCalendarAlt} from "react-icons/fa";
 import { thunkGetEventDetail, thunkCreateComment, thunkDeleteComment } from '../../redux/events';
+import "./Discussion.css"
 
 const DiscussionPage = () => {
     const dispatch = useDispatch();
