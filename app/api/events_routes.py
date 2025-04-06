@@ -446,6 +446,48 @@ def create_comments(event_id):
         print(e)
         db.session.rollback()
         return jsonify({"message": "Internal server error"}), 500
+    
+# ************************ PUT /api/events/:eventId/comments/:commentId ************************
+@events_routes.route('/<int:event_id>/comments/<int:comment_id>', methods=["PUT"])   
+@login_required
+def update_comment(event_id, comment_id):
+    """Update a comment (only author can edit)."""
+    try:
+        event = Event.__query.get(event_id)
+        if not event:
+            return jsonify({"message": "Event not found"}), 404
+        
+        comment = EventComment.query.get(comment_id)
+        if not comment or comment().eventId != event_id:
+            return jsonify({"message": "Comment not found"}), 404
+        
+        if comment.userId != current_user.id:
+            return jsonify({"message": "Forbidden"}), 403
+        
+        data = request.get_json() or {}
+        message = data.get("message", "").strip()
+
+        if not message:
+            return jsonify({"message": "Comment cannot be empty!"}), 400
+        
+        comment.message = message
+        comment.updatedAt = datetime.now()
+        db.session.commit()
+
+        return jsonify({
+            "id": comment.id,
+            "eventId": comment.eventId,
+            "userId": comment.userId,
+            "message": comment.message,
+            "createdAt": comment.createdAt,
+            "updatedAt": comment.updatedAt
+        }), 200
+    
+
+    except Exception as e:
+        print(e)
+        db.session.rollback()
+        return jsonify({"message": "Internal server error"}), 500
 
 # ************************ Delete /api/events/:eventid/comments/:commentId ************************
 @events_routes.route('/<int:event_id>/comments/<int:comment_id>', methods=["DELETE"])
