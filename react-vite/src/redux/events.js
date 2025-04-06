@@ -10,6 +10,7 @@ const DELETE_EVENT = 'events/DELETE_EVENT';
 const JOIN_EVENT = 'events/JOIN_EVENT';
 const LEAVE_EVENT = 'events/LEAVE_EVENT';
 const CREATE_COMMENT = 'events/CREATE_COMMENT';
+const UPDATE_COMMENT = 'events/UPDATE_COMMENT';
 const DELETE_COMMENT = 'events/DELETE_COMMENT';
 
 // --- ACTION CREATORS ---
@@ -57,6 +58,12 @@ const createComment = (comment) => ({
 type: CREATE_COMMENT,
 payload: comment,
 })
+
+const updateComment = (comment) => ({
+    type: UPDATE_COMMENT,
+    payload: comment,
+  });
+  
 
 const deleteComment = (commentId) => ({
     type: DELETE_COMMENT,
@@ -196,6 +203,25 @@ export const thunkCreateComment = (eventId, message) => async (dispatch) => {
     return data;
 };
 
+//Update message
+export const thunkUpdateComment = (eventId, commentId, message) => async (dispatch) => {
+    const res = await csrfFetch(`/api/events/${eventId}/comments/${commentId}`, {
+      method: 'PUT',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message }),
+    });
+  
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || 'Failed to update comment');
+    }
+  
+    const data = await res.json();
+    dispatch(updateComment(data));
+    return data;
+  };
+  
+
 //Delete message
 export const thunkDeleteComment = (eventId, commentId) => async (dispatch) => {
     const res = await csrfFetch(`/api/events/${eventId}/comments/${commentId}`,{
@@ -285,6 +311,22 @@ const eventsReducer = (state = initialState, action) => {
             }
             return state;
         }
+
+        case UPDATE_COMMENT: {
+            if (state.eventDetail && state.eventDetail.comments) {
+              return {
+                ...state,
+                eventDetail: {
+                  ...state.eventDetail,
+                  comments: state.eventDetail.comments.map((comment) =>
+                    comment.id === action.payload.id ? action.payload : comment
+                  ),
+                },
+              };
+            }
+            return state;
+          }
+          
 
         case DELETE_COMMENT: {
             if (state.eventDetail && state.eventDetail.comments) {

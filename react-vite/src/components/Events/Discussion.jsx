@@ -17,7 +17,7 @@ const DiscussionPage = () => {
 
     useEffect(() => {
         if (eventId) {
-        dispatch(thunkGetEventDetail(eventId));
+        dispatch(thunkGetEventDetail(eventId));re
         }
     }, [dispatch, eventId]);
 
