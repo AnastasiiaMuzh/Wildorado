@@ -2,39 +2,47 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaRegEdit } from "react-icons/fa";
 import { FaUserFriends, FaRegCalendarAlt} from "react-icons/fa";
-import { thunkGetEventDetail, thunkCreateComment, thunkDeleteComment } from '../../redux/events';
+import { thunkGetEventDetail, thunkCreateComment, thunkDeleteComment, thunkUpdateComment } from '../../redux/events';
 import "./Discussion.css"
 
 const DiscussionPage = () => {
     const dispatch = useDispatch();
     const { eventId } = useParams();
     const [commentText, setCommentText] = useState("");
+    const [editingCommentId, setEditingCommentId] = useState(null);
+    const [editedMessage, setEditedMessage] = useState("");
     const event = useSelector((state) => state.events.eventDetail);
     const currentUser = useSelector((state) => state.session.user);
 
 
     useEffect(() => {
         if (eventId) {
-        dispatch(thunkGetEventDetail(eventId));re
+        dispatch(thunkGetEventDetail(eventId));
         }
     }, [dispatch, eventId]);
 
-    
 
+    const startEditing = (comment) => {
+         console.log("CLICKED EDIT:", comment);
+        setEditingCommentId(comment.id);
+        setEditedMessage(comment.message);
+      };  
+      
+      
     const handleCommentSubmit = async (e) => {
-        e.preventDefault();
-        if (!commentText.trim()) return;
-        try {
-          await dispatch(thunkCreateComment(event.id, commentText));
-          await dispatch(thunkGetEventDetail(event.id))
-          setCommentText("");
-        } catch (error) {
-          console.err(error.message);
-        }
-    };
-
+            e.preventDefault();
+            if (!commentText.trim()) return;
+            try {
+            await dispatch(thunkCreateComment(event.id, commentText));
+            await dispatch(thunkGetEventDetail(event.id))
+            setCommentText("");
+            } catch (error) {
+            console.err(error.message);
+            }
+        };
+        
     const handleDelete = async (commentId) => {
         try {
           await dispatch(thunkDeleteComment(eventId, commentId));
@@ -42,6 +50,18 @@ const DiscussionPage = () => {
           console.err(error.message);
         }
     }
+
+    const handleUpdate = async () => {
+        try {
+          await dispatch(thunkUpdateComment(eventId, editingCommentId, editedMessage));
+          setEditingCommentId(null);
+          setEditedMessage("");
+          await dispatch(thunkGetEventDetail(eventId)); // обновим комментарии
+        } catch (err) {
+          console.error(err.message);
+        }
+      };
+      
 
     moment.updateLocale("en", {
       relativeTime: {
@@ -115,24 +135,41 @@ const DiscussionPage = () => {
                                     )}
                                     <strong>{comment.username}</strong>
                                 </div>
-
+                                                                                        
                                 <div className="message-content">
+                                {editingCommentId === comment.id ? (
+                                    <div className="edit-form">
+                                        <input
+                                        value={editedMessage}
+                                        onChange={(e) => setEditedMessage(e.target.value)}
+                                        className="edit-input"
+                                        />
+                                        <button onClick={handleUpdate} className="save-btn">Save</button>
+                                        <button onClick={() => setEditingCommentId(null)} className="cancel-btn">Cancel</button>
+                                    </div>
+                                    ) : (
                                     <p className="message">{comment.message}</p>
+                                    )}
+
                                     <span className="message-date">
-                                        {moment(comment.createdAt).local().fromNow()}
-                                        {comment.userId === currentUser?.id && (
-                                            <button
-                                                onClick={() => handleDelete(comment.id)}
-                                                className="message-delete-btn"
-                                            >
+                                    {moment(comment.createdAt).local().fromNow()}
+                                    {comment.userId === currentUser?.id && (
+                                        <div className="comment-controls">
+                                            <button className="comment-edit-btn" onClick={() => startEditing(comment)} title="Edit your message">
+                                                <FaRegEdit />
+                                            </button>
+                                            <button className="message-delete-btn" onClick={() => handleDelete(comment.id)}>
                                                 <FaTrash />
                                             </button>
-                                        )}
-                                    </span>
-                                </div>
+                                        </div>
+                                    )}
+                                </span>
                             </div>
-                        ))}
+                        </div>
+                    ))}
+
                     </ul>
+                    
                 ) : (
                     <p className="no-messages">No messages yet. Be the first to leave a message!</p>
                 )}
