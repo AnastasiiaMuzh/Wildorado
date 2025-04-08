@@ -1,12 +1,10 @@
 import EventForm from "./EventForm";
 import { thunkCreateEvent } from "../../redux/events";
 import { useDispatch } from "react-redux";
-import { useSearchParams } from "react-router-dom";
 import { useModal } from "../../context/Modal";
 import "./EventFormModal.css";
 
 const CreateEventFormModal = ({ locationId }) => {
-    const [searchParams] = useSearchParams(); 
     const dispatch = useDispatch();
 
     const { closeModal } = useModal();

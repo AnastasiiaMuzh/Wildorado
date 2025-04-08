@@ -7,7 +7,6 @@ import "react-calendar/dist/Calendar.css";
 import "./Navigation.css"; 
 import { csrfFetch } from "../../redux/csrf";
 import OpenModalMenuItem from "./OpenModalMenuItem";
-import { useModal } from "../../context/Modal";
 import CreateLocationFormModal from "../LocationForm/CreateLocationForm";
 
 const Navigation = () => {

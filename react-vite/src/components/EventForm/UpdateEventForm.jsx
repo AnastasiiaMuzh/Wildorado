@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import EventForm from "./EventForm";
 import { thunkGetEventDetail, thunkUpdateEvent, thunkGetCurrentUserEvents } from "../../redux/events";
 import { useModal } from "../../context/Modal";

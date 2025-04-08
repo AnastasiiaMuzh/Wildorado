@@ -5,19 +5,17 @@ import { csrfFetch } from '../../redux/csrf';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import DeleteLocationModal from './DeleteLocationModal';
 import "./ManageLocations.css"
-import { useModal } from "../../context/Modal";
 import UpdateLocationFormModal from '../LocationForm/UpdateLocationForm';
 
 const ManageLocations = () => {
   const [locations, setLocations] = useState([]); 
   const [isLoading, setIsLoading] = useState(true); 
   const [error, setError] = useState(null); 
-  const { closeModal } = useModal();
   const navigate = useNavigate();
 
-  const handleEdit = (locationId) => {
-    navigate(`/locations/${locationId}/edit`);
-  };
+  // const handleEdit = (locationId) => {
+  //   navigate(`/locations/${locationId}/edit`);
+  // };
 
   const handleLocClick = (locationId) => {
     navigate(`/locations/${locationId}`);
@@ -71,7 +69,7 @@ const ManageLocations = () => {
                     modalComponent={
                       <UpdateLocationFormModal 
                       locationId={location.id} 
-                      onUpdate={fetchUserLocations}
+                      // onUpdate={fetchUserLocations}
                       />
                     }
                     onButtonClick={(e) => {
