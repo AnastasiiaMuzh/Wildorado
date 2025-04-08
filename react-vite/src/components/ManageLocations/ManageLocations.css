@@ -1,254 +1,205 @@
 .manage-loc-container {
-    max-width: 1450px;
-    margin: 0 auto;
-    padding: 2rem;
-    font-family: 'Arial', sans-serif;
-    min-height: 100vh;
-  }
-  
-  .manage-loc-container h2 {
-    font-size: 40px;
-    color: #d34026;
-    margin-left: 15px;
-    margin-bottom: 30px;
-    font-weight: 700;
-  }
-  
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Arial', sans-serif;
+  min-height: 100vh;
+}
+
+.manage-loc-container h2 {
+  font-size: 40px;
+  color: #d34026;
+  margin-left: 15px;
+  margin-bottom: 30px;
+  font-weight: 700;
+}
+
+.manage-loc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 35px;
+  padding: 0 1rem;
+}
+
+.location-card {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(to bottom, #fdf8f5, #f2d1b5);
+  border-radius: 20px;
+  padding: 20px;
+  gap: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.location-card:hover {
+  transform: translateY(-5px);
+}
+
+.location-card-image {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.location-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.location-card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  flex-grow: 1;
+}
+
+.my-location-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.my-location-header h3 {
+  font-size: 1.9rem;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+.location-city {
+  font-size: 1.3rem;
+  color: #5f5f5f;
+  display: flex;
+  margin-bottom: -10px;
+  margin-left: -13px;
+ 
+}
+
+.location-pin {
+  font-size: 25px;
+  margin-left: 10px;
+}
+
+.location-card-actions {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+}
+
+button:has(.icon) {
+  background-color: #689aea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+button:has(.icon):hover {
+  background-color: #3367d6;
+}
+
+button:has(.icon-trash) {
+  background-color: #fdf8f5;
+  border: 1px solid #ddd;
+  color: #d34026;
+}
+
+button:has(.icon-trash):hover {
+  background-color: #fff8f7;
+  border-color: #d34026;
+}
+
+.icon-trash {
+  font-size: 16px;
+}
+
+/* Центрирование рейтинга */
+.location-footer {
+  display: flex;
+  justify-content: start;
+  padding-top: 10px;
+  margin-top: 20px;
+  border-top: 1px solid #e0d0c5;
+}
+
+.location-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Звезды */
+.star {
+  color: transparent;
+  font-size: 20px;
+  position: relative;
+  -webkit-text-stroke: 1px #deb53a;
+  width: 20px;
+  text-align: center;
+}
+
+.star.filled {
+  color: #f8b400;
+  -webkit-text-stroke: 0;
+}
+
+.star.half {
+  position: relative;
+  color: transparent;
+  -webkit-text-stroke: 1px #f8b400;
+}
+
+.star.half::before {
+  content: '★';
+  color: #f8b400;
+  position: absolute;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+  -webkit-text-stroke: 0;
+}
+
+.star.unfilled {
+  color: transparent;
+  -webkit-text-stroke: 1px #f8b400;
+}
+
+.star.empty {
+  color: transparent;
+  -webkit-text-stroke: 1px #deb53a;
+}
+
+.rating-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #3a3a3a;
+}
+
+@media (max-width: 1200px) {
   .manage-loc-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 35px;
-    padding: 0 1rem;
+    grid-template-columns: repeat(1, 1fr);
   }
-  
-  .location-card {
-    background-color: #fdf8f5;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .location-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-  }
-  
-  .location-card-image {
-    width: 100%;
-    height: 280px;
-    overflow: hidden;
-  }
-  
-  .location-card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-  }
-  
-  .location-card:hover .location-card-image img {
-    transform: scale(1.05);
-  }
-  
-  .location-card-content {
+}
+
+@media (max-width: 768px) {
+  .manage-loc-container {
     padding: 1.5rem;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
   }
-  
-  .my-location-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
+
+  .manage-loc-container h2 {
+    font-size: 2rem;
   }
-  
-  .my-location-header h3 {
-    font-size: 1.4rem;
-    color: #333;
-    font-weight: 600;
-    margin: 0;
-  }
-  
-  .location-city {
-    font-size: 1.1rem;
-    color: #666;
-    display: flex;
-    align-items: center;
-    margin: 0;
-  }
-  
-  .location-pin {
-    font-size: 20px;
-    margin-right: 5px;
-    color: #d34026;
-  }
-  
-  .location-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 15px;
-    margin-top: auto;
-    border-top: 1px solid #e0d0c5;
-  }
-  
-  .location-rating {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-  }
-  
-  /* Базовая звезда */
-  .star {
-    color: transparent; 
-    font-size: 20px;
-    position: relative;
-    -webkit-text-stroke: 1px #deb53a; /* золотая обводка */
-    display: inline-block;
-    width: 20px;
-    text-align: center;
-  }
-  
-  /* Заполненная звезда */
-  .star.filled {
-    color: #f8b400; /* полностью золотая */
-    -webkit-text-stroke: 0; /* убрать обводку */
-  }
-  
-  /* Ползвезды */
-  .star.half {
-    position: relative;
-    color: transparent;
-    -webkit-text-stroke: 1px #f8b400;
-  }
-  .star.half::before {
-    content: '★';
-    color: #f8b400;
-    position: absolute;
-    left: 0;
-    width: 50%;
-    overflow: hidden;
-    -webkit-text-stroke: 0;
-  }
-  
-  /* Пустая звезда (когда рейтинг есть, но звезда не входит в рейтинг) */
-  .star.unfilled {
-    /* Можно оставить обводку золотом, а внутренность прозрачной: */
-    color: transparent;
-    -webkit-text-stroke: 1px #f8b400;
-  }
-  
-  /* Полностью «нет рейтинга» */
-  .star.empty {
-    /* например, тоже самое, или сделать серый контур — это уже как удобнее */
-    color: transparent; 
-    font-size: 20px;
-    position: relative;
-    -webkit-text-stroke: 1px #deb53a; /* золотая обводка */
-    display: inline-block;
-    width: 20px;
-    text-align: center;
-  }
-  
-  
-  .rating-text {
-    margin-left: 8px;
-    font-size: 14px;
-    color: #666;
-  }
-  
-  .location-card-actions {
-    display: flex;
-    gap: 15px;
-  }
-  
-  .edit-btn, button:has(.icon) {
-    background-color: #4285f4;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-  }
-  
-  .edit-btn:hover, button:has(.icon):hover {
-    background-color: #3367d6;
-  }
-  
-  button:has(.icon-trash) {
-    background-color: #fdf8f5;
-    border: 1px solid #ddd;
-    color: #d34026;
-    width: 30px;
-    height: 30px;
-  }
-  
-  button:has(.icon-trash):hover {
-    background-color: #fff8f7;
-    border-color: #d34026;
-  }
-  
-  .icon-trash {
-    font-size: 16px;
-  }
-  
-  .empty-locations {
-    text-align: center;
-    padding: 3rem;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  }
-  
-  .empty-locations p {
-    font-size: 1.2rem;
-    color: #666;
-    margin-bottom: 1.5rem;
-  }
-  
-  .create-location-link {
-    display: inline-block;
-    background-color: #d34026;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background-color 0.2s ease;
-  }
-  
-  .create-location-link:hover {
-    background-color: #b83521;
-  }
-  
-  @media (max-width: 1200px) {
-    .manage-loc-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .manage-loc-container {
-      padding: 1.5rem;
-    }
-    
-    .manage-loc-grid {
-      grid-template-columns: 1fr;
-    }
-    
-    .manage-loc-container h2 {
-      font-size: 2rem;
-    }
-  }
+}

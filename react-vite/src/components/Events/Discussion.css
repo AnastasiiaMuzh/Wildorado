@@ -27,8 +27,6 @@
 .event-creator {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin: 15px 0;
 }
 
 .creator-avatar {
@@ -71,6 +69,7 @@
   gap: 20px;
 }
 
+/* Оболочка для всего сообщения */
 .message-item {
   display: flex;
   gap: 14px;
@@ -81,29 +80,83 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.message-avatar {
-  width: 45px;
-  height: 45px;
+.message-avatar-placeholder {
+  min-width: 50px;
+  height: 50px;
   border-radius: 50%;
-  object-fit: cover;
+  background-color: #669d82;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+  font-family: 'Segoe UI', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.message-header {
-  font-weight: 600;
-  color: #2f2f2f;
-  margin-bottom: 6px;
-}
+
 
 .message-content {
-  flex: 1;
+  flex: 1;          
+  position: relative; 
 }
 
-.message {
-  margin: 4px 0 8px;
-  font-size: 1rem;
-  color: #333;
-  line-height: 1.4;
+.message-date {
+  font-size: 0.9rem;
+  color: #888;
+  display: block; 
+  margin-top: 6px;
 }
+
+/* Блок с иконками (правый верхний угол) */
+.comment-controls {
+  position: absolute; 
+  top: 0;       /* прижимаем к верхнему краю */
+  right: 0;     /* и к правому */
+  display: flex;
+  flex-direction: column; /* Edit над Delete */
+  gap: 8px;
+}
+
+.comment-edit-btn {
+  background: none;
+  border: none;
+  color: #1e3a8a; 
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: color 0.2s ease;
+}
+.comment-edit-btn:hover {
+  color: #0f265e;
+}
+
+.message-delete-btn {
+  background: none;
+  border: none;
+  color: #c03a2b;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: color 0.2s ease;
+}
+.message-delete-btn:hover {
+  color: #9a2f23;
+}
+
+.edit-input {
+  padding: 8px;
+  border: 2px solid #bc8560;
+  background-color: #f7eee3;
+  border-radius: 4px;
+  outline: none;
+  width: 50%;
+  box-sizing: border-box;
+}
+
+
 
 .message-date {
   font-size: 0.9rem;
@@ -145,6 +198,31 @@
 
 .message-input:focus {
   border-color: #1b4fa3;
+}
+
+.save-cancel-control {
+  display: flex;
+  justify-content:start;
+  gap: 30px;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.save-btn {
+  background: none;
+  border: none;
+  color: #0e5d10;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.cancel-btn {
+  background: none;
+  border: none;
+  color: #0f265e;
+  font-size: 15px;
+  font-weight: bold;
+
 }
 
 .message-send-btn {

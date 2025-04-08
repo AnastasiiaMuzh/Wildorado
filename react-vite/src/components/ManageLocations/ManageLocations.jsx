@@ -61,15 +61,45 @@ const ManageLocations = () => {
               <div className="location-card-image" onClick={() => handleLocClick(location.id)}>
                 <img src={location.imageUrl} alt={location.name} />
               </div>
-            
+
               <div className="location-card-content">
                 <div className="my-location-header">
-                  <h3>{location.name}</h3>
-                  <p className="location-city">
-                    <span className="location-pin">📍</span> {location.city}
-                  </p>
+                  <h3>{location.name}</h3>                 
+                  <div className="location-card-actions">
+                    <OpenModalButton
+                    buttonText={<FaEdit className="icon" />}
+                    modalComponent={
+                      <UpdateLocationFormModal 
+                      locationId={location.id} 
+                      onUpdate={fetchUserLocations}
+                      />
+                    }
+                    onButtonClick={(e) => {
+                      if (e?.stopPropagation) e.stopPropagation();
+                      if (e?.preventDefault) e.preventDefault();
+                    }}
+                    />
+                    
+                    <OpenModalButton
+                      buttonText={<FaTrash className="icon-trash" />}
+                      modalComponent={
+                        <DeleteLocationModal 
+                        locationId={location.id} 
+                        onDelete={fetchUserLocations}
+                        />
+                      }
+                      onButtonClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                      }}
+                    />
+                  </div>
                 </div>
-                
+
+                <p className="location-city">
+                  <span className="location-pin">📍</span> {location.city}
+                </p>
+
                 <div className="location-footer">
                   <div className="location-rating">
                     {[1, 2, 3, 4, 5].map((star) => {
@@ -93,8 +123,6 @@ const ManageLocations = () => {
                       } else if (isHalf) {
                         starClass += " half";
                       } else {
-                        // "empty" star that comes after the filled ones
-                        // with "the existing" rating-> unfilled (not to be confused with .empty)
                         starClass += " unfilled";
                       }
 
@@ -110,43 +138,13 @@ const ManageLocations = () => {
                         ? `${location.avgRating.toFixed(1)} (${location.reviewCount} reviews)` 
                         : 'No reviews yet'}
                     </span>
-                  </div>
-                  
-                  <div className="location-card-actions">
-                  <OpenModalButton
-                    buttonText={<FaEdit className="icon" />}
-                    modalComponent={
-                      <UpdateLocationFormModal 
-                        locationId={location.id} 
-                        onUpdate={fetchUserLocations}
-                      />
-                    }
-                    onButtonClick={(e) => {
-                      if (e?.stopPropagation) e.stopPropagation();
-                      if (e?.preventDefault) e.preventDefault();
-                    }}
-                  />
-
-                    <OpenModalButton
-                      buttonText={<FaTrash className="icon-trash" />}
-                      modalComponent={
-                        <DeleteLocationModal 
-                          locationId={location.id} 
-                          onDelete={fetchUserLocations}
-                        />
-                      }
-                      onButtonClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                      }}
-                    />
-                  </div>
-                </div>
+              </div> 
               </div>
             </div>
+          </div>
           ))}
         </div>
-      ) : (
+        ) : (
         <div className="empty-locations">
           <p>You currently have no created locations.</p>
           <Link to="/locations/new" className="create-location-link">Create a new location</Link>

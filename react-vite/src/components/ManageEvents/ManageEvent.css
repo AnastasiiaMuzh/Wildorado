@@ -32,20 +32,11 @@
   width: 100%;
   max-width: 650px;
 
-  display: flex;              /* ✅ добавляем */
-  flex-direction: column;     /* элементы сверху вниз */
+  display: flex;             
+  flex-direction: column;    
   justify-content: space-between; 
 }
 
-/* .event-title-manage {
-  font-size: 35px;
-  font-weight: 700;
-  color: #d33f2f;
-  margin-bottom: 15px;
-  margin-top: 20px;
-  text-decoration: none;
-  border-bottom: 2px solid currentColor; 
-} */
 
 .event-meta-manage {
   display: flex;
@@ -58,9 +49,9 @@
 .event-title-link {
   font-size: 35px;
   font-weight: 550;
-  color: #d33f2f; /* 🔴 как сейчас */
+  color: #d33f2f; 
   text-decoration: none;
-  border-bottom: 2px solid currentColor; /* ⬅️ всегда подчёркивание того же цвета */
+  border-bottom: 2px solid currentColor; 
   cursor: pointer;
   transition: color 0.2s ease, border-color 0.2s ease;
 }
@@ -108,8 +99,8 @@
 .event-btn-manage .edit-btn-manage,
 .event-btn-manage .delete-btn-manage,
 .event-btn-manage .discussion-btn-manage {
-  width: 140px; /* ✅ фиксированная ширина для всех */
-  height: 45px;  /* ✅ одинаковая высота */
+  width: 140px; 
+  height: 45px;  
   padding: 10px;
   font-size: 15px;
   border: none;
@@ -117,7 +108,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center; /* ✅ выравнивание текста и иконки */
+  justify-content: center; 
   gap: 8px;
   font-weight: 500;
   transition: background 0.2s ease, transform 0.2s ease;
@@ -125,7 +116,7 @@
 }
 
 .edit-btn-manage {
-  background-color: #1b4fa3;
+  background-color: #4977c0;
   color: white;
 }
 
@@ -134,7 +125,7 @@
 }
 
 .delete-btn-manage {
-  background-color: #d93b2c;
+  background-color: #d74d41;
   color: white;
 }
 
@@ -143,7 +134,7 @@
 }
 
 .discussion-btn-manage {
-  background-color: #207b30;
+  background-color: #2e843e;
   color: white;
 }
 

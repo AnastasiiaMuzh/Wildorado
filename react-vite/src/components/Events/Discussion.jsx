@@ -110,10 +110,7 @@ const DiscussionPage = () => {
                         className="event-preview-image" 
                     />
                 )}
-
                 <h2 className="event-description">{event.description}</h2>
-                
-
             </header>
 
             <hr />
@@ -126,33 +123,42 @@ const DiscussionPage = () => {
                         {event.comments.map((comment) => (
                             <div key={comment.id} className="message-item">
                                 <div className="message-header">
-                                    {comment.avatar && (
+                                    {comment.avatar ? (
                                         <img 
                                             src={comment.avatar} 
                                             alt="User avatar" 
                                             className="message-avatar" 
                                         />
+                                    ) : (
+                                        <div className="message-avatar-placeholder">
+                                        {comment.username}
+                                      </div>
                                     )}
-                                    <strong>{comment.username}</strong>
                                 </div>
                                                                                         
                                 <div className="message-content">
-                                {editingCommentId === comment.id ? (
-                                    <div className="edit-form">
-                                        <input
-                                        value={editedMessage}
-                                        onChange={(e) => setEditedMessage(e.target.value)}
-                                        className="edit-input"
-                                        />
-                                        <button onClick={handleUpdate} className="save-btn">Save</button>
-                                        <button onClick={() => setEditingCommentId(null)} className="cancel-btn">Cancel</button>
-                                    </div>
+                                    
+                                    {editingCommentId === comment.id ? (
+                                        
+                                        <div className="edit-form">
+                                            <input
+                                            value={editedMessage}
+                                            onChange={(e) => setEditedMessage(e.target.value)}
+                                            className="edit-input"
+                                            />
+                                            <div className='save-cancel-control'>
+                                                <button onClick={() => setEditingCommentId(null)} className="cancel-btn">Cancel</button>
+                                                <button onClick={handleUpdate} className="save-btn">Save</button>
+                                            </div>
+                                        </div>
                                     ) : (
-                                    <p className="message">{comment.message}</p>
-                                    )}
+                                        <p className="message">{comment.message}</p>
 
+                                    )}
                                     <span className="message-date">
                                     {moment(comment.createdAt).local().fromNow()}
+                                    </span>
+
                                     {comment.userId === currentUser?.id && (
                                         <div className="comment-controls">
                                             <button className="comment-edit-btn" onClick={() => startEditing(comment)} title="Edit your message">
@@ -162,32 +168,28 @@ const DiscussionPage = () => {
                                                 <FaTrash />
                                             </button>
                                         </div>
-                                    )}
-                                </span>
+                                    )}                               
                             </div>
                         </div>
                     ))}
-
-                    </ul>
-                    
+                    </ul>                   
                 ) : (
                     <p className="no-messages">No messages yet. Be the first to leave a message!</p>
                 )}
-            </div>
+                </div>
 
-            {/* ✅ Теперь форма для комментариев ВСЕГДА отображается */}
-            <form onSubmit={handleCommentSubmit} className="message-form">
-                <input
-                    value={commentText}
-                    onChange={(e) => setCommentText(e.target.value)}
-                    placeholder="Write your message..."
-                    className="message-input"
-                />
-                <button type="submit" className="message-send-btn">
-                    Send
-                </button>
-            </form>
-        </div>
+                <form onSubmit={handleCommentSubmit} className="message-form">
+                    <input
+                        value={commentText}
+                        onChange={(e) => setCommentText(e.target.value)}
+                        placeholder="Write your message..."
+                        className="message-input"
+                    />
+                    <button type="submit" className="message-send-btn">
+                        Send
+                    </button>
+                </form>
+            </div>
     );
 };
 
