@@ -453,12 +453,12 @@ def create_comments(event_id):
 def update_comment(event_id, comment_id):
     """Update a comment (only author can edit)."""
     try:
-        event = Event.__query.get(event_id)
+        event = Event.query.get(event_id)
         if not event:
             return jsonify({"message": "Event not found"}), 404
         
         comment = EventComment.query.get(comment_id)
-        if not comment or comment().eventId != event_id:
+        if not comment or comment.eventId != event_id:
             return jsonify({"message": "Comment not found"}), 404
         
         if comment.userId != current_user.id:
