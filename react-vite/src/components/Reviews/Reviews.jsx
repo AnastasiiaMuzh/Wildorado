@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkGetReviews } from "../../redux/reviews";
+import CreateReview from "./CreateReview"
 
 const Reviews = ({ locationId }) => {
     const dispatch = useDispatch();
@@ -9,15 +10,23 @@ const Reviews = ({ locationId }) => {
     const reviews = Object.values(reviewsObj); //convert to array for map
     const sessionUser = useSelector(state => state.session.user);
 
+    const hasReviewed = reviews.some(
+        (review) => review.user?.id === sessionUser?.id
+      );
+      
+
     useEffect(() => {
         dispatch(thunkGetReviews(locationId))
     },[dispatch, locationId]);
 
     return (
         <div className="reviews-container">
-
             <h2>REVIEWS</h2>
-          
+
+            {sessionUser && !hasReviewed && (
+                <CreateReview locationId={locationId} />
+            )}
+         
             {(!reviews || reviews.length === 0) && <p>No reviews yet.</p>}
             {reviews?.map(review => (
                 <div key={review.id} className="review-item">

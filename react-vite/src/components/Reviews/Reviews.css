@@ -1,16 +1,39 @@
-.review-item {
-    margin-bottom: 50px;
-}
-
-.review-header {
+.reviews-container {
+    margin-top: 20px;
+  }
+  
+  .reviews-container h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  
+  .review-item {
+    margin-bottom: 30px;
+  }
+  
+  .review-header {
     display: flex;
-    justify-content: start;
-}
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  
+  .review-header strong {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+  }
 
-.review-stars {
-    font-size: 18px;
+  .review-item p {
+    font-size: 18px;  
+    line-height: 1.6;  
+    color: #444;         
+    margin-top: 5px;
+  }
+  
+  .review-stars {
+    font-size: 20px;
     color: #f8b400;
-    margin-top: -5px;
-    margin-left: 15px;
+    margin-top: 2px;
   }
   
