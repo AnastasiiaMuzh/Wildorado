@@ -32,6 +32,7 @@ export const thunkGetReviews = (locationId) => async (dispatch) => {
     const res = await fetch(`/api/reviews/locations/${locationId}`);
     if (res.ok) {
       const data = await res.json();
+      console.log("LOOcK",data); 
       dispatch(loadReviews(data));
     }
   };
@@ -40,13 +41,16 @@ export const thunkGetReviews = (locationId) => async (dispatch) => {
   export const thunkCreateReview = (locationId, payload) => async (dispatch) => {
     const res = await fetch(`/api/reviews/locations/${locationId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
     });
     if (res.ok) {
-        const newReview = await res.json();
-        dispatch(addReview(newReview));
-        return newReview;
+        const data = await res.json();
+        dispatch(addReview(data));
+        return data;
+    } else {
+        const err = await res.json();
+        return err;
     }
 };
 
