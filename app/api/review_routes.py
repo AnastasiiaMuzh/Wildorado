@@ -106,7 +106,11 @@ def create_review(location_id):
             "stars": new_review.stars,
             "text": new_review.text,
             "createdAt": new_review.createdAt,
-            "updatedAt": new_review.updatedAt
+            "updatedAt": new_review.updatedAt,
+            "user": {
+                "id": current_user.id,
+                "username": current_user.username
+            }
         }
         
         # Add an image to JSON (if it exists)
