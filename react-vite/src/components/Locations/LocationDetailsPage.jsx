@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { thunkCategory } from "../../redux/categories";
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import CreateEventFormModal from "../EventForm/CreateEventForm";
+import Reviews from "../Reviews/Reviews";
 import './LocationsDetailsPage.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -108,16 +109,15 @@ const LocationDetailsPage = () => { //ubrala locationId iz ()
                 </div>
 
                 </div>
-                {/* {location?.images?.map(img => (
-                    <img key={img.id} src={img.url} alt="Location" style={{ width: "150px", height: "100px", objectFit: "cover" }}/>
-                ))} */}
+
                 <div className="about-details">
                     <h2>About {location.name}:</h2>
                     <p>{location.description}</p>
                 </div>
                     
                 <div className="reviews-loc-details">
-                    <h2>REVIEWS</h2>
+                    
+                    <Reviews locationId={location.id} />
                 </div>
             </div>
             <div className="details-right">
@@ -130,9 +130,6 @@ const LocationDetailsPage = () => { //ubrala locationId iz ()
                           buttonText="Create Event"
                           modalComponent={<CreateEventFormModal locationId={location.id}/>}
                         />
-                        // <button onClick={() => navigate(`/events/new?locationId=${id}`)}>
-                        //     Create Event
-                        // </button>
                     ) : (
                         <p style={{ color: "red", fontWeight: "bold" }}>
                             To create your own event, please log in to your account.

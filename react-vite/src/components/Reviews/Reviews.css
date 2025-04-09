@@ -1,0 +1,16 @@
+.review-item {
+    margin-bottom: 50px;
+}
+
+.review-header {
+    display: flex;
+    justify-content: start;
+}
+
+.review-stars {
+    font-size: 18px;
+    color: #f8b400;
+    margin-top: -5px;
+    margin-left: 15px;
+  }
+  
