@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { thunkCreateReview } from "../../redux/reviews";
+import { thunkGetLocationDetails } from "../../redux/locations";
 import { useDropzone } from 'react-dropzone';
 import './Reviews.css';
 
@@ -44,6 +45,7 @@ const CreateReview = ({ locationId, onSuccess }) => {
       if (res?.errors) {
         setErrors(res.errors);
       } else {
+        await dispatch(thunkGetLocationDetails(locationId));
         setStars(0);
         setText("");
         setImageUrl("");
