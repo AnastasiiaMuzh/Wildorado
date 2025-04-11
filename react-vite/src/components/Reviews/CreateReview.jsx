@@ -13,7 +13,7 @@ const CreateReview = ({ locationId, onSuccess }) => {
   const [errors, setErrors] = useState([]);
   
 
-  //DROPZONE
+  //DROPZONE to upload an image
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: acceptedFiles => {
       const file = acceptedFiles[0];

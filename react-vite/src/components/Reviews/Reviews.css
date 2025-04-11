@@ -32,11 +32,59 @@
     margin-top: 5px;
 }
 
-.review-stars {
+
+.star {
+    margin-right: 2px;
+  }
+  
+  .star.filled {
     font-size: 20px;
     color: #f8b400;
-    margin-top: 2px;
-}
+
+  }
+  
+  .star.empty {
+    color: transparent;
+    -webkit-text-stroke: 1px #f8b400;
+    font-size: 21px;
+  }
+ 
+  .review-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  
+
+  .review-actions button {
+    background-color: #f7ead9;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  
+  .review-actions button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+  
+  .review-actions .green-icon {
+    color: #28a745;
+    font-size: 24px;
+  }
+  
+  .review-actions .red-icon {
+    color: #dc3545;
+    font-size: 16px;
+  }
+  
 
 /* ------------Create Review------------ */
 .review-form {
@@ -69,7 +117,7 @@
   
 .star {
     font-size: 30px;
-    transition: color 0.2s;
+    transition: color 0.1s;
 }
 
 .star.empty {
@@ -81,7 +129,7 @@
     color: #f8b400;
 }
 
-/* Центрированная, красивая кнопка */
+
 .submit-review {
     align-self: center;
     color: white;
@@ -102,27 +150,187 @@
     transform: translateY(-2px);
   }
   
-  
-  /* Немного увеличить input для URL */
-  .review-form input[type="text"] {
-    height: 30px;
-    font-size: 16px;
-    padding: 8px 12px;
+/* ------------Update Review Modal------------  */
+/* #modal-content {
+    background-color: transparent; 
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }  */
+
+.edit-review-container {
+    background-color: #fff;       
+    border-radius: 8px;   
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  
+    max-width: 750px;   
+    width: 100%;        
+    padding: 24px;     
+                
+  }
+
+.edit-review-container h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Форма редактирования */
+.edit-review-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Метки (label) и поля ввода */
+.edit-review-form label {
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+.edit-review-form input,
+.edit-review-form textarea {
+    margin-top: 4px;
+    padding: 8px;
     border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Ошибки */
+.field-error {
+    color: red;
+    font-size: 0.9rem;
+    margin: 4px 0;
+}
+
+/* Кнопка сабмита */
+.edit-review-form button[type="submit"] {
+    margin-top: 15px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #318336; 
+    color: #fff;
+    cursor: pointer;
+}
+.edit-review-form button[type="submit"]:hover {
+    background-color: #006666; 
+}
+
+/* Стили звёздочек при редактировании */
+.star-rating {
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+    margin-bottom: 8px;
+}
+
+.star {
+    font-size: 1.4rem;
+}
+.star.filled {
+    color: gold;
+}
+.star.empty {
+    color: #ccc;
+}
+
+.green-icon {
+    color: #28a745; 
+    font-size: 15px; 
+    cursor: pointer;
+}
+
+.green-icon:hover {
+    color: #225a2e; 
+}
+
+.image-preview {
+    position: relative;
+    display: inline-block;
+    max-width: 200px;
+}
+
+.image-preview img {
+    border-radius: 8px;
+    display: block;
+}
+
+/* Кнопка удаления */
+.delete-image-btn {
+    position: absolute;
+    top: -1px;
+    right: -10px;   /* немного сдвинуть вправо за пределы */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 2px 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background-color 0.2s;
+}
+
+.delete-image-btn:hover {
+    background-color: #ffd6d6;
+}
+
+
+/* ------------- DeleteReviewModal ---------------- */
+
+.delete-review-modal {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 30px 40px;
+    width: 350px;
+    max-width: 90%;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+  
+  
+  .delete-review-modal p {
+    margin-bottom: 25px;
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .delete-review-buttons {
+    display: flex;
+  justify-content: center;
+  gap: 35px;
+  margin-top: 30px; /* Increased margin */
+  margin-bottom: 10px; /* Add bottom margin */
+  padding-bottom: 10px; /* Extra padding */
+  }
+  
+  .confirm-rev-btn {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 25px;
+    border: none;
     border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
   }
   
-  .field-error {
-    color: #d34026;
-    font-size: 14px;
-    margin-top: 5px;
-    margin-bottom: -10px;
+  .confirm-rev-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
   }
   
-  .input-error {
-    border: 1px solid #d34026;
-    background-color: #fff1f0;
+  .cancel-rev-btn {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
   }
   
-  /* ------------Update Review------------ */
+  .cancel-rev-btn:hover {
+    background-color: #5a6268;
+    transform: translateY(-1px);
+  }
   

@@ -189,7 +189,11 @@ def update_review(review_id):
             "stars": review.stars,
             "text": review.text,
             "createdAt": review.createdAt,
-            "updatedAt": review.updatedAt
+            "updatedAt": review.updatedAt,
+            "user": {
+                "id": current_user.id,
+                "username": current_user.username
+            }
         }
         
         # if image exist, add in JSON
