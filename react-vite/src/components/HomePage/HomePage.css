@@ -1,61 +1,168 @@
 .category-container {
-  position: absolute;
+  position: relative;
   width: 100%;
   background: linear-gradient(
     to bottom,
-    #ecb781, /* темнее */
-    #f2e3da  /* светлее */
+    #ecb781,
+    #f2e3da
   );
-  /* background: linear-gradient(to bottom, rgba(238, 242, 243, 0.9), rgba(106, 147, 201, 0.9)); */
-  padding: 10px 3px;
-  
+  padding: 15px 0;
+  box-sizing: border-box;
 }
 
 .category-list {
   display: flex;
-  justify-content: center;
+  justify-content: center; /* Center items on all screens */
   align-items: center;
-  flex-wrap: nowrap; /* Запрещаем перенос на новую строку */
-  gap: 20px; /* Отступ между элементами */
-  padding: 0;
+  flex-wrap: nowrap;
+  gap: 25px; /* More spacing between category items */
+  padding: 0 15px;
   margin: 0 auto;
   max-width: 100%;
-  overflow-x: auto; /* Добавляем горизонтальную прокрутку если не помещается */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+/* Hide scrollbar for Chrome/Safari/Opera */
+.category-list::-webkit-scrollbar {
+  height: 4px;
+}
+
+.category-list::-webkit-scrollbar-thumb {
+  background: #ff7300;
+  border-radius: 4px;
 }
 
 .category-item {
   display: flex;
-  /* flex-direction: column;
-  align-items: center;
-  text-align: center; */
+  flex: 0 0 auto;
 }
 
 .category-link {
   display: flex;
+  flex-direction: row; /* Horizontal layout - icon and text side by side */
   align-items: center;
   text-decoration: none;
   color: black;
-  font-size: 22px;
   font-weight: bold;
-  gap: 25px; /* Отступ между иконкой и текстом */
+  gap: 15px; /* Space between icon and text */
 }
 
 .category-icon {
-  width: 130px;
-  height: 130px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid #ff7300;
+  border: 3px solid #ff7300;
+  transition: transform 0.3s ease;
 }
 
-.category-item:hover img {
-  transform: scale(0.9); /* Лёгкое увеличение */
-  transition: transform 0.5s ease-in-out;
+.category-item:hover .category-icon {
+  transform: scale(1.05);
 }
 
+/* Text styling */
+.category-text {
+  font-size: 200px;
+  font-weight: bold;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Responsive adjustments */
+@media (min-width: 1441px) {
+  .category-icon {
+    width: 115px;
+    height: 115px;
+  }
+  
+  .category-text {
+    font-size: 23px;
+  }
+  
+  .category-link {
+    gap: 30px;
+  }
+  
+  .category-list {
+    gap: 35px;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .category-icon {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .category-text {
+    font-size: 13px;
+  }
+  
+  .category-list {
+    gap: 7px;
+  }
+}
+
+@media (max-width: 1440px) {
+  .category-icon {
+    width: 85px;
+    height: 85px;
+  }
+  
+  .category-text {
+    font-size: 16px;
+  }
+  
+  .category-list {
+    gap: 20px;
+  }
+}
+
+
+/* For medium screens - this is where we need to ensure text is visible */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .category-list {
+    justify-content: flex-start; /* Allow scrolling from left */
+    gap: 15px;
+  }
+  
+  .category-icon {
+    width: 75px;
+    height: 75px;
+  }
+  
+  .category-text {
+    font-size: 15px;
+  }
+  
+  .category-link {
+    gap: 10px;
+  }
+}
+
+/* For mobile screens - we can optimize further */
 @media (max-width: 768px) {
   .category-list {
+    justify-content: flex-center;
+    gap: 20px;
+    padding: 0 10px;
+  }
+  
+  /* For very small screens, we can switch to vertical layout */
+  .category-link {
     flex-direction: column;
-    align-items: center;
+    text-align: center;
+    gap: 8px;
+  }
+  
+  .category-icon {
+    width: 70px;
+    height: 70px;
+    border-width: 2px;
+  }
+  
+  .category-text {
+    font-size: 14px;
   }
 }

@@ -44,7 +44,7 @@ const HomePage = () => {
                   alt={category.name}
                   className="category-icon"
                 />
-                <span>{category.name}</span>
+                <span className="category-text">{category.name}</span>
               </Link>
             </li>
           ))}
