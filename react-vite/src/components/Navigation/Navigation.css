@@ -189,16 +189,54 @@ body {
   color: #0a1c37;
   z-index: 1100;
 }
-/* Laptops (ноутбуки)  1199px- 1400 */
-@media (max-width: 1600px) {
+
+@media (min-width: 1400px)  {
   .navbar-container {
-    padding: 12px 100px;
+    padding: 12px 40px;
   }
 
   .search-form {
     margin: 0 10px;
     padding: 6px 10px;
-    max-width: 350px; /* <-- Вот это нужно добавить */
+    max-width: 400px; 
+    margin-right: 150px;
+  }
+  
+  .search-button {
+    font-size: 16px;
+  }
+  
+  .search-input {
+    font-size: 14px;
+    padding: 0px;
+   
+  }
+
+  .logo-img {
+    height: 70px;
+    margin-top: -5px;
+  }
+  
+  .nav-link {
+    font-size: 20px;
+    padding: 6px 8px;
+  }
+  
+  .calendar-button {
+    font-size: 17px;
+  }
+}
+
+
+@media (min-width: 1200px) and (max-width: 1300px) {
+  .navbar-container {
+    padding: 12px 60px;
+  }
+
+  .search-form {
+    margin: 0 10px;
+    padding: 6px 10px;
+    max-width: 300px; 
   }
   
   .search-button {
@@ -212,34 +250,34 @@ body {
   }
 
   .logo-img {
-    height: 55px;
+    height: 60px;
+    margin-top: -5px;
   }
   
   .nav-link {
-    font-size: 14px;
+    font-size: 16px;
     padding: 6px 8px;
   }
   
   .calendar-button {
-    font-size: 16px;
+    font-size: 17px;
   }
 }
 
-/* 💻 Laptops (обычные ноутбуки) 992px – 1199px */
-/* Laptops (ноутбуки) 992px – 1199px */
 @media (max-width: 1199px) {
   .navbar-container {
-    padding: 10px 20px;
+    padding: 10px 40px;
   }
 
   .search-form {
     margin: 0 10px;
     padding: 3px 10px;
-    max-width: 280px; 
+    max-width: 3000px; 
+    margin-right: 10px;
   }
   
   .search-button {
-    font-size: 14px;
+    font-size: 13px;
   }
   
   .search-input {
@@ -262,8 +300,6 @@ body {
   }
 }
 
-
-/* 📱 Tablets (планшеты) 768px – 991px */
 @media (max-width: 991px) {
   .navbar-container {
     padding: 10px 15px;
@@ -321,7 +357,7 @@ body {
   }
 }
 
-/* 📱 Mobile (маленькие телефоны) до 767px */
+/*  Mobile */
 @media (max-width: 767px) {
   .navbar-container {
     padding: 8px 10px;
