@@ -4,7 +4,7 @@
   top: 0;
   left: 0;
   z-index: 1000;
-  /* transition: background 0.3s ease-in-out; */
+  transition: background 0.3s ease-in-out;
 }
 
 body {
@@ -16,57 +16,47 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 50px;
+  padding: 15px 30px;
   max-width: 1440px;
   margin: 0 auto;
   position: relative;
 }
 
 .page-content {
-  padding-top: 100px; /* Отступ сверху для всех страниц */
-  background-color: #f7e5d2
+  padding-top: 100px;
+  background-color: #f7e5d2;
 }
 
 .home-page {
-  padding-top: 0; /* Для главной страницы убираем отступ */
-  
+  padding-top: 0;
 }
-
 
 .transparent-navbar {
-  background: rgba(255, 255, 255, 0.1); /* Легкая прозрачность*/
-  backdrop-filter: blur(5px); /* Размытие */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
   transition: background 0.3s ease-in-out; 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Легкая линия */
-
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
-
-/* .navbar solid-navbar {
-  background-color: #471a96;
-} */
 
 .solid-navbar {
-  /* background: linear-gradient(to right, #ffffff, #f5f5f5);  */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Добавляет тень */
-  position: absolute; 
+  background: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-
 
 .logo-img {
   transition: all 0.4s ease;
 }
 
 .logo-home {
-  height: 70px;
+  height: 60px;
+  width: auto;
   filter: brightness(1.2);
-  width: 95px;
-  height: 80px;
 }
 
 .logo-other {
-  height: 70px;
-  margin-top: -15px;
+  height: 50px;
+  width: auto;
+  margin-top: -5px;
 }
 
 .search-form {
@@ -80,11 +70,11 @@ body {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   padding: 5px 20px;
   transition: all 0.3s ease-in-out;
+  margin: 0 20px;
 }
 
 .search-input:focus {
-  background: #E3F2FD; 
-  /* border: 1px solid #64B5F6;  */
+  background: #E3F2FD;
   outline: none;
   box-shadow: 0 0 8px rgba(100, 181, 246, 0.5);
 }
@@ -96,40 +86,36 @@ body {
   border-radius: 50px;
   font-size: 16px;
   background: transparent;
+  width: 100%;
 }
 
 .search-button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 28px;
-  margin-right: 10px;
+  font-size: 20px;
+  margin-right: 5px;
   color: #0D47A1; 
+  flex-shrink: 0;
 }
-
-.search-button:hover {
-  color: #1565C0;
-}
-
-
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 10px;
-  /* color: white; */
+  gap: 5px;
   list-style: none;
+  flex-wrap: nowrap;
 }
 
 .nav-link {
   text-decoration: none;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
   color: #0a1c37;
-  padding: 8px 15px;
+  padding: 8px 10px;
   border-radius: 8px;
   transition: all 0.3s ease-in-out;
-  /* color: white; */
+  white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -144,8 +130,8 @@ body {
   right: 0;
   margin-top: 8px;
   z-index: 1100;
-  background: rgba(255, 255, 255, 0.2); /* Прозрачный эффект */
-  backdrop-filter: blur(10px); /* Размытие */
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   border-radius: 12px;
   padding: 15px;
@@ -156,7 +142,7 @@ body {
 .calendar-popup {
   border-radius: 8px;
   font-family: 'Arial', sans-serif;
-  background: rgba(255, 255, 255, 0.9); /* Легкая прозрачность */
+  background: rgba(255, 255, 255, 0.9);
   padding: 10px;
 }
 
@@ -166,11 +152,12 @@ body {
   background: none;
   border: none;
   color: #0a1c37;
-  font-size: 20px;
-  padding: 8px 12px;
+  font-size: 16px;
+  padding: 8px 10px;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  white-space: nowrap;
 }
 
 .calendar-button:hover {
@@ -179,25 +166,18 @@ body {
   transform: scale(1.05); 
 }
 
-
-.transparent-navbar .nav-link,
-.transparent-navbar .calendar-button {
-  color: rgb(15, 11, 21);
+.profile-container {
+  margin-left: 5px;
 }
 
 .profile-button {
   background: none;
   border: none;
-  font-size: 35px;
+  font-size: 28px;
   cursor: pointer;
   display: flex;
   align-items: center;
-
-}
-
-/* Для прозрачного и solid navbar */
-.transparent-navbar .profile-button {
-  color: white;
+  padding: 0;
 }
 
 .mobile-menu-toggle {
@@ -206,66 +186,177 @@ body {
   border: none;
   font-size: 24px;
   cursor: pointer;
+  color: #0a1c37;
+  z-index: 1100;
+}
+/* Laptops (ноутбуки)  1199px- 1400 */
+@media (max-width: 1600px) {
+  .navbar-container {
+    padding: 12px 100px;
+  }
+
+  .search-form {
+    margin: 0 10px;
+    padding: 6px 10px;
+    max-width: 350px; /* <-- Вот это нужно добавить */
+  }
+  
+  .search-button {
+    font-size: 14px;
+  }
+  
+  .search-input {
+    font-size: 12px;
+    padding: 0px;
+   
+  }
+
+  .logo-img {
+    height: 55px;
+  }
+  
+  .nav-link {
+    font-size: 14px;
+    padding: 6px 8px;
+  }
+  
+  .calendar-button {
+    font-size: 16px;
+  }
+}
+
+/* 💻 Laptops (обычные ноутбуки) 992px – 1199px */
+/* Laptops (ноутбуки) 992px – 1199px */
+@media (max-width: 1199px) {
+  .navbar-container {
+    padding: 10px 20px;
+  }
+
+  .search-form {
+    margin: 0 10px;
+    padding: 3px 10px;
+    max-width: 280px; 
+  }
+  
+  .search-button {
+    font-size: 14px;
+  }
+  
+  .search-input {
+    font-size: 12px;
+    padding: 0px;
+
+  }
+
+  .logo-img {
+    height: 48px;
+  }
+  
+  .nav-link {
+    font-size: 14px;
+    padding: 6px 8px;
+  }
+  
+  .calendar-button {
+    font-size: 16px;
+  }
 }
 
 
-
-@media (max-width: 1024px) {
+/* 📱 Tablets (планшеты) 768px – 991px */
+@media (max-width: 991px) {
   .navbar-container {
-    padding: 10px 20px;
-    flex-wrap: wrap;
-  }
-
-  .nav-links {
-    display: none;
-  }
-
-  .nav-links.mobile-open {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background: #e8e9eb;
-    padding: 20px;
-    gap: 15px;
+    padding: 10px 15px;
+    justify-content: space-between;
   }
 
   .mobile-menu-toggle {
     display: block;
+    order: 3;
   }
 
   .search-form {
-    order: 3;
-    width: 100%;
-    max-width: 100%;
-    margin-top: 10px;
-  }
-
-  .categories-container {
-    flex-wrap: nowrap; /* Запрещаем перенос на новую строку */
-    overflow-x: auto; /* Добавляем скролл */
-    white-space: nowrap;
-  }
-
-  .category-item {
-    min-width: 100px; /* Минимальная ширина */
-  }
-}
-
-@media (max-width: 480px) {
-  .logo-img {
-    height: 40px;
+    order: 2;
+    max-width: 300px;
+    flex: 1;
+    margin: 0 50px;
+    padding: 6px 10px;
   }
   
-  .categories-container {
-    flex-wrap: nowrap;
-    overflow-x: auto;
+
+  .logo-img {
+    height: 55px;
   }
 
-  .category-item {
-    min-width: 90px;
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    flex-direction: column;
+    padding: 15px 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1050;
+  }
+
+  .nav-links.mobile-open {
+    display: flex;
+  }
+
+  .nav-link, .calendar-button {
+    width: 100%;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 15px;
+  }
+
+  .calendar-popup-container {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 350px;
   }
 }
 
+/* 📱 Mobile (маленькие телефоны) до 767px */
+@media (max-width: 767px) {
+  .navbar-container {
+    padding: 8px 10px;
+    flex-wrap: wrap;
+  }
+  
+  .logo-home, .logo-other {
+    margin-bottom: 5px;
+    height: 42px;
+  }
+  
+  .search-form {
+    margin: 0 18px;
+    padding: 0px 4px;
+  }
+  
+  .search-button {
+    font-size: 15px;
+  }
+  
+  .search-input {
+    font-size: 12px;
+    padding: 0px;
+  }
+  
+  .mobile-menu-toggle {
+    font-size: 25px;
+  }
+  
+  .nav-links {
+    padding: 10px 0;
+  }
+  
+  .nav-link, .calendar-button {
+    padding: 10px 0;
+    font-size: 14px;
+  }
+}
