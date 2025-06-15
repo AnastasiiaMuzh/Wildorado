@@ -124,7 +124,6 @@ const Navigation = () => {
           />
           </span>
 
-          // <NavLink to="/locations/new" className='nav-link'>POST</NavLink>
           )}
 
           <div className="dropdown-container" ref={calendarRef}>
