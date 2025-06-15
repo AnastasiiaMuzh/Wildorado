@@ -3,7 +3,7 @@ import { useModal } from "../../context/Modal";
 import { thunkDeleteReview } from "../../redux/reviews";
 import "./Reviews.css";
 
-const DeleteReviewModal = ({ reviewId, locationId, onDeleteSuccess }) => {
+const DeleteReviewModal = ({ reviewId, onDeleteSuccess }) => {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
 

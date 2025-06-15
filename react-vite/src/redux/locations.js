@@ -60,7 +60,6 @@ export const thunkGetLocationDetails = (locationId) => async (dispatch) => {
 
 //Create location
 export const thunkCreateLocation = (locationData) => async (dispatch) => {
-  try {
     const res = await csrfFetch('/api/locations/new', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -77,11 +76,7 @@ export const thunkCreateLocation = (locationData) => async (dispatch) => {
     
     dispatch(createLocation(data));
     return data;
-  } catch (error) {
-    throw error;
-  }
 };
-
 
 //Update an existing location
 export const thunkUpdateLocation = (locationId, locationData) => async (dispatch) => {

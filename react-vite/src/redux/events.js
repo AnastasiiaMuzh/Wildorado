@@ -296,6 +296,7 @@ const eventsReducer = (state = initialState, action) => {
                 },
             };
             }
+            return state;
 
         case CREATE_COMMENT: {
             const newComment = action.payload; // { id, eventId, userId, message, createdAt, ... }

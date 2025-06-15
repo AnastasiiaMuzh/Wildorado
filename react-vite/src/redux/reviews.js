@@ -85,20 +85,22 @@ const initialState = {};
 
 export default function reviewsReducer(state = initialState, action) {
   switch (action.type) {
-    case LOAD_REVIEWS:
+    case LOAD_REVIEWS: {
       const newState = {};
       action.reviews.forEach(review => {
         newState[review.id] = review;
       });
       return newState;
+    }
     case ADD_REVIEW:
       return { ...state, [action.review.id]: action.review };
     case UPDATE_REVIEW:
       return { ...state, [action.review.id]: action.review };
-    case DELETE_REVIEW:
+    case DELETE_REVIEW: {
       const nextState = { ...state };
       delete nextState[action.reviewId];
       return nextState;
+    }
     default:
       return state;
   }

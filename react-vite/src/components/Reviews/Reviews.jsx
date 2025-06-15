@@ -4,7 +4,6 @@ import { thunkGetReviews } from "../../redux/reviews";
 import CreateReview from "./CreateReview";
 import './Reviews.css'
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { useModal } from "../../context/Modal";
 import OpenModalButton from "../OpenModalButton";
 import EditReviewModal from "./EditReviewModal";
 import DeleteReviewModal from "./DeleteReviewModal";
@@ -12,7 +11,6 @@ import DeleteReviewModal from "./DeleteReviewModal";
 
 const Reviews = ({ locationId }) => {
     const dispatch = useDispatch();
-    const { openModal } = useModal(); 
     const reviewsObj = useSelector((state) => state.reviews);
     const reviews = Object.values(reviewsObj); //convert to array for map
     const sessionUser = useSelector(state => state.session.user);
@@ -71,11 +69,6 @@ const Reviews = ({ locationId }) => {
                             locationId={locationId}
                             /> 
                         }
-                        // Чтобы не переходить на другую страницу при клике, если нужно
-                        // onButtonClick={(e) => {
-                        // e.stopPropagation();
-                        // e.preventDefault();
-                        // }}
                         />
                         <OpenModalButton
                         buttonText={<FaTrash className="red-icon" />}
@@ -85,12 +78,7 @@ const Reviews = ({ locationId }) => {
                             locationId={locationId}
                             />
                         }
-                        // onButtonClick={(e) => {
-                        //     e.stopPropagation();
-                        //     e.preventDefault();
-                        // }}
                         />
-
                     </div>
                 )}
                 </div>

@@ -9,7 +9,7 @@ function removeSuffix(str, suffix) {
   return str.replace(suffix, "").trim();
 }
 
-const UpdateLocationFormModal = ({ locationId, onUpdate }) => {
+const UpdateLocationFormModal = ({ locationId }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate(); 
 

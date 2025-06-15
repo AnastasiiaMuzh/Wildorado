@@ -13,10 +13,6 @@ const ManageLocations = () => {
   const [error, setError] = useState(null); 
   const navigate = useNavigate();
 
-  // const handleEdit = (locationId) => {
-  //   navigate(`/locations/${locationId}/edit`);
-  // };
-
   const handleLocClick = (locationId) => {
     navigate(`/locations/${locationId}`);
   };
@@ -69,7 +65,6 @@ const ManageLocations = () => {
                     modalComponent={
                       <UpdateLocationFormModal 
                       locationId={location.id} 
-                      // onUpdate={fetchUserLocations}
                       />
                     }
                     onButtonClick={(e) => {
