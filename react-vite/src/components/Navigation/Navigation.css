@@ -193,7 +193,8 @@ body {
   z-index: 1100;
 }
 
-@media (min-width: 1400px)  {
+/* Desktop Large */
+@media (min-width: 1400px) {
   .navbar-container {
     padding: 12px 40px;
   }
@@ -211,12 +212,11 @@ body {
   
   .search-input {
     font-size: 14px;
-    padding: 0px;
-   
+    padding: 8px;
   }
 
   .logo-img {
-    height: 70px;
+    height: 70px !important;
     margin-top: -5px;
   }
   
@@ -230,8 +230,8 @@ body {
   }
 }
 
-
-@media (min-width: 1200px) and (max-width: 1300px) {
+/* Desktop Medium */
+@media (min-width: 1200px) and (max-width: 1399px) {
   .navbar-container {
     padding: 12px 60px;
   }
@@ -239,7 +239,7 @@ body {
   .search-form {
     margin: 0 10px;
     padding: 6px 10px;
-    max-width: 300px; 
+    max-width: 350px; 
   }
   
   .search-button {
@@ -248,12 +248,11 @@ body {
   
   .search-input {
     font-size: 12px;
-    padding: 0px;
-   
+    padding: 8px;
   }
 
   .logo-img {
-    height: 60px;
+    height: 60px !important;
     margin-top: -5px;
   }
   
@@ -267,7 +266,8 @@ body {
   }
 }
 
-@media (max-width: 1199px) {
+/* Desktop Small */
+@media (min-width: 992px) and (max-width: 1199px) {
   .navbar-container {
     padding: 10px 40px;
   }
@@ -275,7 +275,7 @@ body {
   .search-form {
     margin: 0 10px;
     padding: 3px 10px;
-    max-width: 3000px; 
+    max-width: 300px; /* ISPRAVLENO: bylo 3000px */
     margin-right: 10px;
   }
   
@@ -285,12 +285,11 @@ body {
   
   .search-input {
     font-size: 12px;
-    padding: 0px;
-
+    padding: 8px;
   }
 
   .logo-img {
-    height: 48px;
+    height: 48px !important;
   }
   
   .nav-link {
@@ -303,6 +302,7 @@ body {
   }
 }
 
+/* Tablet */
 @media (max-width: 991px) {
   .navbar-container {
     padding: 10px 15px;
@@ -321,10 +321,9 @@ body {
     margin: 0 50px;
     padding: 6px 10px;
   }
-  
 
   .logo-img {
-    height: 55px;
+    height: 55px !important;
   }
 
   .nav-links {
@@ -360,7 +359,7 @@ body {
   }
 }
 
-/*  Mobile */
+/* Mobile */
 @media (max-width: 767px) {
   .navbar-container {
     padding: 8px 10px;
@@ -369,12 +368,12 @@ body {
   
   .logo-home, .logo-other {
     margin-bottom: 5px;
-    height: 42px;
+    height: 42px !important;
   }
   
   .search-form {
     margin: 0 18px;
-    padding: 0px 4px;
+    padding: 4px 8px;
   }
   
   .search-button {
@@ -383,7 +382,7 @@ body {
   
   .search-input {
     font-size: 12px;
-    padding: 0px;
+    padding: 6px;
   }
   
   .mobile-menu-toggle {
