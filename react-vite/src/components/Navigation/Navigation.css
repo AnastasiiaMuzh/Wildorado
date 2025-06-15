@@ -1,7 +1,8 @@
+/* PRIORITETNYE PRAVILA DLYA PRODUCTION */
 .navbar {
-  width: 100% !important;;
-  position: fixed !important;;
-  min-height: 70px !important;;
+  width: 100% !important;
+  position: fixed !important;
+  min-height: 70px !important;
   top: 0;
   left: 0;
   z-index: 1000;
@@ -14,14 +15,15 @@ body {
 }
 
 .navbar-container {
-  display: flex !important;;
-  align-items: center !important;;
-  justify-content: space-between !important;;
-  padding: 15px 30px !important;;
-  max-width: 1440px !important;;
-  margin: 0 auto !important;;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 15px 30px !important;
+  max-width: 1440px !important;
+  margin: 0 auto !important;
   position: relative;
-  min-height: 70px !important;;
+  min-height: 70px !important;
+  box-sizing: border-box !important;
 }
 
 .page-content {
@@ -34,14 +36,14 @@ body {
 }
 
 .transparent-navbar {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1) !important;
   backdrop-filter: blur(5px);
   transition: background 0.3s ease-in-out; 
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .solid-navbar {
-  background: #ecd9cd;
+  background: #ecd9cd !important;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -59,162 +61,167 @@ body {
 }
 
 .logo-other {
-  height: 50px !important;;
-  width: auto !important;;
+  height: 50px !important;
+  width: auto !important;
   margin-top: -5px;
 }
 
 .search-form {
-  display: flex !important;;
-  align-items: center !important;;
-  justify-content: center !important;;
-  width: 100% !important;;
-  max-width: 400px !important;;
-  background: rgba(254, 242, 234, 0.8) !important;;
-  border-radius: 50px !important;;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  padding: 5px 20px !important;;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  max-width: 400px !important;
+  background: rgba(254, 242, 234, 0.8) !important;
+  border-radius: 50px !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+  padding: 5px 20px !important;
   transition: all 0.3s ease-in-out;
-  margin: 0 20px !important;;
+  margin: 0 20px !important;
+  box-sizing: border-box !important;
+  margin-right: 40px !important; 
 }
 
 .search-input:focus {
-  background: #E3F2FD;
+  background: #E3F2FD !important;
   outline: none;
-  box-shadow: 0 0 8px rgba(100, 181, 246, 0.5);
+  box-shadow: 0 0 8px rgba(100, 181, 246, 0.5) !important;
 }
 
 .search-input {
-  flex: 1;
-  padding: 8px;
-  border: none;
-  border-radius: 50px;
-  font-size: 16px;
-  background: transparent;
-  width: 100%;
+  flex: 1 !important;
+  padding: 8px !important;
+  border: none !important;
+  border-radius: 50px !important;
+  font-size: 16px !important;
+  background: transparent !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .search-button {
-  background: none;
-  border: none;
+  background: none !important;
+  border: none !important;
   cursor: pointer;
-  font-size: 20px;
-  margin-right: 5px;
-  color: #0D47A1; 
-  flex-shrink: 0;
+  font-size: 20px !important;
+  margin-right: 5px !important;
+  color: #0D47A1 !important; 
+  flex-shrink: 0 !important;
 }
 
 .nav-links {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  list-style: none;
-  flex-wrap: nowrap;
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  list-style: none !important;
+  flex-wrap: nowrap !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .nav-link {
-  text-decoration: none;
-  font-size: 16px;
-  font-weight: bold;
-  color: #0a1c37;
-  padding: 8px 10px;
-  border-radius: 8px;
+  text-decoration: none !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  color: #0a1c37 !important;
+  padding: 8px 10px !important;
+  border-radius: 8px !important;
   transition: all 0.3s ease-in-out;
-  white-space: nowrap;
+  white-space: nowrap !important;
 }
 
 .nav-link:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #e16024;
-  transform: scale(1.05); 
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #e16024 !important;
+  transform: scale(1.05) !important; 
 }
 
 .calendar-popup-container {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: 8px;
+  position: absolute !important;
+  top: 100% !important;
+  right: 0 !important;
+  margin-top: 8px !important;
   z-index: 1100;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.9) !important;
   backdrop-filter: blur(10px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 12px;
-  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+  border-radius: 12px !important;
+  padding: 15px !important;
   overflow: hidden;
   transition: all 0.3s ease-in-out;
 }
 
 .calendar-popup {
-  border-radius: 8px;
+  border-radius: 8px !important;
   font-family: 'Arial', sans-serif;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 10px;
+  background: rgba(255, 255, 255, 0.9) !important;
+  padding: 10px !important;
 }
 
 .calendar-button {
   position: relative;
   z-index: 1050;
-  background: none;
-  border: none;
-  color: #0a1c37;
-  font-size: 16px;
-  padding: 8px 10px;
-  border-radius: 8px;
+  background: none !important;
+  border: none !important;
+  color: #0a1c37 !important;
+  font-size: 16px !important;
+  padding: 8px 10px !important;
+  border-radius: 8px !important;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
-  white-space: nowrap;
+  white-space: nowrap !important;
 }
 
 .calendar-button:hover {
-  color: #e16024;
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.05); 
+  color: #e16024 !important;
+  background: rgba(255, 255, 255, 0.3) !important;
+  transform: scale(1.05) !important; 
 }
 
 .profile-container {
-  margin-left: 5px;
+  margin-left: 5px !important;
 }
 
 .profile-button {
-  background: none;
-  border: none;
-  font-size: 28px;
+  background: none !important;
+  border: none !important;
+  font-size: 28px !important;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 0;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 !important;
 }
 
 .mobile-menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 24px;
+  display: none !important;
+  background: none !important;
+  border: none !important;
+  font-size: 24px !important;
   cursor: pointer;
-  color: #0a1c37;
+  color: #0a1c37 !important;
   z-index: 1100;
 }
 
 /* Desktop Large */
 @media (min-width: 1400px) {
   .navbar-container {
-    padding: 12px 40px;
+    padding: 12px 40px !important;
   }
 
   .search-form {
-    margin: 0 10px;
-    padding: 6px 10px;
-    max-width: 400px; 
-    margin-right: 150px;
+    margin: 0 10px !important;
+    padding: 6px 10px !important;
+    max-width: 400px !important; 
+    margin-right: 100px !important;
   }
   
   .search-button {
-    font-size: 16px;
+    font-size: 16px !important;
   }
   
   .search-input {
-    font-size: 14px;
-    padding: 8px;
+    font-size: 14px !important;
+    padding: 8px !important;
   }
 
   .logo-img {
@@ -223,34 +230,34 @@ body {
   }
   
   .nav-link {
-    font-size: 20px;
-    padding: 6px 8px;
+    font-size: 20px !important;
+    padding: 6px 8px !important;
   }
   
   .calendar-button {
-    font-size: 17px;
+    font-size: 17px !important;
   }
 }
 
 /* Desktop Medium */
 @media (min-width: 1200px) and (max-width: 1399px) {
   .navbar-container {
-    padding: 12px 60px;
+    padding: 12px 60px !important;
   }
 
   .search-form {
-    margin: 0 10px;
-    padding: 6px 10px;
-    max-width: 350px; 
+    margin: 0 10px !important;
+    padding: 6px 10px !important;
+    max-width: 350px !important; 
   }
   
   .search-button {
-    font-size: 14px;
+    font-size: 14px !important;
   }
   
   .search-input {
-    font-size: 12px;
-    padding: 8px;
+    font-size: 12px !important;
+    padding: 8px !important;
   }
 
   .logo-img {
@@ -259,35 +266,35 @@ body {
   }
   
   .nav-link {
-    font-size: 16px;
-    padding: 6px 8px;
+    font-size: 16px !important;
+    padding: 6px 8px !important;
   }
   
   .calendar-button {
-    font-size: 17px;
+    font-size: 17px !important;
   }
 }
 
 /* Desktop Small */
 @media (min-width: 992px) and (max-width: 1199px) {
   .navbar-container {
-    padding: 10px 40px;
+    padding: 10px 40px !important;
   }
 
   .search-form {
-    margin: 0 10px;
-    padding: 3px 10px;
-    max-width: 300px; /* ISPRAVLENO: bylo 3000px */
-    margin-right: 10px;
+    margin: 0 10px !important;
+    padding: 3px 10px !important;
+    max-width: 300px !important;
+    margin-right: 10px !important;
   }
   
   .search-button {
-    font-size: 13px;
+    font-size: 13px !important;
   }
   
   .search-input {
-    font-size: 12px;
-    padding: 8px;
+    font-size: 12px !important;
+    padding: 8px !important;
   }
 
   .logo-img {
@@ -295,33 +302,33 @@ body {
   }
   
   .nav-link {
-    font-size: 14px;
-    padding: 6px 8px;
+    font-size: 14px !important;
+    padding: 6px 8px !important;
   }
   
   .calendar-button {
-    font-size: 16px;
+    font-size: 16px !important;
   }
 }
 
 /* Tablet */
 @media (max-width: 991px) {
   .navbar-container {
-    padding: 10px 15px;
-    justify-content: space-between;
+    padding: 10px 15px !important;
+    justify-content: space-between !important;
   }
 
   .mobile-menu-toggle {
-    display: block;
+    display: block !important;
     order: 3;
   }
 
   .search-form {
     order: 2;
-    max-width: 300px;
-    flex: 1;
-    margin: 0 50px;
-    padding: 6px 10px;
+    max-width: 300px !important;
+    flex: 1 !important;
+    margin: 0 50px !important;
+    padding: 6px 10px !important;
   }
 
   .logo-img {
@@ -329,43 +336,43 @@ body {
   }
 
   .nav-links {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background: #ffffff;
-    flex-direction: column;
-    padding: 15px 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: none !important;
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    width: 100% !important;
+    background: #ffffff !important;
+    flex-direction: column !important;
+    padding: 15px 0 !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
     z-index: 1050;
   }
 
   .nav-links.mobile-open {
-    display: flex;
+    display: flex !important;
   }
 
   .nav-link, .calendar-button {
-    width: 100%;
-    text-align: center;
-    padding: 12px 0;
-    font-size: 15px;
+    width: 100% !important;
+    text-align: center !important;
+    padding: 12px 0 !important;
+    font-size: 15px !important;
   }
 
   .calendar-popup-container {
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 350px;
+    position: fixed !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 90% !important;
+    max-width: 350px !important;
   }
 }
 
 /* Mobile */
 @media (max-width: 767px) {
   .navbar-container {
-    padding: 8px 10px;
-    flex-wrap: wrap;
+    padding: 8px 10px !important;
+    flex-wrap: wrap !important;
   }
   
   .logo-home, .logo-other {
@@ -374,29 +381,51 @@ body {
   }
   
   .search-form {
-    margin: 0 18px;
-    padding: 4px 8px;
+    margin: 0 18px !important;
+    padding: 4px 8px !important;
   }
   
   .search-button {
-    font-size: 15px;
+    font-size: 15px !important;
   }
   
   .search-input {
-    font-size: 12px;
-    padding: 6px;
+    font-size: 12px !important;
+    padding: 6px !important;
   }
   
   .mobile-menu-toggle {
-    font-size: 25px;
+    font-size: 25px !important;
   }
   
   .nav-links {
-    padding: 10px 0;
+    padding: 10px 0 !important;
   }
   
   .nav-link, .calendar-button {
-    padding: 10px 0;
-    font-size: 14px;
+    padding: 10px 0 !important;
+    font-size: 14px !important;
   }
+}
+
+/* DODATOCHNYYE PRAVILA DLYA PRODUCTION */
+.navbar * {
+  box-sizing: border-box !important;
+}
+
+/* Prinuditel'nyye minimal'nyye razmery */
+.navbar-container {
+  min-width: 320px !important;
+}
+
+.logo-img {
+  min-height: 40px !important;
+}
+
+.search-form {
+  min-width: 200px !important;
+}
+
+.nav-link {
+  min-width: auto !important;
 }
