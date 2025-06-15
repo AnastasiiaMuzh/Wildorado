@@ -83,9 +83,8 @@ body {
 }
 
 .search-input:focus {
-  background: #E3F2FD !important;
+  background:  #f7ebe3 !important;
   outline: none;
-  box-shadow: 0 0 8px rgba(100, 181, 246, 0.5) !important;
 }
 
 .search-input {
